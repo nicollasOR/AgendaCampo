@@ -1,9 +1,14 @@
+using AgendaCampo.Contexts;
+using AgendaCampo.Interface;
+using AgendaCampo.Repositories;
 using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+using RoyalGamess.Aplications.Services;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
-
+string conexaoBanco = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 // builder.Services.AddOpenApi();
@@ -11,6 +16,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServer(conexaoBanco));
+
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<UsuarioService>();
 
 
 // cors btw
