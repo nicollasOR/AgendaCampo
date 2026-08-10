@@ -25,10 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Applications\Regras\" />
-    <Folder Include="Applications\Services\" />
-    <Folder Include="Controllers\" />
     <Folder Include="DTOs\" />
-    <Folder Include="Interface\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 
