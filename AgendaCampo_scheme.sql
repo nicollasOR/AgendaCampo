@@ -1,5 +1,6 @@
 CREATE DATABASE AgendaCampo
 GO
+
 USE AgendaCampo
 CREATE TABLE [Usuario] (
     [usuarioID] uniqueidentifier PRIMARY KEY NOT NULL default NEWID(),
@@ -64,39 +65,39 @@ ON d.usuarioID = usr.usuarioID
 END
 GO
 
--- CREATE TRIGGER trg_checagem_Agendamento
---     ON Agendamento
---     AFTER INSERT, UPDATE
---     AS
---     BEGIN
---     UPDATE Agnd
---         SET Agnd.statusAgenda = 0
---         FROM Agendamento Agnd
---             INNER JOIN inserted updtBit ON Agnd.agendaID = updtBit.agendaID
---                 WHERE updtBit.data > SYSDATETIME();
---     END
---     GO
---
---
--- CREATE TRIGGER trg_checagem_Visita
---     ON Visita
---     AFTER INSERT, UPDATE
---     AS
--- BEGIN
---     UPDATE vis
---     SET vis.statusRealizado = 1
---     FROM Visita vis
---              INNER JOIN inserted updtBit ON vis.statusRealizado = updtBIT.statusRealizado
---     WHERE updtBit.statusRealizado > SYSDATETIME();
--- END
--- GO
+ CREATE TRIGGER trg_checagem_Agendamento
+     ON Agendamento
+     AFTER INSERT, UPDATE
+     AS
+     BEGIN
+     UPDATE Agnd
+         SET Agnd.statusAgenda = 0
+         FROM Agendamento Agnd
+             INNER JOIN inserted updtBit ON Agnd.agendaID = updtBit.agendaID
+                 WHERE updtBit.data > SYSDATETIME();
+     END
+     GO
 
 
--- CREATE TRIGGER trg_softDelete_Visita
---     ON Visita
---     INSTEAD OF DELETE
---     AS
---     BEGIN
---         UPDATE vis set statusRealizado = 0
---     end
+ --CREATE TRIGGER trg_checagem_Visita
+ --    ON Visita
+ --    AFTER INSERT, UPDATE
+ --    AS
+ --BEGIN
+ --    UPDATE vis
+ --    SET vis.statusRealizado = 1
+ --    FROM Visita vis
+ --             INNER JOIN inserted updtBit ON vis.statusRealizado = updtBIT.statusRealizado
+ --    WHERE updtBit.statusRealizado > SYSDATETIME();
+ --END
+ --GO
+
+
+ --CREATE TRIGGER trg_softDelete_Visita
+ --    ON Visita
+ --    INSTEAD OF DELETE
+ --    AS
+ --    BEGIN
+ --        UPDATE vis set statusRealizado = 0
+ --    end
 
