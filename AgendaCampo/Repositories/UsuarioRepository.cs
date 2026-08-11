@@ -25,7 +25,7 @@ namespace AgendaCampo.Repositories
             return _context.Usuario.ToList();
         }
 
-        public Usuario? ObterPorId(int id)
+        public Usuario? ObterPorId(Guid id)
         {
             return _context.Usuario.Find(id);
         }
@@ -48,7 +48,18 @@ namespace AgendaCampo.Repositories
             _context.SaveChanges();
         }
 
-        public void Remover(int id)
+        public void AtualizarSenha(Guid id, byte[] senha)
+        {
+            var usuarioBanco = _context.Usuario.Find(id);
+            if (usuarioBanco == null)
+                return;
+            usuarioBanco.senha = senha;
+            // _context.Usuario.Update(usuarioBanco);
+            _context.SaveChanges();
+
+        }
+
+        public void Remover(Guid id)
         {
             var usuarioBanco = ObterPorId(id);
             if (usuarioBanco == null)
