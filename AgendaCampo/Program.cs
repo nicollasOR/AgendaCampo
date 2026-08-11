@@ -3,7 +3,7 @@ using DotNetEnv;
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
-
+string conexaoBanco = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 // builder.Services.AddOpenApi();
