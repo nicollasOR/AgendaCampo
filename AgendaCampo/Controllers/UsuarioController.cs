@@ -89,7 +89,7 @@ namespace AgendaCampo.Controllers
         }
 
         [HttpPatch("{id}")]
-        public ActionResult<atualizarUsuarioDTO> AtualizarSenha(Guid id, atualizarUsuarioDTO atualizarDTO)
+        public ActionResult<atualizarUsuarioDTO> AtualizarSenha(Guid id, atualizarSenhaDTO atualizarDTO)
         {
             try
             {

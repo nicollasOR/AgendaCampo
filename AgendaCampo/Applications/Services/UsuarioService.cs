@@ -32,7 +32,6 @@ namespace RoyalGamess.Aplications.Services
                 usuarioID = usuario.usuarioID,
                 email = usuario.email,
                 nome = usuario.nome,
-                // senha = 
                 statusUsuario = usuario.statusUsuario ?? true
             };
 
@@ -61,6 +60,7 @@ namespace RoyalGamess.Aplications.Services
         public lerUsuarioDTO buscarPorEmail(string email)
         {
             Usuario usuarioDTO = _rep.ObterPorEmail(email);
+            Validacoes.validarEmail(email);
             if (usuarioDTO == null)
                 throw new DomainException("Usuário não encontrado");
 
@@ -113,7 +113,7 @@ namespace RoyalGamess.Aplications.Services
             return lerDTO(usuarioBanco);
         }
 
-        public void AtualizarSenha(Guid id, atualizarUsuarioDTO atualizarDTO)
+        public void AtualizarSenha(Guid id, atualizarSenhaDTO atualizarDTO)
         {
             
             Usuario usuarioBanco = _rep.ObterPorId(id);
