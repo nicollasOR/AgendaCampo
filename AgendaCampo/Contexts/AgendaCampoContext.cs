@@ -26,8 +26,9 @@ public partial class AgendaCampoContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-    // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-    // optionsBuilder.UseSqlServer("Server=localhost,1433;Database=AgendaCampo;User Id=sa;Password=Developer123@;Encrypt=True;TrustServerCertificate=True");
+        
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+//          optionsBuilder.UseSqlServer("Server=localhost,1433;Database=AgendaCampo;User Id=sa;Password=Developer123@;Encrypt=True;TrustServerCertificate=True");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -74,15 +75,16 @@ public partial class AgendaCampoContext : DbContext
 
         modelBuilder.Entity<Visita>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.visitaID).HasName("PK__Visita__37DD75FD1C4A5BE9");
 
+            entity.Property(e => e.sedeVisitada).HasMaxLength(60);
             entity.Property(e => e.titulo).HasMaxLength(50);
 
-            entity.HasOne(d => d.agendamento).WithMany()
+            entity.HasOne(d => d.agendamento).WithMany(p => p.Visita)
                 .HasForeignKey(d => d.agendamentoID)
                 .HasConstraintName("FK_Visita_AgendamentoID");
 
-            entity.HasOne(d => d.endereco).WithMany()
+            entity.HasOne(d => d.endereco).WithMany(p => p.Visita)
                 .HasForeignKey(d => d.enderecoID)
                 .HasConstraintName("FK_Visita_Endereco");
         });

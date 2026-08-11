@@ -15,5 +15,7 @@ public partial class Agendamento
 
     public bool statusAgenda { get; set; }
 
+    public virtual ICollection<Visita> Visita { get; set; } = new List<Visita>();
+
     public virtual Usuario usuario { get; set; } = null!;
 }
