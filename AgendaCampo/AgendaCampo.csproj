@@ -24,9 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Applications\Regras\" />
     <Folder Include="DTOs\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>
