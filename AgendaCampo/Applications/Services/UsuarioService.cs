@@ -20,7 +20,7 @@ namespace RoyalGamess.Aplications.Services
         private static byte[] HashSenha_(string senha)
         {
             if (string.IsNullOrEmpty(senha)) 
-                throw new DomainException("Senha eh obrigatoria"); 
+                throw new DomainException("Senha é obrigatória"); 
             using var sha256 = SHA256.Create();
             return sha256.ComputeHash(Encoding.UTF8.GetBytes(senha));
         }
@@ -52,7 +52,7 @@ namespace RoyalGamess.Aplications.Services
         {
             Usuario usuarioDto = _rep.ObterPorId(id);
             if(usuarioDto == null)
-                throw new DomainException("Usuario no encontrado");
+                throw new DomainException("Usuário não encontrado");
 
             return lerDTO(usuarioDto);
 
@@ -62,7 +62,7 @@ namespace RoyalGamess.Aplications.Services
         {
             Usuario usuarioDTO = _rep.ObterPorEmail(email);
             if (usuarioDTO == null)
-                throw new DomainException("Usuario nao encontrado");
+                throw new DomainException("Usuário não encontrado");
 
             return lerDTO(usuarioDTO);
         }
@@ -75,7 +75,7 @@ namespace RoyalGamess.Aplications.Services
             Validacoes.validarNome(usuarioDTO.nome);
 
             if (_rep.EmailExiste(usuarioDTO.email))
-                throw new DomainException("Email invalido");
+                throw new DomainException("Já existe um usuário com esse e-mail");
 
             Usuario usuario = new Usuario
             {
@@ -101,6 +101,9 @@ namespace RoyalGamess.Aplications.Services
 
             if (usuarioDTO != null && usuarioBanco.usuarioID != id)
                 throw new DomainException("Usuario inexistente");
+
+            if (_rep.EmailExiste(usuarioDTO.email))
+                throw new DomainException("Já existe um usuário com esse e-mail");
 
             usuarioBanco.email = usuarioDTO.email;
             usuarioBanco.nome = usuarioDTO.nome;
