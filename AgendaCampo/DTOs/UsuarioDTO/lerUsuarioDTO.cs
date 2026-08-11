@@ -36,6 +36,14 @@ namespace AgendaCampo.DTOs.UsuarioDTO
         [Required(ErrorMessage = "A senha é obrigatório")]
         public string senha { get; set; } = null!;
 
-        public bool? statusUsuario { get; set; } = null!;
+        // public bool? statusUsuario { get; set; } = null!;
+    }
+
+
+    public class atualizarSenhaDTO
+    {
+        [Required(ErrorMessage = "A senha é obrigatório")]
+        public string senha { get; set; } = null!;
+        
     }
 }
