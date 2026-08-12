@@ -9,8 +9,16 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: Colors.blue,
-        tabBarInactiveTintColor: Colors.gray,
+        tabBarStyle: {
+          backgroundColor: Colors.blue,
+          paddingTop: 8,
+        },
+        tabBarActiveTintColor: Colors.white,
+        tabBarInactiveTintColor: Colors.inactive,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontFamily: "Outfit_700Bold",
+        },
       }}
     >
       <Tabs.Screen

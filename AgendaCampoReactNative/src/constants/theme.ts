@@ -9,7 +9,7 @@ export const Colors = {
   lightgreen: "#E7FEE9",
   bgc: "#FFF",
   white: "#FFF",
-  gray: "#617583",
+  inactive: "#9FC5DF",
 };
 
 const Font = {
