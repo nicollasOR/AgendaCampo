@@ -1,8 +1,8 @@
 import { Tabs } from "expo-router";
 import { Colors } from "../../constants/theme";
-import Home from "../../../assets/svg/Home.svg";
-import Criar from "../../../assets/svg/Criar.svg";
-import Perfil from "../../../assets/svg/Perfil.svg";
+import HomeIcon from "../../../assets/svg/HomeIcon.svg";
+import CriarIcon from "../../../assets/svg/CriarIcon.svg";
+import PerfilIcon from "../../../assets/svg/PerfilIcon.svg";
 
 export default function TabsLayout() {
   return (
@@ -29,7 +29,7 @@ export default function TabsLayout() {
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <Home fill={color} color={color} width={30} height={30} />
+            <HomeIcon fill={color} color={color} width={30} height={30} />
           ),
         }}
       />
@@ -39,7 +39,7 @@ export default function TabsLayout() {
           title: "Agendamento",
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <Criar fill={color} color={color} width={30} height={30} />
+            <CriarIcon fill={color} color={color} width={30} height={30} />
           ),
         }}
       />
@@ -48,8 +48,8 @@ export default function TabsLayout() {
         name="perfil/index"
         options={{
           title: "Perfil",
-          tabBarIcon: ({ color, size }) => (
-            <Perfil fill={color} color={color} width={30} height={30} />
+          tabBarIcon: ({ color }) => (
+            <PerfilIcon fill={color} color={color} width={30} height={30} />
           ),
         }}
       />
