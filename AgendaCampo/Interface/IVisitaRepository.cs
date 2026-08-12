@@ -7,7 +7,7 @@ public interface IVisitaRepository
     public List<Visita> Listar();
 
     public Visita BuscarPorTitulo(string titulo);
-    
+
     public Visita BuscarPorId(int id);
 
     public bool agendamentoExiste(int id);
@@ -16,12 +16,15 @@ public interface IVisitaRepository
 
     public Visita BuscarPorEndereco(string logradouro);
 
-    public bool VisitaExistir(DateTime data);
+    public bool visita_dataExistir(DateTime data);
 
     public void Adicionar(Visita visita, int? agendamentosIds, int? intenderecoIds);
     // public bool condicaoEventoExistir(DateTime data, Agendamento agendamento);
-    // public void Atualizar(int id, Visita visita);
-    // public void Remover(int id);
-    
-    
+    public void Atualizar(Visita visita, int? agendamentosIds, int? enderecoIds);
+
+    public void atualizarEndereco(int id, int enderecoId);
+    public void atualizarAgendamento(int id, int agendamentoId);
+    public void Remover(int id);
+
+
 }

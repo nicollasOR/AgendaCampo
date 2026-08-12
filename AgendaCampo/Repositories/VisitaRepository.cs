@@ -1,5 +1,6 @@
 using AgendaCampo.Contexts;
 using AgendaCampo.Domains;
+using AgendaCampo.DTOs.UsuarioDTO;
 using AgendaCampo.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ public class VisitaRepository : IVisitaRepository
 {
     private readonly AgendaCampoContext _context;
 
-    public VisitaRepository(AgendaCampoContext context) => context = context;
+    public VisitaRepository(AgendaCampoContext context) => _context = context;
 
     public List<Visita> Listar()
     {
@@ -52,7 +53,7 @@ public class VisitaRepository : IVisitaRepository
             .Include(varAux => varAux.endereco)
             .Include(varAux => varAux.agendamento)
             .FirstOrDefault(varAux => varAux.agendamento.data == data);
-            
+
     }
 
     public Visita BuscarPorEndereco(string logradouro)
@@ -63,7 +64,7 @@ public class VisitaRepository : IVisitaRepository
             .FirstOrDefault(varAux => varAux.endereco.logradouro == logradouro);
     }
 
-    public bool VisitaExistir(DateTime data)
+    public bool visita_dataExistir(DateTime data)
     {
         return _context.Visita.Any(varAux => varAux.agendamento.data.HasValue && varAux.agendamento.data == data);
     }
@@ -81,6 +82,63 @@ public class VisitaRepository : IVisitaRepository
     public void Adicionar(Visita visita, int? agendamentosIds, int? enderecoIds)
     {
         _context.Visita.Add(visita);
+        _context.SaveChanges();
+
+    }
+
+    public void Atualizar(Visita visita, int? agendamentosIds, int? enderecoIds)
+    {
+        Visita visitaBanco = _context.Visita
+            .Include(varAux => varAux.agendamentoID == agendamentosIds)
+            .Include(varAux => varAux.enderecoID == enderecoIds)
+            .FirstOrDefault(varAux => varAux.visitaID == visita.visitaID);
+
+        if (visitaBanco == null)
+            return;
+
+
+        visitaBanco.descricao = visita.descricao;
+        visitaBanco.dataTermino = visita.dataTermino;
+        visitaBanco.dataInicio = visita.dataInicio;
+        visitaBanco.titulo = visita.titulo;
+        visitaBanco.agendamentoID = visita.agendamentoID;
+        visitaBanco.enderecoID = visita.enderecoID;
+
+        _context.SaveChanges();
+
+
+        //var agenda = _context.Agendamento.Where(varAux => )
+    }
+
+    public void atualizarEndereco(int id, int enderecoId)
+    {
+        Visita visitaBanco = BuscarPorId(id);
+        if (visitaBanco == null)
+            return;
+
+        visitaBanco.enderecoID = enderecoId;
+
+        _context.SaveChanges();
+    }
+
+
+    public void atualizarAgendamento(int id, int agendamentoId)
+    {
+        Visita visitaBanco = BuscarPorId(id);
+        if (visitaBanco == null)
+            return;
+        visitaBanco.agendamentoID = agendamentoId;
+        _context.SaveChanges();
+    }
+
+    public void Remover(int id)
+    {
+        Visita visitaBanco = BuscarPorId(id);
+
+        if (visitaBanco == null)
+            return;
+
+        _context.Visita.Remove(visitaBanco);
         _context.SaveChanges();
 
     }
