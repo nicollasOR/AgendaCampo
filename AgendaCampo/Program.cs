@@ -1,9 +1,16 @@
+using AgendaCampo.Applications.Autenticacao;
+using AgendaCampo.Applications.Services;
 using AgendaCampo.Contexts;
 using AgendaCampo.Interface;
 using AgendaCampo.Repositories;
 using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using RoyalGamess.Aplications.Services;
+using System.Text;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +21,22 @@ builder.Services.AddControllers();
 // builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Insira o token JWT desta forma: Bearer {seu_token}"
+    });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
+});
 
 
 builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServer(conexaoBanco));
@@ -22,6 +44,38 @@ builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServe
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
 
+//JWT
+builder.Services.AddScoped<GeradorTokenJwt>();
+builder.Services.AddScoped<AutenticacaoService>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var chave = builder.Configuration["Jwt:Key"]!;
+
+        var issuer = builder.Configuration["Jwt:Issuer"]!;
+
+        var audience = builder.Configuration["Jwt:Audience"]!;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+
+            ValidateAudience = true,
+
+            ValidateLifetime = true,
+
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = issuer,
+
+            ValidAudience = audience,
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(chave)
+            )
+        };
+    });
 
 // cors btw
 

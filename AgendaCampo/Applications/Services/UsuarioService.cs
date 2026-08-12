@@ -94,7 +94,7 @@ namespace RoyalGamess.Aplications.Services
             Usuario usuarioBanco = _rep.ObterPorId(id);
 
             if (usuarioBanco == null)
-                throw new DomainException("Usuario nao encontrado");
+                throw new DomainException("Usuario não encontrado");
             
             Validacoes.validarEmail(usuarioDTO.email);
             Validacoes.validarNome(usuarioDTO.nome);
@@ -119,7 +119,7 @@ namespace RoyalGamess.Aplications.Services
             Usuario usuarioBanco = _rep.ObterPorId(id);
 
             if (usuarioBanco == null)
-                throw new DomainException("Usuario nao encontrado");
+                throw new DomainException("Usuario não encontrado");
             usuarioBanco.senha = HashSenha_(atualizarDTO.senha);
             
             _rep.AtualizarSenha(id, usuarioBanco.senha);
@@ -132,7 +132,7 @@ namespace RoyalGamess.Aplications.Services
         {
             Usuario usuario = _rep.ObterPorId(id);
             if (usuario == null)
-                throw new DomainException("Usuario nao encontrado");
+                throw new DomainException("Usuario não encontrado");
             
             _rep.Remover(id);
         }
