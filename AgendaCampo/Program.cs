@@ -1,4 +1,9 @@
+using AgendaCampo.Applications.Services;
+using AgendaCampo.Contexts;
+using AgendaCampo.Interface;
+using AgendaCampo.Repositories;
 using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +16,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServer(conexaoBanco));
 
+builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
+builder.Services.AddScoped<AgendamentoService>();
 
 // cors btw
 

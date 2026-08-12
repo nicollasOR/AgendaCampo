@@ -4,11 +4,11 @@ using AgendaCampo.Interface;
 
 namespace AgendaCampo.Repositories
 {
-    public class AgendaRepository : IAgendaRepository 
+    public class AgendamentoRepository : IAgendamentoRepository 
     {
         private readonly AgendaCampoContext _context;
 
-        public AgendaRepository(AgendaCampoContext context)
+        public AgendamentoRepository(AgendaCampoContext context)
         {
             _context = context;
         }
