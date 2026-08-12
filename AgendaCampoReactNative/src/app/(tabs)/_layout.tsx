@@ -10,13 +10,15 @@ export default function TabsLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.bgc,
+          height: 72,
+          paddingBottom: 8,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: Colors.white,
+        tabBarActiveTintColor: Colors.blue,
         tabBarInactiveTintColor: Colors.inactive,
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 16,
           fontFamily: "Outfit_700Bold",
         },
       }}
@@ -26,13 +28,8 @@ export default function TabsLayout() {
         options={{
           title: "Home",
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Home
-              fill={color}
-              color={color}
-              width={size || 24}
-              height={size || 24}
-            />
+          tabBarIcon: ({ color }) => (
+            <Home fill={color} color={color} width={30} height={30} />
           ),
         }}
       />
@@ -41,13 +38,8 @@ export default function TabsLayout() {
         options={{
           title: "Agendamento",
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Criar
-              fill={color}
-              color={color}
-              width={size || 24}
-              height={size || 24}
-            />
+          tabBarIcon: ({ color }) => (
+            <Criar fill={color} color={color} width={30} height={30} />
           ),
         }}
       />
@@ -57,12 +49,7 @@ export default function TabsLayout() {
         options={{
           title: "Perfil",
           tabBarIcon: ({ color, size }) => (
-            <Perfil
-              fill={color}
-              color={color}
-              width={size || 24}
-              height={size || 24}
-            />
+            <Perfil fill={color} color={color} width={30} height={30} />
           ),
         }}
       />
