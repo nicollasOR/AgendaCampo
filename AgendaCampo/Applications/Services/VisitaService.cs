@@ -29,10 +29,14 @@ public class VisitaService
             nomeSede = visita.sedeVisitada,
             statusRealizado = visita.statusRealizado,
             enderecoId = visita.enderecoID,
+            
+            // dados para usar no front:
+            logadouroEndereco = visita.endereco?.logradouro,
+            nomeCliente = visita.agendamento?.empresaSede
         };
     }
 
-
+    // METODOS GET
     public List<lerVisitaDTO> Listar()
     {
         List<Visita> visita = _rep.Listar();
@@ -41,6 +45,20 @@ public class VisitaService
 
         return lerVisitas;
     }
+
+    public List<lerVisitaDTO> listarFuturasVisitas(Guid usuarioId)
+    {
+        return _rep
+            .listagemFuturosEvento(usuarioId)
+            .Select(lerDTO).ToList();
+    }
+
+    // listagem para puxar apenas as concluidas
+    public List<lerVisitaDTO> ListarConcluidas(Guid usuarioId)
+    {
+        return _rep.listagemEventosConcluidos(usuarioId).Select(lerDTO).ToList();
+    }
+    
 
     public lerVisitaDTO buscarPorId(int id)
     {
@@ -65,7 +83,7 @@ public class VisitaService
     {
         //if (_rep.enderecoExiste(logradouro))
         //    throw new DomainException("");
-        Visita visitaBanco = _rep.BuscarPorEndereco(logradouro);
+        Visita visitaBanco = _rep.BuscarPorEndereco(logradouro.ToLower());
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
 
@@ -74,7 +92,7 @@ public class VisitaService
 
     public lerVisitaDTO buscarPorTitulo(string titulo)
     {
-        Visita visitaBanco = _rep.BuscarPorTitulo(titulo);
+        Visita visitaBanco = _rep.BuscarPorTitulo(titulo.ToLower());
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
 
@@ -83,13 +101,17 @@ public class VisitaService
 
     public lerVisitaDTO Adicionar(criarVisitaDTO criarVisitaDto)
     {
-        var agndBanco = _agndRep.buscarPorId(criarVisitaDto.agendamentoId);
-        if (agndBanco == null || !(agndBanco.data.HasValue)) 
+        var agndBanco = _agndRep.BuscarPorId(criarVisitaDto.agendamentoId);
+        if (agndBanco == null) //|| !(agndBanco.data.HasValue))    //era para funcionar o .value
             throw new DomainException("Agendamento não encontrado!"); // if(agendamento) visita == true
 
-        if (agndBanco.data != criarVisitaDto.dataInicio)
+        if (agndBanco.data.Date != criarVisitaDto.dataInicio.Date)
             throw new DomainException("A visita deve ter a mesma data, hora de inicio do agendamento");
-      
+
+        if (criarVisitaDto.dataTermino <= criarVisitaDto.dataInicio)
+            throw new DomainException("A data termino tem que ser depois da inicial");
+        if (!_rep.enderecoExiste(criarVisitaDto.enderecoId))
+            throw new DomainException("Endereco não existente..");
       // falta adicionar o endereco de validação.
 
       Visita visita = new Visita
@@ -103,8 +125,8 @@ public class VisitaService
           statusRealizado = criarVisitaDto.statusRealizado,
           enderecoID = criarVisitaDto.enderecoId,
       };
-        
-      _rep.Adicionar(visita, visita.enderecoID, visita.agendamentoID);
+
+      _rep.Adicionar(visita);//);
       return lerDTO(visita);
     }
     
@@ -116,6 +138,10 @@ public class VisitaService
 
         if (!(_rep.agendamentoExiste(visitaBanco.agendamentoID)) || !(_rep.enderecoExiste(visitaBanco.enderecoID)))
             throw new DomainException("Agendamento e/ou endereço não encontrado");
+        
+        
+        if (atualizarDTO.dataTermino <= atualizarDTO.dataInicio)
+            throw new DomainException("A data termino tem que ser depois da inicial");
 
         visitaBanco.titulo = atualizarDTO.nomeEvento;
         visitaBanco.descricao = atualizarDTO.descricao;
@@ -143,6 +169,24 @@ public class VisitaService
         visitaBanco.enderecoID = atlDTO.enderecoId;
 
         _rep.atualizarEndereco(id, visitaBanco.enderecoID);
+    }
+    
+    // [NOVO] Atende a regra central de Reagendar Visita no App
+    public lerVisitaDTO Reagendar(int visitaId, DateTime novaDataInicio, DateTime novaDataTermino)
+    {
+        var visitaBanco = _rep.BuscarPorId(visitaId);
+        if (visitaBanco == null)
+            throw new DomainException("Visita nao encontrada");
+
+        if (novaDataTermino <= novaDataInicio)
+            throw new DomainException("A nova data de termino deve ser posterior a data de inicio");
+
+        _rep.Reagendar(visitaId, novaDataInicio, novaDataTermino);
+
+        visitaBanco.dataInicio = novaDataInicio;
+        visitaBanco.dataTermino = novaDataTermino;
+
+        return lerDTO(visitaBanco);
     }
 
     public void atualizarAgendamento(int id, atualizarVisitaDTO atlDTO)
