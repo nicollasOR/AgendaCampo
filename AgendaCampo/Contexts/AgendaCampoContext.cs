@@ -37,7 +37,7 @@ public partial class AgendaCampoContext : DbContext
         {
             entity.HasKey(e => e.agendaID).HasName("PK__Agendame__04F591BBA4C5D389");
 
-            entity.Property(e => e.agendaID).ValueGeneratedNever();
+            entity.Property(e => e.agendaID).ValueGeneratedOnAdd();
             entity.Property(e => e.empresaSede).HasMaxLength(50);
             entity.Property(e => e.statusAgenda).HasDefaultValue(true);
 

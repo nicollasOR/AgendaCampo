@@ -1,7 +1,14 @@
-using AgendaCampo.Domains;
-namespace AgendaCampo.Interface;
+﻿using AgendaCampo.Domains;
 
-public interface IAgendamentoRepository
+namespace AgendaCampo.Interface
 {
-    public Agendamento? buscarPorId(int id);
+    public interface IAgendamentoRepository
+    {
+        public List<Agendamento> Buscar();
+        public Agendamento? BuscarPorId(int id);
+        public List<Agendamento> BuscarPorTecnico(Guid id);
+        public Agendamento Adicionar (Agendamento agendamento);
+        public void Atualizar(int id, Agendamento agendamento);
+        public bool ExisteConflitoHorario(Guid idUsuario, DateTime horario);
+    }
 }

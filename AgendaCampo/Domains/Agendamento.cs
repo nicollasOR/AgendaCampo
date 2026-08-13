@@ -7,7 +7,7 @@ public partial class Agendamento
 {
     public int agendaID { get; set; }
 
-    public DateTime? data { get; set; }
+    public DateTime data { get; set; }
 
     public string empresaSede { get; set; } = null!;
 

@@ -1,3 +1,4 @@
+DROP DATABASE AgendaCampo
 CREATE DATABASE AgendaCampo
 GO
 USE AgendaCampo
@@ -16,6 +17,11 @@ GO
 SELECT * FROM Usuario
 
 CREATE TABLE [Agendamento] (
+    [agendaID] int PRIMARY KEY IDENTITY NOT NULL,
+    [data] datetime2 NOT NULL,
+    [empresaSede] nvarchar(50) NOT NULL,
+                            [usuarioID] uniqueidentifier NOT NULL,
+                            [statusAgenda] bit default 1 NOT NULL,
                                [agendaID] int PRIMARY KEY NOT NULL,
                                [data] datetime2,
                                [empresaSede] nvarchar(50) NOT NULL,
@@ -65,9 +71,23 @@ CREATE TABLE [Visita] (
                           --CONSTRAINT FK_Visita_statusVisita FOREIGN KEY(statusVisitaID)
                              -- REFERENCES StatusVisita(statusVisitaID) ON DELETE CASCADE
 )
+GO
+
 
 
 CREATE TRIGGER trg_softDelete_Usuario
+ON Usuario
+INSTEAD OF DELETE
+AS
+BEGIN
+UPDATE usr SET statusUsuario = 0
+from Usuario usr
+INNER JOIN deleted d
+ON d.usuarioID = usr.usuarioID
+END
+GO
+
+
     ON Usuario
     INSTEAD OF DELETE
     AS
@@ -115,3 +135,79 @@ CREATE TRIGGER trg_softDelete_Usuario
 --         UPDATE vis set statusRealizado = 0
 --     end
 
+-- ==========================================
+-- USUÁRIOS
+-- ==========================================
+
+DECLARE @usuario1 UNIQUEIDENTIFIER = NEWID();
+DECLARE @usuario2 UNIQUEIDENTIFIER = NEWID();
+DECLARE @usuario3 UNIQUEIDENTIFIER = NEWID();
+
+INSERT INTO Usuario
+    (usuarioID, nome, email, senha, statusUsuario)
+VALUES
+    (@usuario1, 'João Silva', 'joao@agendacampo.com',
+     HASHBYTES('SHA2_256', '123456'), 1),
+
+    (@usuario2, 'Carlos Santos', 'carlos@agendacampo.com',
+     HASHBYTES('SHA2_256', '123456'), 1),
+
+    (@usuario3, 'Pedro Oliveira', 'pedro@agendacampo.com',
+     HASHBYTES('SHA2_256', '123456'), 1);
+
+     SELECT * FROM Usuario
+
+-- ==========================================
+-- ENDEREÇOS
+-- ==========================================
+
+INSERT INTO Endereco
+    (enderecoID, logradouro, bairro, numero, cep)
+VALUES
+    (1, 'Rua das Flores', 'Centro', 100, '01000000'),
+
+    (2, 'Avenida Brasil', 'Jardim America', 250, '02000000'),
+
+    (3, 'Rua Sao Paulo', 'Vila Nova', 500, '03000000'),
+
+    (4, 'Avenida Central', 'Centro', 1200, '04000000');
+
+
+-- ==========================================
+-- AGENDAMENTOS
+-- ==========================================
+
+INSERT INTO Agendamento
+    (data, empresaSede, usuarioID, statusAgenda)
+VALUES
+    ('2026-08-15 08:30:00', 'Tech Solutions', 'A1C44FBA-7182-430C-B53E-2D419B3549A5', 1),
+
+    ('2026-08-15 14:00:00', 'Empresa Alpha', 'C47E4AC5-51C9-43DB-A0CA-70BA445A2DF8', 1),
+
+    ('2026-08-16 09:00:00', 'Beta Sistemas', 'C47E4AC5-51C9-43DB-A0CA-70BA445A2DF8', 1),
+
+    ('2026-08-17 15:30:00', 'Gamma Tecnologia', '849AD641-8EDB-4E73-AAE5-A13B4410E6D3', 1);
+
+    select * from Agendamento
+
+-- ==========================================
+-- VISITAS
+-- ==========================================
+
+INSERT INTO Visita
+    (agendamentoID, enderecoID, titulo, descricao, statusRealizado)
+VALUES
+    (1, 1, 'Manutencao de servidor',
+     'Realizar manutencao preventiva no servidor principal.', 0),
+
+    (2, 2, 'Instalacao de equipamento',
+     'Instalar e configurar novo equipamento de rede.', 0),
+
+    (3, 3, 'Suporte tecnico',
+     'Verificar problemas de conexao e realizar testes.', 0),
+
+    (4, 4, 'Atualizacao de sistema',
+     'Atualizar os equipamentos e verificar funcionamento.', 1);
+
+GO
+select * from Visita;

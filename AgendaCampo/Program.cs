@@ -1,9 +1,9 @@
+using AgendaCampo.Applications.Services;
 using AgendaCampo.Contexts;
 using AgendaCampo.Interface;
 using AgendaCampo.Repositories;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
-using RoyalGamess.Aplications.Services;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -16,17 +16,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServer(conexaoBanco));
 
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<UsuarioService>();
-
 builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
-
-builder.Services.AddScoped<IVisitaRepository, VisitaRepository>();
-builder.Services.AddScoped<VisitaService>();
-
+builder.Services.AddScoped<AgendamentoService>();
 
 // cors btw
 
@@ -47,14 +40,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = string.Empty; // Exibe o Swagger na raiz da aplicação
-    });
+    app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

@@ -16,9 +16,17 @@ public interface IVisitaRepository
 
     public Visita BuscarPorEndereco(string logradouro);
 
-    public bool visita_dataExistir(DateTime data);
+    // public bool visita_dataExistir(DateTime data);
+    public List<Visita> listarPorUsuario(Guid usuarioId);
+    public List<Visita> listagemFuturosEvento(Guid usuarioId);
+    public List<Visita> listagemEventosConcluidos(Guid usuarioId);
 
-    public void Adicionar(Visita visita, int? agendamentosIds, int? intenderecoIds);
+    // ver com o grupo btw
+    public bool conflitoDeHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null);
+
+    public bool Reagendar(int visitaId, DateTime novaDataInicio, DateTime novaDataTermino);
+
+    public void Adicionar(Visita visita);//, int? agendamentosIds, int? intenderecoIds);
     // public bool condicaoEventoExistir(DateTime data, Agendamento agendamento);
     public void Atualizar(Visita visita, int? agendamentosIds, int? enderecoIds);
 
