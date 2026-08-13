@@ -17,7 +17,7 @@ GO
 SELECT * FROM Usuario
 
 CREATE TABLE [Agendamento] (
-    [agendaID] int PRIMARY KEY IDENTITY NOT NULL,
+    [agendaID] int PRIMARY KEY IDENTITY(1,1) NOT NULL,
     [data] datetime2 NOT NULL,
     [empresaSede] nvarchar(50) NOT NULL,
                             [usuarioID] uniqueidentifier NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE [Agendamento] (
 go
 
 CREATE TABLE [Endereco] (
-                            [enderecoID] int PRIMARY KEY,
+                            [enderecoID] int PRIMARY KEY identity(1,1) not null,
                             [logradouro] nvarchar(60) NOT NULL,
                             [bairro] nvarchar(40) NOT NULL,
                             [numero] int NOT NULL,
@@ -195,19 +195,10 @@ VALUES
 -- ==========================================
 
 INSERT INTO Visita
-    (agendamentoID, enderecoID, titulo, descricao, statusRealizado)
+(agendamentoID, enderecoID, titulo, descricao, dataInicio, dataTermino)
 VALUES
     (1, 1, 'Manutencao de servidor',
-     'Realizar manutencao preventiva no servidor principal.', 0),
-
-    (2, 2, 'Instalacao de equipamento',
-     'Instalar e configurar novo equipamento de rede.', 0),
-
-    (3, 3, 'Suporte tecnico',
-     'Verificar problemas de conexao e realizar testes.', 0),
-
-    (4, 4, 'Atualizacao de sistema',
-     'Atualizar os equipamentos e verificar funcionamento.', 1);
+     'Realizar manutencao preventiva no servidor principal.', (SELECT data FROM Agendamento WHERE agendaID = 1), '2026-08-15 08:30:00')
 
 GO
 select * from Visita;
