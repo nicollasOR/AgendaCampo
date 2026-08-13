@@ -57,4 +57,14 @@ public class lerVisitaDTO
     public DateTime? dataInicio { get; set; } 
     [Required(ErrorMessage = "uma data final é obrigatória")]
     public DateTime? dataTermino { get; set; }
+    
+    public string? logadouroEndereco { get; set; } = string.Empty;
+    public string? nomeCliente { get; set; } = string.Empty;
+}
+
+
+public class reagendarVisita
+{
+    public DateTime dataInicio { get; set; }
+    public DateTime dataFinal { get; set; }
 }
