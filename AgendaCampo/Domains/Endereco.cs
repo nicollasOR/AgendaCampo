@@ -14,4 +14,6 @@ public partial class Endereco
     public int numero { get; set; }
 
     public string cep { get; set; } = null!;
+
+    public virtual ICollection<Visita> Visita { get; set; } = new List<Visita>();
 }

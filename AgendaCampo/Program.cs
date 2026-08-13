@@ -1,4 +1,3 @@
-using AgendaCampo.Applications.Autenticacao;
 using AgendaCampo.Applications.Services;
 using AgendaCampo.Contexts;
 using AgendaCampo.Interface;
@@ -38,8 +37,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
 builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServer(conexaoBanco));
+
+builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
+builder.Services.AddScoped<AgendamentoService>();
+
+builder.Services.AddScoped<IVisitaRepository, VisitaRepository>();
+builder.Services.AddScoped<VisitaService>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
@@ -96,14 +100,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = string.Empty; // Exibe o Swagger na raiz da aplicação
-    });
+    app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
