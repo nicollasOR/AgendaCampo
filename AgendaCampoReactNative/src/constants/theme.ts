@@ -11,6 +11,7 @@ export const Colors = {
   white: "#FFFFFF",
   black: "#000000",
   inactive: "#9FC5DF",
+  gray: "#434656",
   smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
 };
 
