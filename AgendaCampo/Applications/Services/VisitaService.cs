@@ -170,8 +170,8 @@ public class VisitaService
 
         _rep.atualizarEndereco(id, visitaBanco.enderecoID);
     }
-    
-    // [NOVO] Atende a regra central de Reagendar Visita no App
+
+    //metodo necessario mas em analise    
     public lerVisitaDTO Reagendar(int visitaId, DateTime novaDataInicio, DateTime novaDataTermino)
     {
         var visitaBanco = _rep.BuscarPorId(visitaId);
