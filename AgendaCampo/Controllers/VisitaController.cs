@@ -30,6 +30,21 @@ namespace AgendaCampo.Controllers
                 return Ok(list);
 
         }
+        
+        [HttpGet("futurasVisitas/{usuarioId}")]
+        public ActionResult<List<lerVisitaDTO>> ListarFuturas(Guid usuarioId)
+        {
+            var lista = _service.listarFuturasVisitas(usuarioId);
+            return Ok(lista);
+        }
+
+        
+        [HttpGet("concluidas/{usuarioId}")]
+        public ActionResult<List<lerVisitaDTO>> ListarConcluidas(Guid usuarioId)
+        {
+            var lista = _service.ListarConcluidas(usuarioId);
+            return Ok(lista);
+        }
 
         [HttpGet("{id}")]
         public ActionResult<lerVisitaDTO> ObterPorId(int id)
@@ -98,7 +113,7 @@ namespace AgendaCampo.Controllers
             try
             {
                 lerVisitaDTO postDTO = _service.Adicionar(criarDTO);
-                return NoContent();
+                return Created();
             }
 
             catch(DomainException ex)
@@ -109,11 +124,48 @@ namespace AgendaCampo.Controllers
 
 
         [HttpPut]
-        public ActionResult<lerVisitaDTO> Atualizar(lerVisitaDTO lerDTO)
+        public ActionResult<lerVisitaDTO> Atualizar(int id, [FromForm] atualizarVisitaDTO lerDTO)
         {
-
+            try
+            {
+                lerVisitaDTO lerDTOs = _service.Atualizar(id, lerDTO);
+                return Ok(lerDTOs);
+            }
+            catch (DomainException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [HttpPatch("reagendar/{id}")]
+        public ActionResult<lerVisitaDTO> Reagendar(int id, [FromForm] reagendarVisita request)
+                                                            //[FromBody]
+        {
+            try
+            {
+                var visitaReagendada = _service.Reagendar(id, request.dataInicio, request.dataFinal);
+                return Ok(visitaReagendada);
+            }
+            catch (DomainException ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
+        }
+
+        [HttpDelete]
+        public ActionResult Remover(int id)
+        {
+            try
+            {
+                _service.Remover(id);
+                return NoContent();
+
+            }
+            catch (DomainException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         
 
     }
