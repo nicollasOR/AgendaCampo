@@ -7,11 +7,14 @@ export const Colors = {
   green: "#4DB266",
   darkgreen: "#064721",
   lightgreen: "#E7FEE9",
+  darknessblue: "#0B1C30",
   bgc: "#FFFFFF",
   white: "#FFFFFF",
   black: "#000000",
-  inactive: "#9FC5DF",
   gray: "#434656",
+  inactive: "#9FC5DF",
+  bgcBlue: `#D3E4FE`,
+  txtBlue: `#003EC7`,
   smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
 };
 
