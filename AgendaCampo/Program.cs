@@ -4,6 +4,7 @@ using AgendaCampo.Interface;
 using AgendaCampo.Repositories;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using RoyalGamess.Aplications.Services;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,11 @@ builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServe
 
 builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
 builder.Services.AddScoped<AgendamentoService>();
+
+builder.Services.AddScoped<IVisitaRepository, VisitaRepository>();
+builder.Services.AddScoped<VisitaService>();
+
+
 
 // cors btw
 
