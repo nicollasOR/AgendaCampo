@@ -12,9 +12,12 @@ export const Colors = {
   white: "#FFFFFF",
   black: "#000000",
   gray: "#434656",
+  grayShadow: '#43465626',
   inactive: "#9FC5DF",
+  btnblue: '#013FC7',
   bgcBlue: `#D3E4FE`,
-  txtBlue: `#003EC7`,
+  txtBlue: `#003EC7`, //
+  borderclr: '#A9C2F3',
   smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
 };
 
