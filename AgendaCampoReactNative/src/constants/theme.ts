@@ -18,6 +18,10 @@ export const Colors = {
   bgcBlue: `#D3E4FE`,
   txtBlue: `#003EC7`, //
   borderclr: '#A9C2F3',
+  darkgray: `#565F70`,
+  lightgray: `#C3C5D9`,
+  littleblue: `#D3D9EB`,
+  littlebluelight: `#E5EEFF`,
   smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
 };
 
