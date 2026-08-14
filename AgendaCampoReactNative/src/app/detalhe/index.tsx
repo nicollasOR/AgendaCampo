@@ -7,14 +7,19 @@ import {
   Text,
   View,
   TouchableOpacity,
+  SectionList
+
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Btn,
+  Center,
   Colors,
+  Column,
   Container,
   H1,
   H2,
+  H3,
   H4,
   P,
   Round,
@@ -23,7 +28,10 @@ import {
 import DetalheIcon from "../../../assets/svg/DetalheIcon.svg";
 import PerfilIcon from "../../../assets/svg/PerfilIcon.svg";
 import CriarIcon from "../../../assets/svg/CriarIcon.svg";
-import { Phone, MapPin } from "lucide-react-native";
+import EditarIcon from "../../../assets/svg/EditarIcon.svg";
+import CancelarIcon from "../../../assets/svg/CancelarIcon.svg";
+import { Phone, MapPin, Scroll, FileText } from "lucide-react-native";
+// import { Color } from "react-native/types_generated/Libraries/Animated/AnimatedExports";
 // import { Color } from "react-native/types_generated/Libraries/Animated/AnimatedExports";
 // import Feather from '@expo/vector-icons/Feather';
 
@@ -40,20 +48,42 @@ export default function Detalhe() {
     endereco: "Rodovia BR-163, Km 45, Zona Rural Sorriso - MT, 78890-000",
   };
 
+  const client = {
+
+    nome: `Fazenda São João`
+
+  }
+
+  // function dividirNome(nome:string) {
+  //   if(client)
+  //     for(let i = 0; i < name.length; i++)
+  //   {
+  //     i = nome.length[i]
+  //   }
+    
+  // }
+
+
   return (
-    <SafeAreaView style={{ ...Container }}>
-      <View style={styles.body}>
+    <SafeAreaView style={[{ ...Container }]}>
+      <View style={[styles.body, {backgroundColor: `transparent`}]}>
         {/* <View style={styles.main}> */}
-        <View style={styles.cardsContainer}>
+        <View style={[styles.cardsContainer, { paddingHorizontal: 0, backgroundColor: `transparent` }]}>
           <View style={[Round, styles.cards]}>
             <Text style={[P, styles.cardsText]}>{detalhes.id}</Text>
-            {/* {detalhes.id} */}
           </View>
           <View style={[Round, styles.cards, { width: "40%" }]}>
             <Text style={[P, styles.cardsText]}>{detalhes.statusAgenda}</Text>
           </View>
         </View>
-        <ScrollView style={[styles.main]}>
+        <ScrollView style={[styles.main]}
+
+
+
+        // contentContainerStyle={[
+        //   { paddingBottom: 30 },
+        // ]}
+        >
           <View style={[styles.titulo]}>
             <Text style={[H1, { color: Colors.darknessblue }]}>
               {detalhes.titulo}
@@ -63,17 +93,19 @@ export default function Detalhe() {
                 color={Colors.gray}
                 width={18}
                 height={24}
-                style={{ marginRight: "4%" }}
+                style={{ marginHorizontal: 5 }}
               />
+              {/* <View style={styles.imgClient}>
+                <Text>{detalhes.titulo}</Text>
+              </View> */}
               <Text style={[P, styles.dataTexto, { color: Colors.gray }]}>
-                {" "}
-                {detalhes.data}{" "}
+                {detalhes.data}
               </Text>
             </View>
           </View>
           <View style={styles.hr} />
 
-          <View style={[theme.card, styles.info, {marginTop: '2%'}]}>
+          <View style={[theme.card, styles.info, { marginTop: '2%' }]}>
             <View style={styles.tituloSup}>
               <PerfilIcon color={Colors.txtBlue} />
               <Text style={[H2, { color: Colors.darknessblue }]}>
@@ -90,7 +122,6 @@ export default function Detalhe() {
                 <Text style={[P]}>Contato: Roberto Silva (Gerente)</Text>
                 <View style={[styles.telefone]}>
                   <Phone size={16} />
-                  {/* <Image source={require("../../../assets/img/logo.png")} /> */}
                   <Text style={[P]}>(11) 98765-4321</Text>
                 </View>
               </View>
@@ -99,7 +130,7 @@ export default function Detalhe() {
             <View style={styles.hr} />
 
             <View style={[styles.tituloSup, { flexDirection: "column" }]}>
-              <View style={[styles.tituloSup, { alignItems: "center" }]}>
+              <View style={[styles.tituloSup, { alignItems: "center", marginTop: 10 }]}>
                 <MapPin />
                 <Text style={[H4, { color: Colors.black }]}>Endereço</Text>
               </View>
@@ -113,27 +144,26 @@ export default function Detalhe() {
 
           <View style={[theme.card, styles.info, styles.acoes]}>
             <Text style={[P, styles.tituloAcoes]}>AÇÕES SECUNDÁRIAS</Text>
-            <TouchableOpacity style={[Btn, styles.button, styles.buttonAcoes]}>
-              {/* <CriarIcon /> */}
-              <Text style={[styles.buttonText]}> Reagendar </Text>
+            <TouchableOpacity style={[Btn, styles.button, styles.buttonAcoes, { backgroundColor: `transparent`, borderColor: Colors.txtBlue, borderStyle: `solid`, borderWidth: 3, }]}>
+              <EditarIcon color={Colors.txtBlue} />
+              <Text style={[styles.buttonText, { color: Colors.txtBlue }]}> Reagendar </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[Btn, styles.button, styles.buttonAcoes, {margin: 0}]}>
-              {/* <CriarIcon /> */}
-              <Text style={[styles.buttonText]}> Cancelar Visita </Text>
+            <TouchableOpacity style={[Btn, styles.button, styles.buttonAcoes, { backgroundColor: `transparent`, borderColor: Colors.lightgray, borderStyle: `solid`, borderWidth: 3, }]}>
+              <CancelarIcon color={Colors.darkgray} width={30} />
+              <Text style={[styles.buttonText, { color: Colors.darkgray }]}> Cancelar Visita </Text>
             </TouchableOpacity>
           </View>
 
-          <View style={[theme.card, styles.acoes]}>
-            <View>
-              {/* <Image source={require("../../../assets/img/logo.png")} /> */}
-              <Text style={[H2, { color: Colors.darknessblue }]}>
-                Descricao do Problema
+          <View style={[theme.card, styles.info, { marginTop: '2%', gap: 10 }]}>
+            <View style={[styles.tituloSup]}>
+              <FileText color={Colors.txtBlue} size={28} />
+              <Text style={[H3, { color: Colors.darknessblue, fontWeight: 700 }]}>
+                Descrição do Problema
               </Text>
-            </View>{" "}
-            {/* titulo */}
-            <View>
-              <Text>{detalhes.descricao}</Text>
-              <Text>{detalhes.desc2}</Text>
+            </View>
+            <View style={[styles.infoDesc, {borderWidth: 2}]} >
+              <Text style={[P, {color: `black`}]}>{detalhes.descricao}</Text>
+              <Text style={[P, {color: `black`}]}>{detalhes.desc2}</Text>
             </View>
           </View>
         </ScrollView>
@@ -146,7 +176,8 @@ export default function Detalhe() {
 
 const styles = StyleSheet.create({
   body: {
-    marginHorizontal: 15,
+    paddingHorizontal: 10,
+    flex: 1
   },
 
   cardsContainer: {
@@ -154,21 +185,17 @@ const styles = StyleSheet.create({
     alignItems: `center`,
     justifyContent: `flex-start`,
     gap: `6%`,
-    height: "15%",
+    height: `7%`,
+    marginVertical: `2%`,
     width: "80%",
     // height: '%'
   },
 
   cards: {
-    // paddingVertical: `10%`,
-    // paddingHorizontal: `2%`,
     color: Colors.txtBlue,
     backgroundColor: Colors.bgcBlue,
-    height: "50%",
-    width: "59%",
-    // textAlign: 'center',
-    // alignItems: 'center',
-    // letterSpacing: 10,
+    height: "90%",
+    width: "64%",
     justifyContent: "center",
     alignItems: "center",
     borderColor: Colors.borderclr,
@@ -180,12 +207,9 @@ const styles = StyleSheet.create({
 
   main: {
     width: "100%",
-    // borderColor: 'black',
-    // outlineColor: 'black',
-    // borderWidth: 1,
-    // borderColor: Colors.gray,
-    // borderRadius: 8,
-    // borderStyle: 'solid',
+    // height: `100%`,
+
+    // padding: 
   },
 
   titulo: {},
@@ -198,6 +222,8 @@ const styles = StyleSheet.create({
     alignItems: `center`,
     // justifyContent: 'center'
   },
+
+
 
   dataTexto: {
     ...P,
@@ -220,11 +246,12 @@ const styles = StyleSheet.create({
     borderColor: Colors.grayShadow,
     borderRadius: 12,
     borderStyle: "solid",
+    gap: 10 
   },
 
   tituloSup: {
     flexDirection: "row",
-    gap: 4,
+    gap: 7,
   },
 
   section: {
@@ -235,7 +262,15 @@ const styles = StyleSheet.create({
     // alignItems: 'center'
   },
 
-  img: {},
+  img: {
+    height: 50,
+    width: 50
+
+  },
+
+  imgClient: {
+
+  },
 
   aside: {
     flexDirection: "column",
@@ -256,8 +291,8 @@ const styles = StyleSheet.create({
 
   button: {
     marginVertical: "10%",
-    width: "90%",
-    height: "7%",
+    width: "100%",
+    height: "5.5%",
     flexDirection: "row",
     alignSelf: "center",
     borderRadius: 50,
@@ -265,6 +300,8 @@ const styles = StyleSheet.create({
     gap: '2%',
     backgroundColor: Colors.btnblue
   },
+
+
 
   buttonText: {
     color: Colors.white,
@@ -275,20 +312,34 @@ const styles = StyleSheet.create({
   tituloAcoes: {
     paddingLeft: 1,
     color: Colors.gray,
-  
+
   },
   acoes: {
-    height: '25%',
+    height: '20%',
     width: '100%',
-    justifyContent: 'center',
-    // gap: 1
-    // alignItems: 'center'
-    // backgroundColor: 'black'
+    // justifyContent: `center`
   },
 
   buttonAcoes: {
-    height: '25%',
-    margin: 0
+    marginTop: 15,
+    height: '28%',
+    margin: 0,
+    marginVertical: 0
+  },
+
+  infoDesc: {
+    width: "99%",
+    alignSelf: "center",
+    borderWidth: 1,
+    borderColor: Colors.littleblue,
+    backgroundColor: Colors.littlebluelight,
+    borderRadius: 12,
+    borderStyle: "solid",
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    gap: 30,
+    justifyContent: `center`
     
   }
 
