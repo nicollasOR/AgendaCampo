@@ -17,6 +17,17 @@ export const Colors = {
   inactive: "hsl(205, 50%, 75%)",
   smoothBgc: "hsl(205, 100%, 98%)",
   smoothBgc2: "hsl(205, 100%, 95%)",
+  darknessblue: "#0B1C30",
+  gray: "#434656",
+  grayShadow: '#43465626',
+  btnblue: '#013FC7',
+  bgcBlue: `#D3E4FE`,
+  txtBlue: `#003EC7`, //
+  borderclr: '#A9C2F3',
+  darkgray: `#565F70`,
+  lightgray: `#C3C5D9`,
+  littleblue: `#D3D9EB`,
+  littlebluelight: `#E5EEFF`,
   smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
 } as const;
 
