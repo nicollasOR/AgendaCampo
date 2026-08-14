@@ -19,15 +19,16 @@ export const Colors = {
   smoothBgc2: "hsl(205, 100%, 95%)",
   darknessblue: "#0B1C30",
   gray: "#434656",
-  grayShadow: '#43465626',
-  btnblue: '#013FC7',
+  grayShadow: "#43465626",
+  btnblue: "#013FC7",
   bgcBlue: `#D3E4FE`,
   txtBlue: `#003EC7`, //
-  borderclr: '#A9C2F3',
+  borderclr: "#A9C2F3",
   darkgray: `#565F70`,
   lightgray: `#C3C5D9`,
   littleblue: `#D3D9EB`,
   littlebluelight: `#E5EEFF`,
+  btnBlue: "#003EC7",
   smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
 } as const;
 
@@ -46,6 +47,15 @@ const baseShadow: ViewStyle = {
   shadowColor: Colors.shadow,
   shadowRadius: 6,
   elevation: 4,
+};
+
+const baseInput: ViewStyle = {
+  width: "100%",
+  backgroundColor: Colors.bgc,
+  borderWidth: 1,
+  borderColor: Colors.lightgray,
+  borderRadius: 10,
+  paddingLeft: 35,
 };
 
 export const theme = StyleSheet.create({
@@ -110,6 +120,47 @@ export const theme = StyleSheet.create({
     backgroundColor: Colors.bgc,
   },
 
+  formulario: {
+    ...baseShadow,
+    width: "100%",
+
+    backgroundColor: Colors.smoothBgc,
+    borderWidth: 1,
+    borderColor: Colors.lightgray,
+    borderRadius: 10,
+
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    gap: 30,
+  },
+
+  campoForm: {
+    gap: 4,
+  },
+
+  campoInput: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+  },
+
+  inputIcon: {
+    position: "absolute",
+    left: 10,
+    zIndex: 2, // zIndex -> sobe uma camada dos elementos dentro view
+  },
+
+  input: {
+    ...baseInput,
+    height: 50,
+  },
+
+  textarea: {
+    ...baseInput,
+    minHeight: 150,
+    textAlignVertical: "top",
+  },
+
   box: {
     ...baseShadow,
     width: "100%",
@@ -142,6 +193,7 @@ export const theme = StyleSheet.create({
 
   btnText: {
     ...baseText,
+    color: Colors.white,
     fontSize: 18,
     fontFamily: Font.semibold,
   },
@@ -173,6 +225,12 @@ export const theme = StyleSheet.create({
     fontSize: 15,
   },
 
+  label: {
+    ...baseText,
+    fontSize: 18,
+    fontFamily: Font.semibold,
+  },
+
   line: {
     height: 1,
     width: "100%",
@@ -201,4 +259,8 @@ export const {
   h4: H4,
   p: P,
   line: Line,
+  input: Input,
+  inputIcon: InputIcon,
+  textarea: textarea,
+  label: Label,
 } = theme;
