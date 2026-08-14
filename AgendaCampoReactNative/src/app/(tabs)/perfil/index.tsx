@@ -50,7 +50,7 @@ export default function Perfil() {
         <View style={{ alignItems: "center" }}>
           <Text style={H1}>João Silva</Text>
           <View style={Row}>
-            <PerfilIcon color={Colors.darkblue} width={24} height={24} />
+            <PerfilIcon color={Colors.darkblue} />
             <Text style={H4}>Técnico de Campo</Text>
           </View>
         </View>
@@ -108,7 +108,7 @@ export default function Perfil() {
           <TouchableOpacity style={Box} activeOpacity={0.75}>
             <View style={Row}>
               <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
-                <PerfilIcon color={Colors.blue} width={24} height={24} />
+                <PerfilIcon color={Colors.blue} />
               </View>
               <Text style={BtnText}>Dados Pessoais</Text>
             </View>

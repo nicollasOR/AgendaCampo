@@ -1,24 +1,16 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
-import VisitaCheckIcon from "../../../../assets/svg/VisitaCheckIcon.svg";
-import ArrowMapIcon from "../../../../assets/svg/ArrowMapIcon.svg";
-import CalendarIcon from "../../../../assets/svg/CalendarIcon.svg";
-import WatchIcon from "../../../../assets/svg/WatchIcon.svg";
 import MapIcon from "../../../../assets/svg/MapIcon.svg";
 import CriarIcon from "../../../../assets/svg/CriarIcon.svg";
+import WatchIcon from "../../../../assets/svg/WatchIcon.svg";
+import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
+import ArrowMapIcon from "../../../../assets/svg/ArrowMapIcon.svg";
+import CalendarIcon from "../../../../assets/svg/CalendarIcon.svg";
+import VisitaCheckIcon from "../../../../assets/svg/VisitaCheckIcon.svg";
 import {
-  Btn,
-  Btn2,
   Colors,
-  Font,
-  H1,
   H2,
-  H3,
-  H4,
   P,
-  Row,
-  theme,
 } from "../../../constants/theme";
 import { ScrollView } from "react-native";
 
