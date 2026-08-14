@@ -2,9 +2,11 @@ import { StyleSheet, ViewStyle, TextStyle } from "react-native";
 
 export const Colors = {
   blue: "#337DB2",
+  btnBlue: "#003EC7",
   darkblue: "#063747",
   lightblue: "#E7F1FE",
-  gray: "#434656",
+  darkgray: "#434656",
+  gray: "#818286",
   lightgray: "#C3C5D9",
   green: "#4DB266",
   darkgreen: "#064721",
@@ -38,12 +40,25 @@ export const baseShadow: ViewStyle = {
   elevation: 4,
 };
 
+const baseInput: ViewStyle = {
+  width: "100%",
+  backgroundColor: Colors.bgc,
+  borderWidth: 1,
+  borderColor: Colors.lightgray,
+  borderRadius: 10,
+  paddingLeft: 35,
+}
+
 export const theme = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
     alignItems: "center",
     backgroundColor: Colors.bgc,
+  },
+
+  scroll: {
+    paddingBottom: 32,
   },
 
   center: {
@@ -97,14 +112,45 @@ export const theme = StyleSheet.create({
     backgroundColor: Colors.bgc,
   },
 
-  input: {
+  formulario: {
+    ...baseShadow,
     width: "100%",
-    backgroundColor: Colors.bgc,
+
+    backgroundColor: Colors.smoothBgc,
     borderWidth: 1,
     borderColor: Colors.lightgray,
     borderRadius: 10,
 
-    paddingLeft: 35
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    gap: 30
+  },
+
+  campoForm: {
+    gap: 4
+  },
+
+  campoInput: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative"
+  },
+
+  inputIcon: {
+    position: "absolute",
+    left: 10,
+    zIndex: 2, // zIndex -> sobe uma camada dos elementos dentro view
+  },
+
+  input: {
+    ...baseInput,
+    height: 50
+  },
+
+  textarea: {
+    ...baseInput,
+    minHeight: 150,
+    textAlignVertical: "top",
   },
 
   box: {
@@ -170,6 +216,12 @@ export const theme = StyleSheet.create({
     fontSize: 15,
   },
 
+  label: {
+    ...baseText,
+    fontSize: 18,
+    fontFamily: Font.semibold
+  },
+
   line: {
     height: 1,
     width: "100%",
@@ -180,6 +232,7 @@ export const theme = StyleSheet.create({
 
 export const {
   container: Container,
+  scroll: Scroll,
   center: Center,
   row: Row,
   column: Column,
@@ -198,4 +251,7 @@ export const {
   p: P,
   line: Line,
   input: Input,
+  inputIcon: InputIcon,
+  textarea: textarea,
+  label: Label
 } = theme;
