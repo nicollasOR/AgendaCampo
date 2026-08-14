@@ -31,7 +31,7 @@ export const Colors = {
   smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
 } as const;
 
-const Font = {
+export const Font = {
   regular: "Outfit_400Regular",
   semibold: "Outfit_600SemiBold",
   bold: "Outfit_700Bold",
@@ -72,7 +72,7 @@ export const theme = StyleSheet.create({
   },
 
   column: {
-    gap: 12,
+    gap: 18,
     flexDirection: "column",
   },
 
