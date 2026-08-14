@@ -1,8 +1,32 @@
+import { View } from "react-native";
 import { Tabs } from "expo-router";
 import { Colors } from "../../constants/theme";
-import Home from "../../../assets/svg/Home.svg";
-import Criar from "../../../assets/svg/Criar.svg";
-import Perfil from "../../../assets/svg/Perfil.svg";
+import HomeIcon from "../../../assets/svg/HomeIcon.svg";
+import CriarIcon from "../../../assets/svg/CriarIcon.svg";
+import PerfilIcon from "../../../assets/svg/PerfilIcon.svg";
+
+function TabIconWrapper({
+  children,
+  focused,
+}: {
+  children: React.ReactNode;
+  focused: boolean;
+}) {
+  return (
+    <View
+      style={{
+        width: 40,
+        height: 40,
+        borderRadius: 999,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: focused ? Colors.smoothBgc2 : "transparent",
+      }}
+    >
+      {children}
+    </View>
+  );
+}
 
 export default function TabsLayout() {
   return (
@@ -11,14 +35,15 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: Colors.bgc,
-          height: 72,
+          borderColor: Colors.lightblue,
+          borderTopWidth: 1,
           paddingBottom: 8,
-          paddingTop: 8,
+          paddingTop: 10,
         },
         tabBarActiveTintColor: Colors.blue,
         tabBarInactiveTintColor: Colors.inactive,
         tabBarLabelStyle: {
-          fontSize: 16,
+          fontSize: 14,
           fontFamily: "Outfit_700Bold",
         },
       }}
@@ -27,19 +52,22 @@ export default function TabsLayout() {
         name="home/index"
         options={{
           title: "Home",
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <Home fill={color} color={color} width={30} height={30} />
+          tabBarIcon: ({ color, focused }) => (
+            <TabIconWrapper focused={focused}>
+              <HomeIcon fill={color} color={color} width={24} height={24} />
+            </TabIconWrapper>
           ),
         }}
       />
+
       <Tabs.Screen
         name="agendamento/index"
         options={{
           title: "Agendamento",
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <Criar fill={color} color={color} width={30} height={30} />
+          tabBarIcon: ({ color, focused }) => (
+            <TabIconWrapper focused={focused}>
+              <CriarIcon fill={color} color={color} width={24} height={24} />
+            </TabIconWrapper>
           ),
         }}
       />
@@ -48,8 +76,10 @@ export default function TabsLayout() {
         name="perfil/index"
         options={{
           title: "Perfil",
-          tabBarIcon: ({ color, size }) => (
-            <Perfil fill={color} color={color} width={30} height={30} />
+          tabBarIcon: ({ color, focused }) => (
+            <TabIconWrapper focused={focused}>
+              <PerfilIcon fill={color} color={color} width={24} height={24} />
+            </TabIconWrapper>
           ),
         }}
       />
