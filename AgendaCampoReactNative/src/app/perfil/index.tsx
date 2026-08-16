@@ -15,10 +15,41 @@ import {
 } from "../../constants/theme";
 import PerfilIcon from "../../../../assets/svg/PerfilIcon.svg";
 import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
+import { buscarUsuarioID, usuarioPOST } from "../api/usuarioService";
+import { useEffect, useState } from "react";
 // import { LinearGradient } from "expo-linear-gradient";
 
+interface usuarioGET extends usuarioPOST {
+  usuarioID: string
+}
+
+
+
 export default function Perfil() {
+  const [usuario, setUsuario] = useState<usuarioGET>();
+
+
+  async function buscarUsuario(usuarioID : string){
+
+    try {
+      const response = await buscarUsuarioID(String(usuarioID))
+      console.log(response)
+    } catch (error: any) {
+      console.log(error.message)
+    }
+  }
+  
+    useEffect(() =>{
+      // buscarUsuario()
+    })
+  
+    useEffect(() =>{
+      
+    })
+  
   return (
+
+
     <SafeAreaView style={{ ...Container }}>
       {/* <LinearGradient
         colors={Colors.smoothGradient}

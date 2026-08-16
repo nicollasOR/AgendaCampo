@@ -31,11 +31,34 @@ import CriarIcon from "../../../assets/svg/CriarIcon.svg";
 import EditarIcon from "../../../assets/svg/EditarIcon.svg";
 import CancelarIcon from "../../../assets/svg/CancelarIcon.svg";
 import { Phone, MapPin, Scroll, FileText } from "lucide-react-native";
+import { useEffect, useState } from "react";
+import { listarVisitasID, visitaGet } from "../api/visitaService";
 // import { Color } from "react-native/types_generated/Libraries/Animated/AnimatedExports";
 // import { Color } from "react-native/types_generated/Libraries/Animated/AnimatedExports";
 // import Feather from '@expo/vector-icons/Feather';
 
 export default function Detalhe() {
+
+  const[visita, setVisita] = useState<visitaGet>()
+  let visitaID: number = 2
+
+  async function buscarVisitaID() {
+    try {
+      const response = await listarVisitasID(Number(visitaID))
+      setVisita(response.data)
+    } catch (error: any) {
+      return error.response.data
+    }
+  }
+
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      buscarVisitaID()
+    }, 1000);
+  }, [])
+
   const detalhes = {
     id: "ID: #VS-2023-084",
     statusAgenda: "Agendada",
