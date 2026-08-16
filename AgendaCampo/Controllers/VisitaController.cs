@@ -1,5 +1,5 @@
 using AgendaCampo.Domains;
-using AgendaCampo.DTOs.EventoDTO;
+using AgendaCampo.DTOs.VisitaDTO;
 using AgendaCampo.DTOs.UsuarioDTO;
 using AgendaCampo.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -96,7 +96,7 @@ namespace AgendaCampo.Controllers
         {
             try
             {
-                lerVisitaDTO lerDTO = _service.buscarPorEndereco(logradouro);
+                lerVisitaDTO lerDTO = _service.buscarPorEndereco(logradouro.ToLower());
                 return Ok(lerDTO);
             }
 

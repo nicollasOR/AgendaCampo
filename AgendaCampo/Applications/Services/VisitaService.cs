@@ -1,5 +1,5 @@
 using AgendaCampo.Domains;
-using AgendaCampo.DTOs.EventoDTO;
+using AgendaCampo.DTOs.VisitaDTO;
 using AgendaCampo.Exceptions;
 using AgendaCampo.Interface;
 
@@ -9,10 +9,13 @@ public class VisitaService
 {
     private readonly IVisitaRepository _rep;
     private readonly IAgendamentoRepository _agndRep;
-    public VisitaService(IVisitaRepository rep, IAgendamentoRepository _agendRep)
+
+    private readonly IEnderecoRepository _endrcRep;
+    public VisitaService(IVisitaRepository rep, IAgendamentoRepository _agendRep, IEnderecoRepository endrcRep)
     {
         _rep = rep;
         _agndRep = _agendRep;
+        _endrcRep = endrcRep;
     }
 
 
@@ -101,29 +104,34 @@ public class VisitaService
 
     public lerVisitaDTO Adicionar(criarVisitaDTO criarVisitaDto)
     {
-        var agndBanco = _agndRep.BuscarPorId(criarVisitaDto.agendamentoId);
+        Agendamento? agndBanco = _agndRep.BuscarPorId(criarVisitaDto.agendamentoId);
+        Endereco? endrcBanco = _endrcRep.buscarPorId(criarVisitaDto.enderecoId);
         if (agndBanco == null) //|| !(agndBanco.data.HasValue))    //era para funcionar o .value
             throw new DomainException("Agendamento não encontrado!"); // if(agendamento) visita == true
-
+        if (endrcBanco == null)
+            throw new DomainException("Endereço não encontrado..");
         if (agndBanco.data.Date != criarVisitaDto.dataInicio.Date)
             throw new DomainException("A visita deve ter a mesma data, hora de inicio do agendamento");
 
         if (criarVisitaDto.dataTermino <= criarVisitaDto.dataInicio)
             throw new DomainException("A data termino tem que ser depois da inicial");
+        
         if (!_rep.enderecoExiste(criarVisitaDto.enderecoId))
             throw new DomainException("Endereco não existente..");
       // falta adicionar o endereco de validação.
 
       Visita visita = new Visita
       {
-          agendamentoID = criarVisitaDto.agendamentoId,
+          agendamentoID = agndBanco.agendaID,
           dataInicio = criarVisitaDto.dataInicio,
           dataTermino = criarVisitaDto.dataTermino,
           descricao = criarVisitaDto.descricao,
           titulo = criarVisitaDto.nomeSede,
-          sedeVisitada = criarVisitaDto.nomeSede,
+          sedeVisitada = string.IsNullOrEmpty(criarVisitaDto.nomeSede) 
+                                    ? agndBanco.empresaSede // if para puxar o nome do agendamento
+                                    : criarVisitaDto.nomeSede, // else para caso não consiga
           statusRealizado = criarVisitaDto.statusRealizado,
-          enderecoID = criarVisitaDto.enderecoId,
+          enderecoID = endrcBanco.enderecoID,
       };
 
       _rep.Adicionar(visita);//);
@@ -145,8 +153,11 @@ public class VisitaService
 
         visitaBanco.titulo = atualizarDTO.nomeEvento;
         visitaBanco.descricao = atualizarDTO.descricao;
-        visitaBanco.dataTermino = atualizarDTO.dataTermino;
-        visitaBanco.dataInicio = atualizarDTO.dataInicio;
+        // visitaBanco.dataTermino = atualizarDTO.dataTermino;
+        // visitaBanco.dataInicio = atualizarDTO.dataInicio; testando o de baixo
+        visitaBanco.dataTermino = atualizarDTO.dataTermino.UtcDateTime;
+        visitaBanco.dataInicio = atualizarDTO.dataInicio.UtcDateTime;
+
         visitaBanco.agendamentoID = visitaBanco.agendamentoID;
         visitaBanco.enderecoID = visitaBanco.enderecoID;
 

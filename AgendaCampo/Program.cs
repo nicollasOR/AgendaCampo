@@ -1,4 +1,5 @@
 using AgendaCampo.Applications.Services;
+using AgendaCampo.Applications.Autenticacao;
 using AgendaCampo.Contexts;
 using AgendaCampo.Interface;
 using AgendaCampo.Repositories;
@@ -10,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using RoyalGamess.Aplications.Services;
 using System.Text;
+using AgendaCampo.Applications;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +49,11 @@ builder.Services.AddScoped<VisitaService>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
+
+builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+builder.Services.AddScoped<EnderecoService>();
+// builder.Services.AddScoped<testeService>();
+
 
 //JWT
 builder.Services.AddScoped<GeradorTokenJwt>();
