@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AgendaCampo.DTOs.EventoDTO;
+namespace AgendaCampo.DTOs.VisitaDTO;
 
 public class criarVisitaDTO
 {

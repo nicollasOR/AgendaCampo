@@ -55,7 +55,7 @@ public class VisitaRepository : IVisitaRepository
         return _context.Visita
             .Include(varAux => varAux.endereco)
             .Include(varAux => varAux.agendamento)
-            .FirstOrDefault(varAux => varAux.endereco.logradouro == logradouro);
+            .FirstOrDefault(varAux => varAux.endereco.logradouro.ToLower() == logradouro.ToLower());
     }
 
     // public bool visita_dataExistir(DateTime data)
@@ -104,7 +104,7 @@ public class VisitaRepository : IVisitaRepository
             .Include(v => v.agendamento)
             .Where(varAux => 
                 varAux.agendamento.usuarioID == usuarioId 
-                             && (varAux.statusRealizado || varAux.dataTermino < DateTime.Now))
+                             && (varAux.statusRealizado && varAux.dataTermino < DateTime.UtcNow))
             .OrderByDescending(varAux => varAux.dataInicio)
             .ToList();
     }
