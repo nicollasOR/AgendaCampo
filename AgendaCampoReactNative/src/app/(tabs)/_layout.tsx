@@ -1,8 +1,9 @@
 import { Tabs } from "expo-router";
 import { Colors } from "../../constants/theme";
-import Home from "../../../assets/svg/Home.svg";
-import Criar from "../../../assets/svg/Criar.svg";
-import Perfil from "../../../assets/svg/Perfil.svg";
+import Home from "../../../assets/svg/HomeIcon.svg";
+import Criar from "../../../assets/svg/CriarIcon.svg";
+import Perfil from "../../../assets/svg/PerfilIcon.svg";
+import React from "react";
 
 export default function TabsLayout() {
   return (
