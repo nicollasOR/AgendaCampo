@@ -64,7 +64,6 @@ export default function RootLayout() {
           name="detalhe/index"
           options={{
             title: "Detalhes do agendamento",
-            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -86,3 +85,4 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgc,
   },
 });
+

@@ -124,7 +124,7 @@ export default function Agendamento() {
           </View>
 
           <View style={{ ...Column }}>
-            :
+            
             <TouchableOpacity
               style={{
                 ...Btn2,
