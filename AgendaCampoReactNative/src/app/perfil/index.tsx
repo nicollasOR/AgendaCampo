@@ -13,7 +13,7 @@ import {
   Round,
   Row,
 } from "../../constants/theme";
-import PerfilIcon from "../../../../assets/svg/PerfilIcon.svg";
+import PerfilIcon from "../../../assets/svg/PerfilIcon.svg"
 import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
 // import { LinearGradient } from "expo-linear-gradient";
 
