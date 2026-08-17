@@ -30,8 +30,28 @@ import PerfilIcon from "../../../../assets/svg/PerfilIcon.svg";
 import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
 import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
 import RelogioIcon from "../../../../assets/svg/RelogioIcon.svg";
+import { useEffect, useState } from "react";
+import { buscarUsuarioID, usuarioPOST } from "../../api/usuarioService";
+
+interface usuarioGET extends usuarioPOST {
+  usuarioID: string;
+}
 
 export default function Perfil() {
+  const [usuario, setUsuario] = useState<usuarioGET>();
+
+  async function buscarUsuario(usuarioID: string) {
+    try {
+      const response = await buscarUsuarioID(String(usuarioID));
+      console.log(response);
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+
+  useEffect(() => {
+    // buscarUsuario()
+  });
   return (
     <SafeAreaView style={Container} edges={["top", "left", "right"]}>
       <LinearGradient
@@ -68,10 +88,7 @@ export default function Perfil() {
       >
         <ScrollView
           contentContainerStyle={[
-            Column,
-            Center,
             Scroll,
-            { paddingTop: 10, paddingBottom: 30 },
           ]}
           showsVerticalScrollIndicator={false}
         >
@@ -110,7 +127,7 @@ export default function Perfil() {
               <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
                 <PerfilIcon color={Colors.blue} />
               </View>
-              <Text style={BtnText}>Dados Pessoais</Text>
+              <Text style={[H4]}>Dados Pessoais</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
@@ -120,7 +137,7 @@ export default function Perfil() {
               <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
                 <AjudaIcon color={Colors.blue} />
               </View>
-              <Text style={BtnText}>Ajuda e Suporte</Text>
+              <Text style={[H4]}>Ajuda e Suporte</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
