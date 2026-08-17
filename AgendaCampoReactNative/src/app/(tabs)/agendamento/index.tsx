@@ -8,16 +8,24 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
+  Btn,
   Btn2,
   BtnText,
+  CampoForm,
+  CampoInput,
+  Center,
   Colors,
   Column,
   Container,
+  Form,
+  H1,
   H4,
+  Input,
   InputIcon,
   Label,
   Row,
   Scroll,
+  TextArea,
   theme,
 } from "../../../constants/theme";
 import RuaIcon from "../../../../assets/svg/RuaIcon.svg";
@@ -32,90 +40,90 @@ import CalendarioIcon from "../../../../assets/svg/CalendarioIcon.svg";
 
 export default function Agendamento() {
   return (
-    <SafeAreaView style={Container} edges={["top", "left", "right"]}>
+    <SafeAreaView style={[Container]} edges={["top", "left", "right"]}>
       <ScrollView
-        contentContainerStyle={{ ...Column, ...Scroll }}
+        contentContainerStyle={[Scroll]}
         showsVerticalScrollIndicator={false}
       >
         <View>
-          <Text style={theme.h1}>Nova Visita</Text>
-          <Text style={{ ...H4, color: Colors.darkgray }}>
+          <Text style={[H1]}>Nova Visita</Text>
+          <Text style={[H4, { color: Colors.darkgray }]}>
             Preencha os detalhes para agendar uma nova visita técnica.
           </Text>
         </View>
 
-        <View style={theme.formulario}>
-          <View style={{ ...Column }}>
-            <View style={theme.campoForm}>
-              <Text style={{ ...Label, color: Colors.darkblue }}>
+        <View style={[Form]}>
+          <View style={[Column]}>
+            <View style={[CampoForm]}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
                 Cliente / Propriedade
               </Text>
-              <View style={theme.campoInput}>
-                <PesquisaIcon style={theme.inputIcon} color={Colors.gray} />
+              <View style={[CampoInput]}>
+                <PesquisaIcon style={[InputIcon]} color={Colors.gray} />
                 <TextInput
-                  style={theme.input}
+                  style={[Input]}
                   placeholder="Buscar cliente..."
                 />
               </View>
             </View>
 
-            <View style={theme.campoForm}>
-              <Text style={{ ...Label, color: Colors.darkblue }}>
+            <View style={[CampoForm]}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
                 Data da Visita
               </Text>
-              <View style={theme.campoInput}>
-                <CalendarioIcon style={theme.inputIcon} color={Colors.gray} />
-                <TextInput style={theme.input} placeholder="mm/dd/yyyy" />
+              <View style={[CampoInput]}>
+                <CalendarioIcon style={[InputIcon]} color={Colors.gray} />
+                <TextInput style={[Input]} placeholder="mm/dd/yyyy" />
               </View>
             </View>
 
-            <View style={theme.campoForm}>
-              <Text style={{ ...Label, color: Colors.darkblue }}>
+            <View style={[CampoForm]}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
                 Horário Previsto
               </Text>
-              <View style={theme.campoInput}>
-                <RelogioIcon style={theme.inputIcon} color={Colors.gray} />
-                <TextInput style={theme.input} placeholder="--:-- --" />
+              <View style={[CampoInput]}>
+                <RelogioIcon style={[InputIcon]} color={Colors.gray} />
+                <TextInput style={[Input]} placeholder="--:-- --" />
               </View>
             </View>
 
-            <View style={theme.campoForm}>
-              <Text style={{ ...Label, color: Colors.darkblue }}>Cep</Text>
-              <View style={theme.campoInput}>
-                <LocalIcon style={theme.inputIcon} color={Colors.gray} />
-                <TextInput style={theme.input} placeholder="00000-000" />
+            <View style={[CampoForm]}>
+              <Text style={[Label, { color: Colors.darkblue }]}>Cep</Text>
+              <View style={[CampoInput]}>
+                <LocalIcon style={[InputIcon]} color={Colors.gray} />
+                <TextInput style={[Input]} placeholder="00000-000" />
               </View>
             </View>
 
-            <View style={theme.campoForm}>
-              <Text style={{ ...Label, color: Colors.darkblue }}>
+            <View style={[CampoForm]}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
                 Logradouro / Endereço
               </Text>
-              <View style={theme.campoInput}>
-                <RuaIcon style={theme.inputIcon} color={Colors.gray} />
-                <TextInput style={theme.input} />
+              <View style={[CampoInput]}>
+                <RuaIcon style={[InputIcon]} color={Colors.gray} />
+                <TextInput style={[Input]} />
               </View>
             </View>
 
-            <View style={theme.campoForm}>
-              <Text style={{ ...Label, color: Colors.darkblue }}>Número</Text>
-              <View style={theme.campoInput}>
-                <NumeroIcon style={theme.inputIcon} color={Colors.gray} />
-                <TextInput style={theme.input} />
+            <View style={[CampoForm]}>
+              <Text style={[Label, { color: Colors.darkblue }]}>Número</Text>
+              <View style={[CampoInput]}>
+                <NumeroIcon style={[InputIcon]} color={Colors.gray} />
+                <TextInput style={[Input]} />
               </View>
             </View>
 
-            <View style={theme.campoForm}>
-              <Text style={{ ...Label, color: Colors.darkblue }}>
+            <View style={[CampoForm]}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
                 Descrição do Serviço
               </Text>
-              <View style={theme.campoInput}>
+              <View style={[CampoInput]}>
                 <DescricaoIcon
-                  style={{ ...InputIcon, top: 15 }}
+                  style={[InputIcon, { top: 15 }]}
                   color={Colors.gray}
                 />
                 <TextInput
-                  style={theme.textarea}
+                  style={[TextArea]}
                   placeholder="Instruções específicas para o técnico..."
                   multiline={true}
                 />
@@ -123,23 +131,23 @@ export default function Agendamento() {
             </View>
           </View>
 
-          <View style={{ ...Column }}>
-            :
+          <View style={[Column, Center]}>
             <TouchableOpacity
-              style={{
-                ...Btn2,
-                ...Row,
-                backgroundColor: Colors.lightred,
-                borderWidth: 2,
-                borderColor: Colors.red,
-              }}
+              style={[
+                Btn2,
+                {
+                  backgroundColor: Colors.lightred,
+                  borderWidth: 2,
+                  borderColor: Colors.red,
+                },
+              ]}
             >
-              <CancelarIcon color={Colors.red} />
-              <Text style={{ ...BtnText, color: Colors.red }}>Cancelar</Text>
+              <CancelarIcon color={Colors.darkred} />
+              <Text style={[BtnText, { color: Colors.darkred }]}>Cancelar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnAgendar}>
+            <TouchableOpacity style={[Btn]}>
               <ConfirmarIcon color={Colors.white} />
-              <Text style={{ ...BtnText, color: Colors.white }}>
+              <Text style={[BtnText, { color: Colors.white }]}>
                 Confirmar Agendamento
               </Text>
             </TouchableOpacity>
@@ -149,17 +157,3 @@ export default function Agendamento() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  btnAgendar: {
-    ...Btn2,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-
-    position: "relative",
-
-    backgroundColor: Colors.btnBlue,
-  },
-});

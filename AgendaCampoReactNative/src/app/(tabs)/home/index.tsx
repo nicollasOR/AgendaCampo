@@ -7,16 +7,19 @@ import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
 import ArrowMapIcon from "../../../../assets/svg/ArrowMapIcon.svg";
 import CalendarIcon from "../../../../assets/svg/CalendarIcon.svg";
 import VisitaCheckIcon from "../../../../assets/svg/VisitaCheckIcon.svg";
-import {
-  Colors,
-  H2,
-  P,
-} from "../../../constants/theme";
+import { Colors, H2, P } from "../../../constants/theme";
 import { ScrollView } from "react-native";
+import { useRouter } from "expo-router";
 
 const Home = () => {
+  const router = useRouter();
+
   return (
-    <ScrollView style={styles.main} contentContainerStyle={styles.mainContent} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={styles.main}
+      contentContainerStyle={styles.mainContent}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.content}>
         <View style={styles.welcomeUser}>
           <Text style={{ ...H2, color: Colors.black }}>Olá, Técnico João</Text>
@@ -46,7 +49,7 @@ const Home = () => {
               <View style={styles.topCard}>
                 <View style={styles.cabecalhoCard}>
                   <View style={styles.statusVisita}>
-                    <Text style={{ ...P, fontSize: 12, color: Colors.btnBlue }}>
+                    <Text style={{ ...P, fontSize: 12, color: Colors.btn }}>
                       Agendada
                     </Text>
                   </View>
@@ -86,8 +89,11 @@ const Home = () => {
             </View>
 
             <View style={styles.rodapeCard}>
-              <TouchableOpacity style={styles.btnCard}>
-                <Text style={{ ...P, fontSize: 14, color: Colors.btnBlue }}>
+              <TouchableOpacity
+                style={styles.btnCard}
+                onPress={() => router.push("/detalhe")}
+              >
+                <Text style={{ ...P, fontSize: 14, color: Colors.btn }}>
                   Detalhes
                 </Text>
               </TouchableOpacity>
@@ -106,7 +112,7 @@ const Home = () => {
               <View style={styles.topCard}>
                 <View style={styles.cabecalhoCard}>
                   <View style={styles.statusVisita}>
-                    <Text style={{ ...P, fontSize: 12, color: Colors.btnBlue }}>
+                    <Text style={{ ...P, fontSize: 12, color: Colors.btn }}>
                       Agendada
                     </Text>
                   </View>
@@ -147,7 +153,7 @@ const Home = () => {
 
             <View style={styles.rodapeCard}>
               <TouchableOpacity style={styles.btnCard}>
-                <Text style={{ ...P, fontSize: 14, color: Colors.btnBlue }}>
+                <Text style={{ ...P, fontSize: 14, color: Colors.btn }}>
                   Detalhes
                 </Text>
               </TouchableOpacity>
@@ -162,9 +168,11 @@ const Home = () => {
           </View>
 
           <TouchableOpacity style={styles.btnAgendar}>
-          <CriarIcon color={Colors.white}/>
-          <Text style={{ ...P, fontSize:15 , color: Colors.white }}>Agendar Nova Visita</Text>
-        </TouchableOpacity>
+            <CriarIcon color={Colors.white} />
+            <Text style={{ ...P, fontSize: 15, color: Colors.white }}>
+              Agendar Nova Visita
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -174,15 +182,15 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
-    main:{
-        flex:1
-    },
+  main: {
+    flex: 1,
+  },
 
   mainContent: {
     width: "100%",
     alignItems: "center",
     paddingTop: 20,
-    paddingBottom: 20
+    paddingBottom: 20,
   },
 
   content: {
@@ -197,14 +205,14 @@ const styles = StyleSheet.create({
   containerVisitas: {
     flexDirection: "column",
     gap: 10,
-    alignItems: "center"
+    alignItems: "center",
   },
 
   topOfContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: '100%'
+    width: "100%",
   },
 
   textBigger: {
@@ -305,13 +313,13 @@ const styles = StyleSheet.create({
 
   btnAgendar: {
     backgroundColor: "#013e9b",
-    width: '60%',
+    width: "60%",
     borderRadius: 10,
     paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
-    marginTop: 30
+    marginTop: 30,
   },
 });

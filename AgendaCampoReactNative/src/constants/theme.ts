@@ -4,32 +4,22 @@ export const Colors = {
   blue: "hsl(205, 55%, 45%)",
   darkblue: "hsl(195, 85%, 15%)",
   lightblue: "hsl(215, 92%, 95%)",
-  green: "hsl(135, 40%, 50%)",
-  darkgreen: "hsl(145, 85%, 15%)",
-  lightgreen: "hsl(125, 92%, 95%)",
   lightred: "hsl(0, 92%, 95%)",
   red: "hsl(0, 100%, 75%)",
   darkred: "hsl(0, 65%, 35%)",
-  bgc: "#FFFFFF",
-  white: "#FFFFFF",
-  black: "#000000",
-  shadow: "hsla(195, 85%, 15%, 0.40)",
+  bgc: "hsl(0, 0%, 100%)",
+  white: "hsl(0, 0%, 100%)",
+  black: "hsl(0, 0%, 0%)",
+  shadow: "hsla(195, 85%, 15%, 0.4)",
   inactive: "hsl(205, 50%, 75%)",
   smoothBgc: "hsl(205, 100%, 98%)",
   smoothBgc2: "hsl(205, 100%, 95%)",
-  darknessblue: "#0B1C30",
-  gray: "#434656",
-  grayShadow: "#43465626",
-  btnblue: "#013FC7",
-  bgcBlue: "#D3E4FE",
-  txtBlue: "#003EC7",
-  borderclr: "#A9C2F3",
-  darkgray: "#565F70",
-  lightgray: "#C3C5D9",
-  littleblue: "#D3D9EB",
-  littlebluelight: "#E5EEFF",
-  btnBlue: "#003EC7",
-  smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
+  gray: "hsl(231, 12%, 30%)",
+  border: "hsla(195, 84%, 15%, 0.05)",
+  darkgray: "hsl(220, 15%, 35%)",
+  lightgray: "hsl(235, 20%, 80%)",
+  btn: "hsl(220, 100%, 40%)",
+  smoothGradient: ["hsl(205, 100%, 95%)", "hsl(0, 0%, 100%)"] as const,
 } as const;
 
 export const Font = {
@@ -67,6 +57,10 @@ export const theme = StyleSheet.create({
   },
 
   scroll: {
+    gap: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 16,
     paddingBottom: 32,
   },
 
@@ -117,10 +111,12 @@ export const theme = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderRadius: 20,
+    borderWidth: 2,
+    borderColor: Colors.border,
     backgroundColor: Colors.bgc,
   },
 
-  formulario: {
+  form: {
     ...baseShadow,
     width: "100%",
 
@@ -155,7 +151,7 @@ export const theme = StyleSheet.create({
     height: 50,
   },
 
-  textarea: {
+  textArea: {
     ...baseInput,
     minHeight: 150,
     textAlignVertical: "top",
@@ -163,7 +159,6 @@ export const theme = StyleSheet.create({
 
   box: {
     ...baseShadow,
-    width: "100%",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderWidth: 2,
@@ -176,18 +171,26 @@ export const theme = StyleSheet.create({
   },
 
   btn: {
+    gap: 10,
     paddingVertical: 16,
+    height: 60,
     paddingHorizontal: 24,
-    borderRadius: 16,
+    width: "90%",
+    borderRadius: 999,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    backgroundColor: Colors.btn,
   },
 
   btn2: {
+    gap: 10,
     padding: 16,
-    width: "65%",
+    height: 60,
+    width: "90%",
     borderRadius: 999,
     alignItems: "center",
+    flexDirection: "row",
     justifyContent: "center",
   },
 
@@ -261,6 +264,10 @@ export const {
   line: Line,
   input: Input,
   inputIcon: InputIcon,
-  textarea: textarea,
   label: Label,
+  form: Form,
+  campoForm: CampoForm,
+  campoInput: CampoInput,
+  textArea: TextArea,
+
 } = theme;
