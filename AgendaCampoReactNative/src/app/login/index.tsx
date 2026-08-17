@@ -8,84 +8,88 @@ import {
   StyleSheet,
 } from "react-native";
 
-import EmailIcon from "../../../assets/svg/email.svg";
-import CadeadoIcon from "../../../assets/svg/cadeado.svg";
+import EmailIcon from "../../../assets/svg/EmailIcon.svg";
+import CadeadoIcon from "../../../assets/svg/CadeadoIcon.svg";
+import SetaIcon from "../../../assets/svg/FlechaIcon.svg"
 import { Image } from "react-native";
+import { Btn, Btn2, CampoForm, CampoInput, Colors, Column, Container, H1, H2, H3, Input, InputIcon, P } from "../../constants/theme";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Login() {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={Container} edges={["top", "left", "right"]}>
 
-      <View style={styles.card}>
+      {/* <View style={styles.card}> */}
 
-        <Image source={require("../../../assets/img/logo.png")}
-        style={styles.logo}/>
+      <Image source={require("../../../assets/img/logo.png")}
+        style={styles.logo} />
 
-          <Text style={styles.titulo}>
-            AgendaCampo
+      <Text style={[H2, { color: Colors.btn }]}>
+        AgendaCampo
+      </Text>
+
+      <Text style={[H3, { color: Colors.gray }]}>
+        Acesse sua conta para continuar.
+      </Text>
+
+      <View style={[Column, CampoForm]}>
+
+        <Text style={[P, { color: Colors.black, fontWeight: '500' }, styles.campoInput]}>
+          E-mail
+        </Text>
+
+        <View style={[CampoInput]}>
+          <EmailIcon width={20} height={20} color={"#003EC7"} style={InputIcon} />
+
+          <TextInput
+            style={[Input]}
+            placeholder="  seu@email.com"
+          />
+        </View>
+
+
+        <Text style={[P, { color: Colors.black, fontWeight: '500' }, styles.campoInput]}>
+          Senha
+        </Text>
+
+        <View style={[CampoInput]}>
+
+          <CadeadoIcon width={20} height={20} color={"#003EC7"} style={[InputIcon ]} />
+          <TextInput
+            style={[Input]}
+            placeholder="  *******"
+            secureTextEntry
+          />
+        </View>
+
+
+        {/* Esqueci minha senha */}
+        <Text style={[P, {color: Colors.btn}]}>
+          Esqueci minha senha
+        </Text>
+
+
+        <TouchableOpacity style={[Btn, {borderRadius: 10}]} onPress={() => router.push("/tabs/home")}>
+          <Text style={styles.textobotao}>
+            Acessar
           </Text>
+          <SetaIcon width={20} height={20} color={Colors.white}/>
+        </TouchableOpacity>
 
-          <Text style={styles.descricao}>
-            Acesse sua conta para continuar.
+
+        <View style={styles.footer}>
+          <Text>
+            Uso exclusivo para técnicos e operacionais
           </Text>
-
-        <View style={styles.campo}>
-
-          <Text style={styles.email}>
-            E-mail
-          </Text>
-
-          <View style={styles.inputContainer}>
-            <EmailIcon width={20} height={20} color={"#003EC7"} />
-
-            <TextInput
-              style={styles.input}
-              placeholder="  seu@email.com"
-            />
-          </View>
-
-
-          <Text style={styles.senha}>
-            Senha
-          </Text>
-
-          <View style={styles.inputContainer}>
-            <CadeadoIcon width={20} height={20} color={"#003EC7"} />
-
-            <TextInput
-              style={styles.input}
-              placeholder="  *******"
-              secureTextEntry
-            />
-          </View>
-
-
-          {/* Esqueci minha senha */}
-          <Text style={styles.senhaesquecida}>
-            Esqueci minha senha
-          </Text>
-
-
-          <TouchableOpacity style={styles.botao}>
-            <Text style={styles.textobotao}>
-              Acessar
-            </Text>
-          </TouchableOpacity>
-
-
-          <View style={styles.footer}>
-            <Text>
-              Uso exclusivo para técnicos e operacionais
-            </Text>
-          </View>
-
         </View>
 
       </View>
 
-    </View>
+      {/* </View> */}
+
+    </SafeAreaView>
   );
 }
 
@@ -105,14 +109,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  logo:{
-  width: 70,
-  height: 30,
-  resizeMode: "contain",
-  alignSelf: "center",
-  marginTop: 10,
-  marginBottom: 20,
-},
+  logo: {
+    width: 70,
+    height: 30,
+    resizeMode: "contain",
+    alignSelf: "center",
+    marginTop: 10,
+    marginBottom: 20,
+  },
 
   titulo: {
     color: "#003EC7",
@@ -126,6 +130,10 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     fontSize: 20,
     textAlign: "center"
+  },
+
+  campoInput: {
+    marginBottom: `2%`
   },
 
   campo: {
@@ -143,7 +151,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 
-  
+
   inputContainer: {
     width: 300,
     height: 45,
@@ -157,7 +165,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  
+
   input: {
     flex: 1,
     marginLeft: 8,
