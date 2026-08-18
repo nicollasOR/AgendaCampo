@@ -1,25 +1,39 @@
-import { StyleSheet, ViewStyle, TextStyle } from "react-native";
+import { StyleSheet, TextStyle, ViewStyle } from "react-native";
+
+// ════════════════════════════════ //
+//  1. DESIGN (Cores e Tipografia)  //
+// ════════════════════════════════ //
 
 export const Colors = {
-  blue: "hsl(205, 55%, 45%)",
-  darkblue: "hsl(195, 85%, 15%)",
-  lightblue: "hsl(215, 92%, 95%)",
-  lightred: "hsl(0, 92%, 95%)",
+  // Cores Principais
+  blue: "hsl(225, 55%, 50%)",
+  darkblue: "hsl(225, 85%, 15%)",
+  lightblue: "hsl(225, 100%, 90%)",
+  btn: "hsl(220, 100%, 40%)",
+
+  // Status & Alertas
   red: "hsl(0, 100%, 75%)",
   darkred: "hsl(0, 65%, 35%)",
+  lightred: "hsl(0, 92%, 95%)",
+  status: "hsl(215, 85%, 92%)",
+
+  // Neutros
   bgc: "hsl(0, 0%, 100%)",
   white: "hsl(0, 0%, 100%)",
-  black: "hsl(0, 0%, 0%)",
-  shadow: "hsla(195, 85%, 15%, 0.4)",
-  inactive: "hsl(205, 50%, 75%)",
-  smoothBgc: "hsl(205, 100%, 98%)",
-  smoothBgc2: "hsl(205, 100%, 95%)",
-  gray: "hsl(231, 12%, 30%)",
-  border: "hsla(195, 84%, 15%, 0.05)",
-  darkgray: "hsl(220, 15%, 35%)",
-  lightgray: "hsl(235, 20%, 80%)",
-  btn: "hsl(220, 100%, 40%)",
-  smoothGradient: ["hsl(205, 100%, 95%)", "hsl(0, 0%, 100%)"] as const,
+  black: "hsl(215, 100%, 2%)",
+  gray: "hsl(230, 25%, 40%)",
+  darkgray: "hsl(220, 25%, 20%)",
+  lightgray: "hsl(235, 15%, 80%)",
+  inactive: "hsl(215, 50%, 75%)",
+
+  // Backgrounds Suaves
+  smoothBgc: "hsl(215, 100%, 98%)",
+  smoothBgc2: "hsl(215, 100%, 95%)",
+
+  // Transparências & Efeitos
+  shadow: "hsla(215, 85%, 15%, 0.4)",
+  border: "hsla(215, 84%, 15%, 0.05)",
+  smoothGradient: ["hsl(215, 100%, 95%)", "hsl(0, 0%, 100%)"] as const,
 } as const;
 
 export const Font = {
@@ -28,9 +42,14 @@ export const Font = {
   bold: "Outfit_700Bold",
 } as const;
 
+// ═════════════════ //
+// 2. ESTILOS BASE   //
+// ═════════════════ //
+
 const baseText: TextStyle = {
   color: Colors.darkblue,
   fontFamily: Font.regular,
+  flexShrink: 1,
 };
 
 const baseShadow: ViewStyle = {
@@ -48,14 +67,18 @@ const baseInput: ViewStyle = {
   paddingLeft: 35,
 };
 
+// ═══════════════ //
+// 3. STYLESHEET   //
+// ═══════════════ //
+
 export const theme = StyleSheet.create({
+  // --- Layout & Containers ---
   container: {
     flex: 1,
     paddingHorizontal: 20,
     alignItems: "center",
     backgroundColor: Colors.bgc,
   },
-
   scroll: {
     gap: 18,
     alignItems: "center",
@@ -63,23 +86,34 @@ export const theme = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 32,
   },
-
   center: {
     alignItems: "center",
     justifyContent: "center",
   },
-
   row: {
     gap: 10,
     alignItems: "center",
     flexDirection: "row",
   },
-
   column: {
     gap: 18,
     flexDirection: "column",
   },
+  list: {
+    gap: 6,
+    flexDirection: "column",
+  },
+  spaceBetween: {
+    justifyContent: "space-between",
+  },
+  line: {
+    height: 1,
+    width: "100%",
+    backgroundColor: Colors.blue,
+    opacity: 0.2,
+  },
 
+  // --- Visual & Componentes Gerais ---
   info: {
     gap: 12,
     padding: 20,
@@ -88,7 +122,6 @@ export const theme = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   round: {
     ...baseShadow,
     borderWidth: 4,
@@ -96,7 +129,6 @@ export const theme = StyleSheet.create({
     overflow: "hidden",
     borderRadius: 999,
   },
-
   icon: {
     width: 48,
     height: 48,
@@ -105,6 +137,7 @@ export const theme = StyleSheet.create({
     borderRadius: 999,
   },
 
+  // --- Cards ---
   card: {
     ...baseShadow,
     width: "100%",
@@ -115,48 +148,70 @@ export const theme = StyleSheet.create({
     borderColor: Colors.border,
     backgroundColor: Colors.bgc,
   },
+  cardInfo: {
+    ...baseShadow,
+    width: "100%",
+    borderRadius: 20,
+    borderLeftWidth: 4,
+    borderColor: Colors.btn,
+    backgroundColor: Colors.bgc,
+  },
+  cardFooter: {
+    padding: 12,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 10,
+    alignItems: "center",
+    backgroundColor: Colors.status,
+    borderTopWidth: 0.5,
+    borderColor: Colors.gray,
+    width: "100%",
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+  },
+  status: {
+    backgroundColor: Colors.status,
+    borderRadius: 8,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+  },
 
+  // --- Formulários & Inputs ---
   form: {
     ...baseShadow,
     width: "100%",
-
     backgroundColor: Colors.smoothBgc,
     borderWidth: 1,
     borderColor: Colors.lightgray,
     borderRadius: 10,
-
     paddingHorizontal: 18,
-    paddingVertical: 10,
+    paddingVertical: 20,
     gap: 30,
   },
-
   campoForm: {
     gap: 4,
   },
-
   campoInput: {
     flexDirection: "row",
     alignItems: "center",
     position: "relative",
   },
-
   inputIcon: {
     position: "absolute",
     left: 10,
-    zIndex: 2, // zIndex -> sobe uma camada dos elementos dentro view
+    zIndex: 2,
   },
-
   input: {
     ...baseInput,
     height: 50,
   },
-
   textArea: {
     ...baseInput,
     minHeight: 150,
     textAlignVertical: "top",
   },
 
+  // --- Boxes / Containers Destacados ---
   box: {
     ...baseShadow,
     paddingVertical: 8,
@@ -169,7 +224,28 @@ export const theme = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: Colors.smoothBgc,
   },
+  box2: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: Colors.btn,
+  },
+  box3: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Colors.btn,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: Colors.bgc,
+  },
 
+  // --- Botões ---
   btn: {
     gap: 10,
     paddingVertical: 16,
@@ -182,7 +258,6 @@ export const theme = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: Colors.btn,
   },
-
   btn2: {
     gap: 10,
     padding: 16,
@@ -193,7 +268,6 @@ export const theme = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
-
   btnText: {
     ...baseText,
     color: Colors.white,
@@ -201,73 +275,81 @@ export const theme = StyleSheet.create({
     fontFamily: Font.semibold,
   },
 
+  // --- Tipografia ---
   h1: {
     ...baseText,
     fontSize: 32,
     fontFamily: Font.bold,
   },
-
   h2: {
     ...baseText,
     fontSize: 26,
     fontFamily: Font.semibold,
   },
-
   h3: {
     ...baseText,
     fontSize: 22,
   },
-
   h4: {
     ...baseText,
     fontSize: 18,
   },
-
   p: {
     ...baseText,
     fontSize: 15,
   },
-
   label: {
     ...baseText,
     fontSize: 18,
     fontFamily: Font.semibold,
   },
-
-  line: {
-    height: 1,
-    width: "100%",
-    backgroundColor: Colors.blue,
-    opacity: 0.2,
-  },
 });
 
+// ════════════════ //
+// 4. EXPORTAÇÕES   //
+// ════════════════ //
+
 export const {
+  // Layout
   container: Container,
   scroll: Scroll,
   center: Center,
   row: Row,
   column: Column,
+  list: List,
+  spaceBetween: SpaceBetween,
+  line: Line,
+
+  // Componentes
   info: Info,
   round: Round,
   icon: Icon,
   card: Card,
+  cardInfo: CardInfo,
+  cardFooter: CardFooter,
+  status: Status,
+
+  // Boxes & Botões
   box: Box,
+  box2: Box2,
+  box3: Box3,
   btn: Btn,
   btn2: Btn2,
   btnText: BtnText,
+
+  // Form
+  form: Form,
+  campoForm: CampoForm,
+  campoInput: CampoInput,
+  input: Input,
+  inputIcon: InputIcon,
+  textArea: TextArea,
+
+  // Tipografia
   h1: H1,
   h2: H2,
   h3: H3,
   h4: H4,
   p: P,
-  line: Line,
-  input: Input,
-  inputIcon: InputIcon,
   label: Label,
-  form: Form,
-  campoForm: CampoForm,
-  campoInput: CampoInput,
-  textArea: TextArea,
-
 } = theme;

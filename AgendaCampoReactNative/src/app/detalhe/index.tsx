@@ -18,12 +18,14 @@ import {
   Row,
   Scroll,
 } from "../../constants/theme";
-import DetalheIcon from "../../../assets/svg/DetalheIcon.svg";
-import PerfilIcon from "../../../assets/svg/PerfilIcon.svg";
 import CriarIcon from "../../../assets/svg/CriarIcon.svg";
+import LocalIcon from "../../../assets/svg/LocalIcon.svg";
 import EditarIcon from "../../../assets/svg/EditarIcon.svg";
+import PerfilIcon from "../../../assets/svg/PerfilIcon.svg";
+import NumeroIcon from "../../../assets/svg/NumeroIcon.svg";
+import DetalheIcon from "../../../assets/svg/DetalheIcon.svg";
 import CancelarIcon from "../../../assets/svg/CancelarIcon.svg";
-import { Phone, MapPin, FileText } from "lucide-react-native";
+import DescricaoIcon from "../../../assets/svg/DescricaoIcon.svg";
 import { useEffect, useState } from "react";
 import { listarVisitasID, visitaGet } from "../api/visitaService";
 
@@ -71,73 +73,65 @@ export default function Detalhe() {
   // }
 
   return (
-    <SafeAreaView style={[Container]}>
-      <View style={[Column]}>
-        <View style={[Row]}>
-          <View style={[Box]}>
-            <Text style={[P]}>{detalhes.id}</Text>
+    <SafeAreaView style={[Container , {paddingTop: 0}]} edges={["top", "left", "right"]}>
+      <View style={Column}>
+        <View style={Row}>
+          <View style={Box}>
+            <Text style={P}>{detalhes.id}</Text>
           </View>
-          <View style={[Box]}>
-            <Text style={[P]}>{detalhes.statusAgenda}</Text>
+          <View style={Box}>
+            <Text style={P}>{detalhes.statusAgenda}</Text>
           </View>
         </View>
         <ScrollView
-          contentContainerStyle={[Scroll]}
+          contentContainerStyle={Scroll}
           showsVerticalScrollIndicator={false}
         >
-          <View style={[Column]}>
+          <View style={Column}>
             <Text style={[H1, { color: Colors.darkblue }]}>
               {detalhes.titulo}
             </Text>
-            <View style={[Row]}>
+            <View style={Row}>
               <DetalheIcon color={Colors.gray} />
               <Text style={[P, { color: Colors.gray }]}>{detalhes.data}</Text>
             </View>
           </View>
-          <View style={[Line]} />
+          <View style={Line} />
           <View style={[Card, Column]}>
-            <View style={[Row]}>
+            <View style={Row}>
               <PerfilIcon color={Colors.darkblue} />
               <Text style={[H2, { color: Colors.darkblue }]}>
                 Cliente e Local
               </Text>
             </View>
-            <View style={[Row]}>
+            <View style={Row}>
               <Image source={require("../../../assets/img/logo.png")} />
               <View>
-                <Text style={[H4]}>Fazenda São João </Text>
-                <Text style={[P]}>Contato: Roberto Silva (Gerente)</Text>
-                <View style={[Row]}>
-                  <Phone size={16} />
-                  <Text style={[P]}>(11) 98765-4321</Text>
+                <Text style={H4}>Fazenda São João </Text>
+                <Text style={P}>Contato: Roberto Silva (Gerente)</Text>
+                <View style={Row}>
+                  <NumeroIcon />
+                  <Text style={P}>(11) 98765-4321</Text>
                 </View>
               </View>
             </View>
 
             <View style={[H3, { flexDirection: "column" }]}>
               <View style={[H3, Row]}>
-                <MapPin />
+                <LocalIcon />
                 <Text style={[H4, { color: Colors.black }]}>Endereço</Text>
               </View>
-              <Text style={[P]}>{detalhes.endereco}</Text>
+              <Text style={P}>{detalhes.endereco}</Text>
             </View>
           </View>
-          <TouchableOpacity style={[Btn]}>
+          <TouchableOpacity style={Btn}>
             <CriarIcon color={Colors.white} />
-            <Text style={[BtnText]}> Iniciar Atendimento </Text>
+            <Text style={BtnText}> Iniciar Atendimento </Text>
           </TouchableOpacity>
-          <View style={[Line]} />
+          <View style={Line} />
           <View style={[Center, Card, Column]}>
-            <Text style={[P]}>AÇÕES SECUNDÁRIAS</Text>
-            <TouchableOpacity
-              style={[
-                Btn,
-                {
-                  borderColor: Colors.txtBlue,
-                  borderWidth: 2,
-                },
-              ]}
-            >
+            <Text style={P}>AÇÕES SECUNDÁRIAS</Text>
+            <TouchableOpacity style={Btn}>
               <EditarIcon color={Colors.white} />
               <Text style={[BtnText, { color: Colors.white }]}>Reagendar</Text>
             </TouchableOpacity>
@@ -158,8 +152,8 @@ export default function Detalhe() {
             </TouchableOpacity>
           </View>
           <View style={[Card, Column]}>
-            <View style={[Row]}>
-              <FileText color={Colors.darkblue} size={28} />
+            <View style={Row}>
+              <DescricaoIcon color={Colors.darkblue} />
               <Text style={[H3, { color: Colors.darkblue }]}>
                 Descrição do Problema
               </Text>

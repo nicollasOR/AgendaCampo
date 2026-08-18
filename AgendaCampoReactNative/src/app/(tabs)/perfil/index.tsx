@@ -2,7 +2,6 @@ import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import MaskedView from "@react-native-masked-view/masked-view";
-
 import {
   Box,
   Btn2,
@@ -19,7 +18,6 @@ import {
   H4,
   H1,
   BtnText,
-  Center,
   Scroll,
 } from "../../../constants/theme";
 
@@ -53,7 +51,7 @@ export default function Perfil() {
     // buscarUsuario()
   });
   return (
-    <SafeAreaView style={Container} edges={["top", "left", "right"]}>
+    <SafeAreaView style={Container} edges={["left", "right"]}>
       <LinearGradient
         colors={Colors.smoothGradient}
         style={Info}
@@ -77,7 +75,7 @@ export default function Perfil() {
       </LinearGradient>
 
       <MaskedView
-        style={{ flex: 1 }}
+        style={{ flex: 1, width: "100%" }}
         maskElement={
           <LinearGradient
             colors={["transparent", "black", "black", "transparent"]}
@@ -87,9 +85,7 @@ export default function Perfil() {
         }
       >
         <ScrollView
-          contentContainerStyle={[
-            Scroll,
-          ]}
+          contentContainerStyle={Scroll}
           showsVerticalScrollIndicator={false}
         >
           <View style={[Column, Card]}>
@@ -122,22 +118,28 @@ export default function Perfil() {
             </View>
           </View>
 
-          <TouchableOpacity style={Box} activeOpacity={0.75}>
+          <TouchableOpacity
+            style={[Box, { width: "100%" }]}
+            activeOpacity={0.75}
+          >
             <View style={Row}>
               <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
                 <PerfilIcon color={Colors.blue} />
               </View>
-              <Text style={[H4]}>Dados Pessoais</Text>
+              <Text style={H4}>Dados Pessoais</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
 
-          <TouchableOpacity style={Box} activeOpacity={0.75}>
+          <TouchableOpacity
+            style={[Box, { width: "100%" }]}
+            activeOpacity={0.75}
+          >
             <View style={Row}>
               <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
                 <AjudaIcon color={Colors.blue} />
               </View>
-              <Text style={[H4]}>Ajuda e Suporte</Text>
+              <Text style={H4}>Ajuda e Suporte</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
