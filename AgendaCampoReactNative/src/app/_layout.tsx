@@ -1,9 +1,38 @@
+/* Comandos para bibliotecas
+  npx expo install @expo-google-fonts/outfit
+  npx expo install @expo/metro-runtime
+  npx expo install @react-native-masked-view/masked-view
+  npx expo install axios
+  npx expo install expo
+  npx expo install expo-constants
+  npx expo install expo-font
+  npx expo install expo-linear-gradient
+  npx expo install expo-router
+  npx expo install expo-secure-store
+  npx expo install expo-status-bar
+  npx expo install lucide-react-native
+  npx expo install react
+  npx expo install react-dom
+  npx expo install react-native
+  npx expo install react-native-paper
+  npx expo install react-native-safe-area-context
+  npx expo install react-native-screens
+  npx expo install react-native-svg
+  npx expo install react-native-web
+*/
+
 import React from "react";
-import { StyleSheet, ActivityIndicator, View } from "react-native";
+import {
+  ActivityIndicator,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 
 // Rotas com Expo-router
 // npx expo install expo-router
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 
 // Fontes Personalizada (Outfit)
 // npx expo install @expo-google-fonts/outfit expo-font
@@ -23,7 +52,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
 // CSS
-import { Colors } from "../constants/theme";
+import { Colors, Container, H2, Row, SpaceBetween } from "../constants/theme";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -34,11 +63,12 @@ export default function RootLayout() {
 
   if (!fontsLoaded) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={Container}>
         <ActivityIndicator size="large" color={Colors.blue} />
       </View>
     );
   }
+  const router = useRouter();
 
   return (
     <SafeAreaProvider>
@@ -50,22 +80,28 @@ export default function RootLayout() {
             color: Colors.white,
             fontFamily: "Outfit_600SemiBold",
           },
+          headerTitle: () => (
+            <View style={[Row, SpaceBetween]}>
+              <Text style={[H2, { color: Colors.white }]}>Agenda Campo</Text>
+              <TouchableOpacity onPress={() => router.push("/home")}>
+                <Image
+                  source={require("../../assets/img/logoBranco.png")}
+                  style={{ width: 32, height: 32 }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            </View>
+          ),
           headerTintColor: Colors.white,
         }}
       >
         <Stack.Screen
           name="login/index"
           options={{
-            title: "Login",
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="detalhe/index"
-          options={{
-            title: "Detalhes do agendamento",
-          }}
-        />
+        <Stack.Screen name="detalhe/index" />
         <Stack.Screen
           name="(tabs)"
           options={{
@@ -76,12 +112,3 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.bgc,
-  },
-});
