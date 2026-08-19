@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import React from "react";
 import { useRouter } from "expo-router";
-
+import { View, Text, TouchableOpacity } from "react-native";
 import {
   Box2,
   Box3,
@@ -14,7 +14,6 @@ import {
   SpaceBetween,
   Status,
 } from "../constants/theme";
-
 import LocalIcon from "../../assets/svg/LocalIcon.svg";
 import RelogioIcon from "../../assets/svg/RelogioIcon.svg";
 import ArrowMapIcon from "../../assets/svg/ArrowMapIcon.svg";

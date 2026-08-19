@@ -1,7 +1,8 @@
 import React from "react";
+import { ScrollView } from "react-native";
+import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
-import CriarIcon from "../../../../assets/svg/CriarIcon.svg";
-import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Box2,
   Btn,
@@ -15,15 +16,9 @@ import {
   Scroll,
   SpaceBetween,
 } from "../../../constants/theme";
-import { ScrollView } from "react-native";
-import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-<<<<<<< HEAD
+import CriarIcon from "../../../../assets/svg/CriarIcon.svg";
 import AgendaCard from "../../../components/agendaCard";
-=======
-import { Container } from "../../../constants/theme";
-import React from "react";
->>>>>>> feature/TelaLogin
+import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
 
 export default function Home() {
   const router = useRouter();

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ScrollView,
   Text,
@@ -6,7 +7,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-<<<<<<< HEAD
 import {
   Btn,
   Btn2,
@@ -23,10 +23,8 @@ import {
   Input,
   InputIcon,
   Label,
-  Row,
   Scroll,
   TextArea,
-  theme,
 } from "../../../constants/theme";
 import RuaIcon from "../../../../assets/svg/RuaIcon.svg";
 import LocalIcon from "../../../../assets/svg/LocalIcon.svg";
@@ -37,10 +35,6 @@ import PesquisaIcon from "../../../../assets/svg/PesquisaIcon.svg";
 import ConfirmarIcon from "../../../../assets/svg/ConfirmarIcon.svg";
 import DescricaoIcon from "../../../../assets/svg/DescricaoIcon.svg";
 import CalendarioIcon from "../../../../assets/svg/CalendarioIcon.svg";
-=======
-import { Container } from "../../../constants/theme";
-import React from "react";
->>>>>>> feature/TelaLogin
 
 export default function Agendamento() {
   return (
@@ -102,7 +96,7 @@ export default function Agendamento() {
               </Text>
               <View style={CampoInput}>
                 <RuaIcon style={InputIcon} color={Colors.gray} />
-                <TextInput style={Input} />
+                <TextInput style={Input} placeholder="Rua Niterói"/>
               </View>
             </View>
 
@@ -110,7 +104,7 @@ export default function Agendamento() {
               <Text style={[Label, { color: Colors.darkblue }]}>Número</Text>
               <View style={CampoInput}>
                 <NumeroIcon style={InputIcon} color={Colors.gray} />
-                <TextInput style={Input} />
+                <TextInput style={Input} placeholder="1234"/>
               </View>
             </View>
 

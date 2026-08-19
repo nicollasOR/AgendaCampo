@@ -204,6 +204,8 @@ export const theme = StyleSheet.create({
   input: {
     ...baseInput,
     height: 50,
+    fontSize: 16,
+    fontFamily: Font.semibold,
   },
   textArea: {
     ...baseInput,

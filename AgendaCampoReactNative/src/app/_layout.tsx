@@ -54,6 +54,9 @@ import { StatusBar } from "expo-status-bar";
 // CSS
 import { Colors, Container, H2, Row, SpaceBetween } from "../constants/theme";
 
+// Logo
+import Logo from "../../assets/svg/Logo.svg";
+
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Outfit_400Regular,
@@ -84,11 +87,7 @@ export default function RootLayout() {
             <View style={[Row, SpaceBetween]}>
               <Text style={[H2, { color: Colors.white }]}>Agenda Campo</Text>
               <TouchableOpacity onPress={() => router.push("/home")}>
-                <Image
-                  source={require("../../assets/img/logoBranco.png")}
-                  style={{ width: 32, height: 32 }}
-                  resizeMode="contain"
-                />
+                <Logo color={Colors.white} height={32} width={32}/>
               </TouchableOpacity>
             </View>
           ),

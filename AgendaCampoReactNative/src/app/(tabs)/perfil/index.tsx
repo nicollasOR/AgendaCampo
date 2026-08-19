@@ -1,8 +1,9 @@
-import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-<<<<<<< HEAD
+import React from "react"
+import { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
+import { SafeAreaView } from "react-native-safe-area-context";
 import MaskedView from "@react-native-masked-view/masked-view";
+import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import {
   Box,
   Btn2,
@@ -21,7 +22,6 @@ import {
   BtnText,
   Scroll,
 } from "../../../constants/theme";
-
 import SairIcon from "../../../../assets/svg/SairIcon.svg";
 import AjudaIcon from "../../../../assets/svg/AjudaIcon.svg";
 import ArrowIcon from "../../../../assets/svg/ArrowIcon.svg";
@@ -29,16 +29,11 @@ import PerfilIcon from "../../../../assets/svg/PerfilIcon.svg";
 import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
 import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
 import RelogioIcon from "../../../../assets/svg/RelogioIcon.svg";
-import { useEffect, useState } from "react";
 import { buscarUsuarioID, usuarioPOST } from "../../api/usuarioService";
 
 interface usuarioGET extends usuarioPOST {
   usuarioID: string;
 }
-=======
-import { Container } from "../../../constants/theme";
-import React from "react";
->>>>>>> feature/TelaLogin
 
 export default function Perfil() {
   const [usuario, setUsuario] = useState<usuarioGET>();
