@@ -6,6 +6,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+<<<<<<< HEAD
 import {
   Btn,
   Btn2,
@@ -36,6 +37,10 @@ import PesquisaIcon from "../../../../assets/svg/PesquisaIcon.svg";
 import ConfirmarIcon from "../../../../assets/svg/ConfirmarIcon.svg";
 import DescricaoIcon from "../../../../assets/svg/DescricaoIcon.svg";
 import CalendarioIcon from "../../../../assets/svg/CalendarioIcon.svg";
+=======
+import { Container } from "../../../constants/theme";
+import React from "react";
+>>>>>>> feature/TelaLogin
 
 export default function Agendamento() {
   return (

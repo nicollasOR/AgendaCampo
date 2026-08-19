@@ -18,7 +18,12 @@ import {
 import { ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+<<<<<<< HEAD
 import AgendaCard from "../../../components/agendaCard";
+=======
+import { Container } from "../../../constants/theme";
+import React from "react";
+>>>>>>> feature/TelaLogin
 
 export default function Home() {
   const router = useRouter();

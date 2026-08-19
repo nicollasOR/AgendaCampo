@@ -1,5 +1,6 @@
 import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+<<<<<<< HEAD
 import { LinearGradient } from "expo-linear-gradient";
 import MaskedView from "@react-native-masked-view/masked-view";
 import {
@@ -34,6 +35,10 @@ import { buscarUsuarioID, usuarioPOST } from "../../api/usuarioService";
 interface usuarioGET extends usuarioPOST {
   usuarioID: string;
 }
+=======
+import { Container } from "../../../constants/theme";
+import React from "react";
+>>>>>>> feature/TelaLogin
 
 export default function Perfil() {
   const [usuario, setUsuario] = useState<usuarioGET>();

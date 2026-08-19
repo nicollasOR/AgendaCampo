@@ -1,6 +1,7 @@
 import { View } from "react-native";
 import { Tabs } from "expo-router";
 import { Colors } from "../../constants/theme";
+<<<<<<< HEAD
 import HomeIcon from "../../../assets/svg/HomeIcon.svg";
 import CriarIcon from "../../../assets/svg/CriarIcon.svg";
 import PerfilIcon from "../../../assets/svg/PerfilIcon.svg";
@@ -27,6 +28,12 @@ function TabIconWrapper({
     </View>
   );
 }
+=======
+import Home from "../../../assets/svg/HomeIcon.svg";
+import Criar from "../../../assets/svg/CriarIcon.svg";
+import Perfil from "../../../assets/svg/PerfilIcon.svg";
+import React from "react";
+>>>>>>> feature/TelaLogin
 
 export default function TabsLayout() {
   return (
