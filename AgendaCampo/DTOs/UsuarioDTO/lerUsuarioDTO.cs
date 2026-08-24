@@ -17,6 +17,9 @@ namespace AgendaCampo.DTOs.UsuarioDTO
         public string email { get; set; } = null!;
 
         public bool? statusUsuario { get; set; } = null!;
+        
+        public string imgURL { get; set; } 
+        
     }
 
 
@@ -37,5 +40,6 @@ namespace AgendaCampo.DTOs.UsuarioDTO
         public string senha { get; set; } = null!;
 
         public bool? statusUsuario { get; set; } = null!;
+        public IFormFile img { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using AgendaCampo.Interface;
 using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
+using AgendaCampo.Applications.Conversoes;
 
 using AgendaCampo.Applications.Validações;
 
@@ -16,6 +17,7 @@ namespace RoyalGamess.Aplications.Services
         private readonly IUsuarioRepository _rep;
         
         public UsuarioService(IUsuarioRepository repo) => _rep = repo;
+        
 
         private static byte[] HashSenha_(string senha)
         {
@@ -24,26 +26,13 @@ namespace RoyalGamess.Aplications.Services
             using var sha256 = SHA256.Create();
             return sha256.ComputeHash(Encoding.UTF8.GetBytes(senha));
         }
-        
-        private static lerUsuarioDTO lerDTO(Usuario usuario)
-        {
-            lerUsuarioDTO usuarioDTO = new lerUsuarioDTO
-            {
-                usuarioID = usuario.usuarioID,
-                email = usuario.email,
-                nome = usuario.nome,
-                // senha = 
-                statusUsuario = usuario.statusUsuario ?? true
-            };
 
-            return usuarioDTO;
-        }
         
         public List<lerUsuarioDTO> Listar()
         {
             List<Usuario> Listar = _rep.Listar();
-
-            List<lerUsuarioDTO> lerUsuarioDTO = Listar.Select(varAux => lerDTO(varAux)).ToList();
+            
+            List<lerUsuarioDTO> lerUsuarioDTO = Listar.Select(varAux => UsuarioConversoes.lerDTO(varAux)).ToList();
             return lerUsuarioDTO;
         }
 
@@ -54,7 +43,7 @@ namespace RoyalGamess.Aplications.Services
             if(usuarioDto == null)
                 throw new DomainException("Usuário não encontrado");
 
-            return lerDTO(usuarioDto);
+            return UsuarioConversoes.lerDTO(usuarioDto);
 
         }
 
@@ -64,7 +53,7 @@ namespace RoyalGamess.Aplications.Services
             if (usuarioDTO == null)
                 throw new DomainException("Usuário não encontrado");
 
-            return lerDTO(usuarioDTO);
+            return UsuarioConversoes.lerDTO(usuarioDTO);
         }
 
 
@@ -82,11 +71,12 @@ namespace RoyalGamess.Aplications.Services
                 nome = usuarioDTO.nome,
                 email = usuarioDTO.email,
                 senha = HashSenha_(usuarioDTO.senha),
-                statusUsuario = true
+                statusUsuario = true,
+                Imagem = converterImg.ConverterImg(usuarioDTO.img)
             };
             
             _rep.Adicionar(usuario);
-            return lerDTO(usuario);
+            return UsuarioConversoes.lerDTO(usuario);
         }
 
         public lerUsuarioDTO Atualizar(Guid id, atualizarUsuarioDTO usuarioDTO)
@@ -110,10 +100,31 @@ namespace RoyalGamess.Aplications.Services
             usuarioBanco.senha = HashSenha_(usuarioDTO.senha);
             
             _rep.Atualizar(usuarioBanco);
-            return lerDTO(usuarioBanco);
+            return UsuarioConversoes.lerDTO(usuarioBanco);
         }
 
-        public void AtualizarSenha(Guid id, atualizarUsuarioDTO atualizarDTO)
+        public atualizarUsuarioDTO AtualizarImg(Guid id, atualizarUsuarioDTO atlzDTO)
+        {
+            Usuario? usuarioBanco = _rep.ObterPorId(id);
+            if (usuarioBanco == null)
+                throw new DomainException("Usuário não encontrado");
+
+            if (atlzDTO.img != null && atlzDTO.img.Length > 0)
+            {
+                byte[] imagemBytes = converterImg.ConverterImg(atlzDTO.img);
+                usuarioBanco.Imagem = imagemBytes;
+
+                // 2. Passa os bytes já convertidos para o repositório
+                _rep.AtualizarFoto(id, imagemBytes);                
+            }
+
+            return UsuarioConversoes.atlzrDTO(usuarioBanco);
+
+
+
+        }
+
+        public atualizarUsuarioDTO AtualizarSenha(Guid id, atualizarUsuarioDTO atualizarDTO)
         {
             
             Usuario usuarioBanco = _rep.ObterPorId(id);
@@ -123,7 +134,8 @@ namespace RoyalGamess.Aplications.Services
             usuarioBanco.senha = HashSenha_(atualizarDTO.senha);
             
             _rep.AtualizarSenha(id, usuarioBanco.senha);
-            // return lerDTO(atualizarDTO);
+            return UsuarioConversoes.atlzrDTO(usuarioBanco);
+            
 
         }
 

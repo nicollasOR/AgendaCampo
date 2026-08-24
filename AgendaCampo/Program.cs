@@ -22,6 +22,8 @@ builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServe
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
 
+builder.Services.AddScoped<ITipoUsuarioRepository, TipoUsuarioRepository>();
+builder.Services.AddScoped<TipoUsuarioService>();
 
 // cors btw
 

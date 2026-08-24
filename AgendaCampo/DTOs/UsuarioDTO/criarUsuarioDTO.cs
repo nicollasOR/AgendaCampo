@@ -17,6 +17,8 @@ namespace AgendaCampo.DTOs.UsuarioDTO
         public string senha { get; set; } = null!;
 
         public bool? statusUsuario { get; set; } = null!;
+        
+        public IFormFile img { get; set; }
     }
 }
 

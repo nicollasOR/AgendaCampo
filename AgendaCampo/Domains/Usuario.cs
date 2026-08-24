@@ -15,5 +15,11 @@ public partial class Usuario
 
     public bool? statusUsuario { get; set; }
 
+    public byte[]? Imagem { get; set; }
+
+    public int? tipoUsuarioID { get; set; }
+
     public virtual ICollection<Agendamento> Agendamento { get; set; } = new List<Agendamento>();
+
+    public virtual TipoUsuario? tipoUsuario { get; set; }
 }

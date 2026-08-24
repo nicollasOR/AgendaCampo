@@ -12,7 +12,7 @@ namespace AgendaCampo.Interface
         public bool EmailExiste(string email);
         public void Adicionar(Usuario usuario);
         public void Atualizar(Usuario usuario);
-
+        public void AtualizarFoto(Guid id, byte[] img);
         public void AtualizarSenha(Guid id, byte[] senha);
         public void Remover(Guid id);
     }

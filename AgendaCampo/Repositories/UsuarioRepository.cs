@@ -48,6 +48,16 @@ namespace AgendaCampo.Repositories
             _context.SaveChanges();
         }
 
+        public void AtualizarFoto(Guid id, byte[] img)
+        {
+            Usuario? usuarioBanco = ObterPorId(id);
+            if (usuarioBanco == null)
+                return;
+
+            usuarioBanco.Imagem = img;
+            _context.SaveChanges();
+        }
+
         public void AtualizarSenha(Guid id, byte[] senha)
         {
             var usuarioBanco = _context.Usuario.Find(id);
