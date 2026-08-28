@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,29 +27,14 @@ import AjudaIcon from "../../../../assets/svg/AjudaIcon.svg";
 import ArrowIcon from "../../../../assets/svg/ArrowIcon.svg";
 import PerfilIcon from "../../../../assets/svg/PerfilIcon.svg";
 import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
+import CadeadoIcon from "../../../../assets/svg/CadeadoIcon.svg";
 import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
 import RelogioIcon from "../../../../assets/svg/RelogioIcon.svg";
-import { buscarUsuarioID, usuarioPOST } from "../../api/usuarioService";
-
-interface usuarioGET extends usuarioPOST {
-  usuarioID: string;
-}
+import { useRouter } from "expo-router";
 
 export default function Perfil() {
-  const [usuario, setUsuario] = useState<usuarioGET>();
+  const router = useRouter();
 
-  async function buscarUsuario(usuarioID: string) {
-    try {
-      const response = await buscarUsuarioID(String(usuarioID));
-      console.log(response);
-    } catch (error: any) {
-      console.log(error.message);
-    }
-  }
-
-  useEffect(() => {
-    // buscarUsuario()
-  });
   return (
     <SafeAreaView style={Container} edges={["left", "right"]}>
       <LinearGradient
@@ -140,6 +125,20 @@ export default function Perfil() {
                 <AjudaIcon color={Colors.blue} />
               </View>
               <Text style={H4}>Ajuda e Suporte</Text>
+            </View>
+            <ArrowIcon color={Colors.darkblue} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[Box, { width: "100%" }]}
+            activeOpacity={0.75}
+            onPress={() => router.push("/alterarsenha")}
+          >
+            <View style={Row}>
+              <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
+                <CadeadoIcon color={Colors.blue} />
+              </View>
+              <Text style={H4}>Alterar Senha</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
