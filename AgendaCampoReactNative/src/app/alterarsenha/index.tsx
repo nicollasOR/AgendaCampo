@@ -13,20 +13,18 @@ import {
   Column,
   Container,
   H1,
-  H2,
   H3,
-  H4,
   Input,
   InputIcon,
   Label,
   P,
 } from "../../constants/theme";
 import Logo from "../../../assets/svg/Logo.svg";
-import EmailIcon from "../../../assets/svg/EmailIcon.svg";
-import ArrowIcon from "../../../assets/svg/ArrowIcon.svg";
 import CadeadoIcon from "../../../assets/svg/CadeadoIcon.svg";
+import ConfirmarIcon from "../../../assets/svg/ConfirmarIcon.svg";
+import ArrowBackIcon from "../../../assets/svg/ArrowBackIcon.svg";
 
-export default function Login() {
+export default function AlterarSenha() {
   const router = useRouter();
 
   return (
@@ -35,28 +33,25 @@ export default function Login() {
         <Logo color={Colors.btn} />
         <Text style={[H1, { color: Colors.btn }]}>AgendaCampo</Text>
         <Text style={[H3, { color: Colors.gray }]}>
-          Acesse sua conta para continuar
+          Altere a senha da sua conta
         </Text>
       </View>
       <View style={CampoForm}>
-        <Text style={Label}>E-mail</Text>
-        <View style={CampoInput}>
-          <EmailIcon color={Colors.blue} style={InputIcon} />
-          <TextInput style={Input} placeholder="seu@email.com" />
-        </View>
-        <Text style={Label}>Senha</Text>
+        <Text style={Label}>Nova Senha</Text>
         <View style={CampoInput}>
           <CadeadoIcon color={Colors.blue} style={InputIcon} />
           <TextInput style={Input} placeholder="*******" secureTextEntry />
         </View>
-        {/* Esqueci minha senha */}
-        <Text style={[H4, { color: Colors.blue }]}>Esqueci minha senha</Text>
+        <Text style={Label}>Nova Confirmar Senha</Text>
+        <View style={CampoInput}>
+          <CadeadoIcon color={Colors.blue} style={InputIcon} />
+          <TextInput style={Input} placeholder="*******" secureTextEntry />
+        </View>
       </View>
       <TouchableOpacity style={Btn} onPress={() => router.push("/(tabs)/home")}>
-        <Text style={BtnText}>Acessar</Text>
-        <ArrowIcon color={Colors.white} />
+        <ConfirmarIcon color={Colors.white} />
+        <Text style={BtnText}>Salvar</Text>
       </TouchableOpacity>
-      <Text style={[H4, { color: Colors.blue }]}>Ou...</Text>
       <TouchableOpacity
         style={[
           Btn2,
@@ -65,9 +60,10 @@ export default function Login() {
             borderColor: Colors.blue,
           },
         ]}
-        onPress={() => router.replace("/cadastro")}
+        onPress={() => router.replace("/(tabs)/perfil")}
       >
-        <Text style={[BtnText, { color: Colors.blue }]}>Cadastre-se</Text>
+        <ArrowBackIcon color={Colors.blue} />
+        <Text style={[BtnText, { color: Colors.blue }]}>Voltar</Text>
       </TouchableOpacity>
       <Text style={[P, { position: "absolute", bottom: 40 }]}>
         Uso exclusivo para técnicos e operacionais

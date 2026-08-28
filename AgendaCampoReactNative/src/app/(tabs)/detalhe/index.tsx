@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, Image, Text, View, TouchableOpacity } from "react-native";
 import {
@@ -28,7 +28,7 @@ import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
 import CancelarIcon from "../../../../assets/svg/CancelarIcon.svg";
 import DescricaoIcon from "../../../../assets/svg/DescricaoIcon.svg";
 import { useEffect, useState } from "react";
-import { listarVisitasID, visitaGet } from "../../api/visitaService";
+import { listarVisitasID, visitaGet } from "../../../service/visitaService";
 
 export default function Detalhe() {
   const [visita, setVisita] = useState<visitaGet>();
@@ -74,7 +74,10 @@ export default function Detalhe() {
   // }
 
   return (
-    <SafeAreaView style={[Container , {paddingTop: 0}]} edges={["top", "left", "right"]}>
+    <SafeAreaView
+      style={[Container, { paddingTop: 0 }]}
+      edges={["top", "left", "right"]}
+    >
       <View style={Column}>
         <View style={Row}>
           <View style={Box}>

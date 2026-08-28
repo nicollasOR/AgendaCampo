@@ -87,7 +87,7 @@ export default function RootLayout() {
             <View style={[Row, SpaceBetween]}>
               <Text style={[H2, { color: Colors.white }]}>Agenda Campo</Text>
               <TouchableOpacity onPress={() => router.push("/home")}>
-                <Logo color={Colors.white} height={32} width={32}/>
+                <Logo color={Colors.white} height={32} width={32} />
               </TouchableOpacity>
             </View>
           ),
@@ -100,7 +100,18 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="detalhe/index" />
+        <Stack.Screen
+          name="cadastro/index"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="alterarsenha/index"
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="(tabs)"
           options={{
