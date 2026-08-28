@@ -20,13 +20,8 @@ CREATE TABLE [Agendamento] (
     [agendaID] int PRIMARY KEY NOT NULL,
     [data] datetime2 NOT NULL,
     [empresaSede] nvarchar(50) NOT NULL,
-                            [usuarioID] uniqueidentifier NOT NULL,
-                            [statusAgenda] bit default 1 NOT NULL,
-                               [data] datetime2,
-                               [empresaSede] nvarchar(50) NOT NULL,
-                               [usuarioID] uniqueidentifier NOT NULL,
-                               [statusAgenda] bit default 1 NOT NULL,
-
+    [usuarioID] uniqueidentifier NOT NULL,
+    [statusAgenda] bit default 1 NOT NULL,
 
                                CONSTRAINT FK_Agendamento_Usuario FOREIGN KEY(usuarioID) REFERENCES Usuario(usuarioID) ON DELETE CASCADE
 )
