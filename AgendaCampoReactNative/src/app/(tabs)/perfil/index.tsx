@@ -1,8 +1,8 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaskedView from "@react-native-masked-view/masked-view";
+import { decodificarToken, useAuth } from "@/src/contexts/AuthContext";
 import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import {
   Box,
@@ -21,22 +21,27 @@ import {
   H1,
   BtnText,
   Scroll,
-} from "../../../constants/theme";
-import SairIcon from "../../../../assets/svg/SairIcon.svg";
-import AjudaIcon from "../../../../assets/svg/AjudaIcon.svg";
-import ArrowIcon from "../../../../assets/svg/ArrowIcon.svg";
-import PerfilIcon from "../../../../assets/svg/PerfilIcon.svg";
-import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
-import CadeadoIcon from "../../../../assets/svg/CadeadoIcon.svg";
-import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
-import RelogioIcon from "../../../../assets/svg/RelogioIcon.svg";
-import { useRouter } from "expo-router";
+} from "@/src/constants/theme";
+import SairIcon from "@/assets/svg/SairIcon.svg";
+import AjudaIcon from "@/assets/svg/AjudaIcon.svg";
+import ArrowIcon from "@/assets/svg/ArrowIcon.svg";
+import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
+import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
+import DetalheIcon from "@/assets/svg/DetalheIcon.svg";
+import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
+import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
 
 export default function Perfil() {
   const router = useRouter();
 
+  // const { usuario, logout } = useAuth();
+  
+  const usuario = decodificarToken(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImFmNTZiMDdmLTQxNDMtNDdjYy1hMmFjLWM5OTI0ZTMwMmY0NyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbsO0bmltbyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFAYSIsImV4cCI6MTc4NzkyOTkzMCwiYXVkIjoiQWdlbmRhQ2FtcG9Gcm9udCJ9.PhEzxmDTKfkNriVrILwzbzB_BLrk0yP0O8KH-RbQZtk",
+  );
+
   return (
-    <SafeAreaView style={Container} edges={["left", "right"]}>
+    <SafeAreaView style={Container} edges={["top", "left", "right"]}>
       <LinearGradient
         colors={Colors.smoothGradient}
         style={Info}
@@ -45,16 +50,16 @@ export default function Perfil() {
       >
         <View style={[Round, { overflow: "hidden" }]}>
           <Image
-            source={require("../../../../assets/img/perfil.jpg")}
+            source={require("@/assets/img/perfil.jpg")}
             style={{ width: 120, height: 120, borderRadius: 60 }}
           />
         </View>
 
         <View style={{ alignItems: "center" }}>
-          <Text style={H1}>João Silva</Text>
+          <Text style={H1}>{usuario?.nome}</Text>
           <View style={Row}>
             <PerfilIcon color={Colors.darkblue} />
-            <Text style={H4}>Técnico de Campo</Text>
+            <Text style={H4}>{usuario?.email}</Text>
           </View>
         </View>
       </LinearGradient>
@@ -154,6 +159,7 @@ export default function Perfil() {
               },
             ]}
             activeOpacity={0.75}
+            // onPress={logout}
           >
             <SairIcon color={Colors.darkred} />
             <Text style={[BtnText, { color: Colors.darkred }]}>

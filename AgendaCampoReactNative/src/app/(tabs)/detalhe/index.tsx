@@ -18,17 +18,17 @@ import {
   P,
   Row,
   Scroll,
-} from "../../../constants/theme";
-import CriarIcon from "../../../../assets/svg/CriarIcon.svg";
-import LocalIcon from "../../../../assets/svg/LocalIcon.svg";
-import EditarIcon from "../../../../assets/svg/EditarIcon.svg";
-import PerfilIcon from "../../../../assets/svg/PerfilIcon.svg";
-import NumeroIcon from "../../../../assets/svg/NumeroIcon.svg";
-import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
-import CancelarIcon from "../../../../assets/svg/CancelarIcon.svg";
-import DescricaoIcon from "../../../../assets/svg/DescricaoIcon.svg";
+} from "@/src/constants/theme";
+import CriarIcon from "@/assets/svg/CriarIcon.svg";
+import LocalIcon from "@/assets/svg/LocalIcon.svg";
+import EditarIcon from "@/assets/svg/EditarIcon.svg";
+import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
+import NumeroIcon from "@/assets/svg/NumeroIcon.svg";
+import DetalheIcon from "@/assets/svg/DetalheIcon.svg";
+import CancelarIcon from "@/assets/svg/CancelarIcon.svg";
+import DescricaoIcon from "@/assets/svg/DescricaoIcon.svg";
 import { useEffect, useState } from "react";
-import { listarVisitasID, visitaGet } from "../../../service/visitaService";
+import { listarVisitasID, visitaGet } from "@/src/service/visitaService";
 
 export default function Detalhe() {
   const [visita, setVisita] = useState<visitaGet>();
@@ -109,7 +109,7 @@ export default function Detalhe() {
               </Text>
             </View>
             <View style={Row}>
-              <Image source={require("../../../../assets/img/logo.png")} />
+              <Image source={require("@/assets/img/logo.png")} />
               <View>
                 <Text style={H4}>Fazenda São João </Text>
                 <Text style={P}>Contato: Roberto Silva (Gerente)</Text>
