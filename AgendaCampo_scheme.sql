@@ -17,12 +17,11 @@ GO
 SELECT * FROM Usuario
 
 CREATE TABLE [Agendamento] (
-    [agendaID] int PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    [agendaID] int PRIMARY KEY NOT NULL,
     [data] datetime2 NOT NULL,
     [empresaSede] nvarchar(50) NOT NULL,
                             [usuarioID] uniqueidentifier NOT NULL,
                             [statusAgenda] bit default 1 NOT NULL,
-                               [agendaID] int PRIMARY KEY NOT NULL,
                                [data] datetime2,
                                [empresaSede] nvarchar(50) NOT NULL,
                                [usuarioID] uniqueidentifier NOT NULL,
