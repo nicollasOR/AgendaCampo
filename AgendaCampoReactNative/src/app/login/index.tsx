@@ -1,4 +1,3 @@
-import React from "react";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -13,18 +12,17 @@ import {
   Column,
   Container,
   H1,
-  H2,
   H3,
   H4,
   Input,
   InputIcon,
   Label,
   P,
-} from "../../constants/theme";
-import Logo from "../../../assets/svg/Logo.svg";
-import EmailIcon from "../../../assets/svg/EmailIcon.svg";
-import ArrowIcon from "../../../assets/svg/ArrowIcon.svg";
-import CadeadoIcon from "../../../assets/svg/CadeadoIcon.svg";
+} from "@/src/constants/theme";
+import Logo from "@/assets/svg/Logo.svg";
+import EmailIcon from "@/assets/svg/EmailIcon.svg";
+import ArrowIcon from "@/assets/svg/ArrowIcon.svg";
+import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 
 export default function Login() {
   const router = useRouter();

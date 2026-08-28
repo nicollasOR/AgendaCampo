@@ -1,4 +1,3 @@
-import React from "react";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -18,11 +17,11 @@ import {
   InputIcon,
   Label,
   P,
-} from "../../constants/theme";
-import Logo from "../../../assets/svg/Logo.svg";
-import CadeadoIcon from "../../../assets/svg/CadeadoIcon.svg";
-import ConfirmarIcon from "../../../assets/svg/ConfirmarIcon.svg";
-import ArrowBackIcon from "../../../assets/svg/ArrowBackIcon.svg";
+} from "@/src/constants/theme";
+import Logo from "@/assets/svg/Logo.svg";
+import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
+import ConfirmarIcon from "@/assets/svg/ConfirmarIcon.svg";
+import ArrowBackIcon from "@/assets/svg/ArrowBackIcon.svg";
 
 export default function AlterarSenha() {
   const router = useRouter();

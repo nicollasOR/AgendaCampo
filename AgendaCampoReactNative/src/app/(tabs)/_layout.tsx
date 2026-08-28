@@ -1,10 +1,11 @@
-import React from "react";
-import { View } from "react-native";
 import { Tabs } from "expo-router";
-import { Colors } from "../../constants/theme";
-import HomeIcon from "../../../assets/svg/HomeIcon.svg";
-import CriarIcon from "../../../assets/svg/CriarIcon.svg";
-import PerfilIcon from "../../../assets/svg/PerfilIcon.svg";
+import { View } from "react-native";
+
+import { Colors } from "@/src/constants/theme";
+
+import HomeIcon from "@/assets/svg/HomeIcon.svg";
+import CriarIcon from "@/src/assets/svg/CriarIcon.svg";
+import PerfilIcon from "@/src/assets/svg/PerfilIcon.svg";
 
 function TabIconWrapper({
   children,

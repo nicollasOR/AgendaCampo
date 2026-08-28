@@ -1,4 +1,3 @@
-import React from "react";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -14,21 +13,18 @@ import {
   Column,
   Container,
   H1,
-  H2,
   H3,
-  H4,
   Input,
   InputIcon,
   Label,
   P,
-  Row,
-} from "../../constants/theme";
-import Logo from "../../../assets/svg/Logo.svg";
-import CriarIcon from "../../../assets/svg/CriarIcon.svg";
-import EmailIcon from "../../../assets/svg/EmailIcon.svg";
-import PerfilIcon from "../../../assets/svg/PerfilIcon.svg";
-import CadeadoIcon from "../../../assets/svg/CadeadoIcon.svg";
-import ArrowBackIcon from "../../../assets/svg/ArrowBackIcon.svg";
+} from "@/src/constants/theme";
+import Logo from "@/assets/svg/Logo.svg";
+import CriarIcon from "@/assets/svg/CriarIcon.svg";
+import EmailIcon from "@/assets/svg/EmailIcon.svg";
+import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
+import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
+import ArrowBackIcon from "@/assets/svg/ArrowBackIcon.svg";
 
 export default function Cadastro() {
   const router = useRouter();

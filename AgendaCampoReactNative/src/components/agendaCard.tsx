@@ -1,4 +1,3 @@
-import React from "react";
 import { useRouter } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
 import {
@@ -13,12 +12,12 @@ import {
   Row,
   SpaceBetween,
   Status,
-} from "../constants/theme";
-import LocalIcon from "../../assets/svg/LocalIcon.svg";
-import RelogioIcon from "../../assets/svg/RelogioIcon.svg";
-import ArrowMapIcon from "../../assets/svg/ArrowMapIcon.svg";
-import CalendarioIcon from "../../assets/svg/CalendarioIcon.svg";
-import VisitaCheckIcon from "../../assets/svg/VisitaCheckIcon.svg";
+} from "@/src/constants/theme";
+import LocalIcon from "@/assets/svg/LocalIcon.svg";
+import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
+import ArrowMapIcon from "@/assets/svg/ArrowMapIcon.svg";
+import CalendarioIcon from "@/assets/svg/CalendarioIcon.svg";
+import VisitaCheckIcon from "@/assets/svg/VisitaCheckIcon.svg";
 
 export default function AgendaCard() {
   const router = useRouter();

@@ -52,10 +52,10 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
 // CSS
-import { Colors, Container, H2, Row, SpaceBetween } from "../constants/theme";
+import { Colors, Container, H2, Row, SpaceBetween } from "@/src/constants/theme";
 
 // Logo
-import Logo from "../../assets/svg/Logo.svg";
+import Logo from "@/assets/svg/Logo.svg";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -92,6 +92,7 @@ export default function RootLayout() {
             </View>
           ),
           headerTintColor: Colors.white,
+          animation: "fade",
         }}
       >
         <Stack.Screen

@@ -1,5 +1,6 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { listarVisitasID, visitaGet } from "@/src/service/visitaService";
 import { ScrollView, Image, Text, View, TouchableOpacity } from "react-native";
 import {
   Box,
@@ -27,8 +28,6 @@ import NumeroIcon from "@/assets/svg/NumeroIcon.svg";
 import DetalheIcon from "@/assets/svg/DetalheIcon.svg";
 import CancelarIcon from "@/assets/svg/CancelarIcon.svg";
 import DescricaoIcon from "@/assets/svg/DescricaoIcon.svg";
-import { useEffect, useState } from "react";
-import { listarVisitasID, visitaGet } from "@/src/service/visitaService";
 
 export default function Detalhe() {
   const [visita, setVisita] = useState<visitaGet>();
