@@ -1,4 +1,4 @@
-import { formatarData } from "../../utils/converterData";
+import { formatarData } from "../utils/converterData";
 import { api } from "./api";
 
 export interface visitaPost {
