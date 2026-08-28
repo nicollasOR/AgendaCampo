@@ -7,8 +7,6 @@ public partial class Visita
 {
     public int visitaID { get; set; }
 
-    public int agendamentoID { get; set; }
-
     public int enderecoID { get; set; }
 
     public string? sedeVisitada { get; set; }
@@ -23,7 +21,7 @@ public partial class Visita
 
     public DateTime dataTermino { get; set; }
 
-    public virtual Agendamento agendamento { get; set; } = null!;
-
     public virtual Endereco endereco { get; set; } = null!;
+
+    public virtual ICollection<Usuario> usuario { get; set; } = new List<Usuario>();
 }

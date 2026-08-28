@@ -15,5 +15,5 @@ public partial class Usuario
 
     public bool? statusUsuario { get; set; }
 
-    public virtual ICollection<Agendamento> Agendamento { get; set; } = new List<Agendamento>();
+    public virtual ICollection<Visita> visita { get; set; } = new List<Visita>();
 }

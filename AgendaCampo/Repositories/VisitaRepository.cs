@@ -16,8 +16,8 @@ public class VisitaRepository : IVisitaRepository
     {
         List<Visita> visita = _context.Visita
             .Include(varAux => varAux.endereco)
-            .Include(varAux => varAux.agendamento)
-            .OrderBy(varAux => varAux.agendamento)
+            //.Include(varAux => varAux.agendamento)
+            //.OrderBy(varAux => varAux.agendamento)
             .ToList();
 
         return visita;
@@ -27,7 +27,7 @@ public class VisitaRepository : IVisitaRepository
     {
         return _context.Visita
             .Include(varAux => varAux.endereco)
-            .Include(varAux => varAux.agendamento)
+            //.Include(varAux => varAux.agendamento)
             .FirstOrDefault(varAux => varAux.titulo == titulo);
 
         // return visita;
@@ -36,7 +36,7 @@ public class VisitaRepository : IVisitaRepository
     public Visita BuscarPorId(int id)
     {
         return _context.Visita
-            .Include(varAux => varAux.agendamento)
+            //.Include(varAux => varAux.agendamento)
             .Include(varAux => varAux.endereco)
             .FirstOrDefault(varAux => varAux.visitaID == id);
     }
@@ -45,8 +45,11 @@ public class VisitaRepository : IVisitaRepository
     {
         return _context.Visita
             .Include(varAux => varAux.endereco)
-            .Include(varAux => varAux.agendamento)
-            .FirstOrDefault(varAux => varAux.agendamento.data == data);
+            .OrderBy(varAux => varAux.dataInicio)
+            //.Include(varAux => varAux.agendamento)
+            .FirstOrDefault(varAux => varAux.dataInicio == data);
+            
+        
 
     }
 
@@ -54,7 +57,8 @@ public class VisitaRepository : IVisitaRepository
     {
         return _context.Visita
             .Include(varAux => varAux.endereco)
-            .Include(varAux => varAux.agendamento)
+            //.Include(varAux => varAux.agendamento)
+            .OrderBy(varAux => varAux.dataInicio)
             .FirstOrDefault(varAux => varAux.endereco.logradouro.ToLower() == logradouro.ToLower());
     }
 
@@ -65,48 +69,63 @@ public class VisitaRepository : IVisitaRepository
 
     public List<Visita> listarPorUsuario(Guid usuarioId)
     {
-        return _context.Visita
-            .Include(varAux => varAux.agendamento)
+        var usuario = _context.Usuario.Find(usuarioId);
+                
+        var visita =  _context.Visita
+            .Include(varAux => varAux.dataInicio)
+            .Include(varAux => varAux.dataTermino)
             .Include(varAux => varAux.endereco)
-            .Where(varAux => varAux.agendamento.usuarioID == usuarioId)
+            .Include(varAux => varAux.usuario.Where(varAux => varAux.usuarioID == usuarioId))
+            
             .OrderBy(varAux => varAux.dataInicio)
             .ToList();
+
+        return visita;
     }
 
     public bool conflitoDeHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null)
     {
-        return _context.Visita.Any(v => 
-            v.agendamento.usuarioID == usuarioId &&
+        var usuarioBanco = _context.Usuario.Find(usuarioId);
+
+        var visitaBanco =  _context.Visita.Any(v => 
+            v.usuario.Any(varAux => varAux.usuarioID == usuarioId) &&
             (visitaId == null || v.visitaID != visitaId) &&
             ((dataComeco >= v.dataInicio && dataComeco < v.dataTermino)
             || (dataFinal > v.dataInicio && dataFinal <= v.dataTermino) 
             || (dataFinal <= v.dataInicio && dataFinal >= v.dataTermino)));
-             
+
+        return visitaBanco;
     }
 
     public List<Visita> listagemFuturosEvento(Guid usuarioId)
     {
+
+
         return _context.Visita
-            .Include(varAux => varAux.agendamento)
-            .Include(varAux => varAux.endereco)
-            .Where(varAux => varAux.agendamento.usuarioID == usuarioId
-                             && varAux.dataInicio >= DateTime.Now &&
-                             !varAux.statusRealizado
-            )
-            .OrderBy(varAux => varAux.dataInicio)
-            .ToList();
-    }
+             .Include(varAux => varAux.endereco)
+             .Include(varAux => varAux.usuario.FirstOrDefault(varAux => varAux.usuarioID == usuarioId))
+             .Where(varAux => varAux.dataInicio >= DateTime.Now && !varAux.statusRealizado)
+             .OrderBy(varAux => varAux.dataInicio)
+             .ToList();
+
+}
 
     public List<Visita> listagemEventosConcluidos(Guid usuarioId)
     {
-        return _context.Visita
-            .Include(v => v.endereco)
-            .Include(v => v.agendamento)
-            .Where(varAux => 
-                varAux.agendamento.usuarioID == usuarioId 
-                             && (varAux.statusRealizado && varAux.dataTermino < DateTime.UtcNow))
-            .OrderByDescending(varAux => varAux.dataInicio)
-            .ToList();
+        //return _context.Visita
+        //    .Include(v => v.endereco)
+        //    .Include(v => v.agendamento)
+        //    .Where(varAux => 
+        //        varAux.agendamento.usuarioID == usuarioId 
+        //                     && (varAux.statusRealizado && varAux.dataTermino < DateTime.UtcNow))
+        //    .OrderByDescending(varAux => varAux.dataInicio)
+        //    .ToList();
+
+        return _context.Visita.
+            Include(varAux => varAux.endereco).
+            Include(varAux => varAux.usuario).
+            Where(varAux => varAux.usuario.FirstOrDefault(varAux => varAux.usuarioID == usuarioId) && (varAux.statusRealizado && varAux.dataTermino < DateTime.UtcNow))
+
     }
 
     
