@@ -21,7 +21,7 @@ import {
   H1,
   H4,
   Input,
-  InputIcon,
+  InputIcon,    
   Label,
   Scroll,
   TextArea,
@@ -58,7 +58,7 @@ export default function Agendamento() {
               </Text>
               <View style={CampoInput}>
                 <PesquisaIcon style={InputIcon} color={Colors.gray} />
-                <TextInput style={Input} placeholder="Buscar cliente..." />
+                <TextInput style={[Input, {color: Colors.red}]} placeholder="Buscar cliente..." />
               </View>
             </View>
 

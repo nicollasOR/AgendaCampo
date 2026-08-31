@@ -30,6 +30,7 @@ import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
 import CadeadoIcon from "../../../../assets/svg/CadeadoIcon.svg";
 import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
 import RelogioIcon from "../../../../assets/svg/RelogioIcon.svg";
+import EditarPerfilIcon from "../../../../assets/svg/EditarPerfilIcon.svg";
 import { useRouter } from "expo-router";
 
 export default function Perfil() {
@@ -106,12 +107,13 @@ export default function Perfil() {
           <TouchableOpacity
             style={[Box, { width: "100%" }]}
             activeOpacity={0.75}
+            onPress={() => router.push("/cadastro")}
           >
             <View style={Row}>
               <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
-                <PerfilIcon color={Colors.blue} />
+                <EditarPerfilIcon color={Colors.blue} />
               </View>
-              <Text style={H4}>Dados Pessoais</Text>
+              <Text style={H4}>Editar Perfil</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
