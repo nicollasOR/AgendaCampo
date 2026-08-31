@@ -1,4 +1,6 @@
 import {
+  Platform,
+  Pressable,
   ScrollView,
   Text,
   TextInput,
@@ -24,6 +26,7 @@ import {
   Label,
   Scroll,
   TextArea,
+  theme,
 } from "@/src/constants/theme";
 import RuaIcon from "@/assets/svg/RuaIcon.svg";
 import LocalIcon from "@/assets/svg/LocalIcon.svg";
@@ -35,7 +38,45 @@ import ConfirmarIcon from "@/assets/svg/ConfirmarIcon.svg";
 import DescricaoIcon from "@/assets/svg/DescricaoIcon.svg";
 import CalendarioIcon from "@/assets/svg/CalendarioIcon.svg";
 
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { useState } from "react";
+
 export default function Agendamento() {
+
+  const [data, setData] = useState<Date>(new Date());
+  const [mostrarCalendario, setMostrarCalendario] = useState<boolean>(false);
+  const [texto, setTexto] = useState<string>('Selecionar data...'); // Texto inicial que vai estar escrito no botão, muda quando a data for selecionada
+
+  const Calendario = (event: DateTimePickerEvent, selectedDate?: Date) => {
+
+    // Fechar a janela do calendário assim que acontecer alguma ação(confirmar ou cancelar)
+    // Platform.OS -> recurso do react native que detecta qual o sistema operacional que está rodando(ios ou android)
+    if (Platform.OS === 'android') {
+      setMostrarCalendario(false);
+    }
+
+    // Ao confirmar a data escolhida, clicar no "Ok"
+    if (event.type === 'set' && selectedDate) {
+      const currentDate = selectedDate;
+      setData(currentDate); // Atualiza o estado da data com a escolhida
+
+
+      // Formatação para leitura da data
+      const dia = String(currentDate.getDate()).padStart(2, '0'); // .padStart(2, '0') -> garante que se o número for menor que 10, acrescenta um 0 na frente
+      const mes = String(currentDate.getMonth() + 1).padStart(2, '0'); // Soma +1 para que na visualização os meses iniciem em 01 e não em 00(padrão js)
+      const ano = currentDate.getFullYear();
+
+      setTexto(`${dia}/${mes}/${ano}`);
+    } else if (event.type === 'dismissed') { // Caso o usuário cancele a operação
+      setMostrarCalendario(false);
+    }
+  }
+
+  // Constante criada para permitir agendamento de visita somente a partir do dia seguinte
+  const amanha = new Date();
+  amanha.setDate(amanha.getDate() + 1);
+
+
   return (
     <SafeAreaView style={Container} edges={["left", "right"]}>
       <ScrollView
@@ -62,13 +103,23 @@ export default function Agendamento() {
             </View>
 
             <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
-                Data da Visita
-              </Text>
-              <View style={CampoInput}>
+              <Text style={[Label, { color: Colors.darkblue }]}> Data da Visita </Text>
+              <Pressable style={Input} onPress={() => setMostrarCalendario(true)}>
                 <CalendarioIcon style={InputIcon} color={Colors.gray} />
-                <TextInput style={Input} placeholder="mm/dd/yyyy" />
-              </View>
+                <Text style={texto === 'Selecionar data...' ? {color: Colors.darkgray} : {color: Colors.black}}>{texto}</Text>
+              </Pressable>
+
+              {/* Exibição do Calendário */}
+              {mostrarCalendario && (
+                <DateTimePicker
+                  value={data} // data inicial selecionada ao abrir o calendário, geralmente é a data mínima
+                  mode="date" // Aceita apenas data (ignora hora)
+                  display={Platform.OS === 'ios' ? 'inline' : 'default'} // Estilo visual
+                  onChange={Calendario}
+                  minimumDate={amanha} // Bloqueia datas passadas
+                />
+              )}
+
             </View>
 
             <View style={CampoForm}>

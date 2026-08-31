@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace AgendaCampo.Domains;
+
+public partial class Usuario
+{
+    public Guid usuarioID { get; set; }
+
+    public string nome { get; set; } = null!;
+
+    public string email { get; set; } = null!;
+
+    public byte[] senha { get; set; } = null!;
+
+    public bool? statusUsuario { get; set; }
+
+    public virtual ICollection<Agendamento> Agendamento { get; set; } = new List<Agendamento>();
+}
