@@ -62,7 +62,8 @@ namespace AgendaCampo.Controllers
             }
         }
         [HttpPost]
-        public ActionResult<lerUsuarioDTO> Adicionar(criarUsuarioDTO criarDto)
+        [Consumes("multipart/form-data")]
+        public ActionResult<lerUsuarioDTO> Adicionar([FromForm]criarUsuarioDTO criarDto)
         {
             try
             {
@@ -75,7 +76,9 @@ namespace AgendaCampo.Controllers
             }
         }
         [HttpPut("{id}")]
-        public ActionResult<lerUsuarioDTO> Atualizar(Guid id, atualizarUsuarioDTO criarDto)
+        [Consumes("multipart/form-data")]
+
+        public ActionResult<lerUsuarioDTO> Atualizar(Guid id, [FromForm]atualizarUsuarioDTO criarDto)
         {
             try
             {
@@ -96,6 +99,22 @@ namespace AgendaCampo.Controllers
                 _service.AtualizarSenha(id, atualizarDTO);
                 return NoContent();
 
+            }
+            catch (DomainException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+        [HttpPatch("img/{id}")]
+        [Consumes("multipart/form-data")]
+        public ActionResult<atualizarUsuarioDTO> atualizarImg(Guid id, [FromForm] atualizarImg img)
+        {
+            try
+            {
+                _service.atualizarImg(id, img.img);
+                return NoContent();
             }
             catch (DomainException e)
             {

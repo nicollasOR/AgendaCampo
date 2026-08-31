@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using AgendaCampo.DTOs.EnderecoDTO;
 using AgendaCampo.DTOs.VisitaDTO;
 
-namespace AgendaCampo.DTOs.VisitaDTO;
+namespace AgendaCampo.DTOs.VisitaDTONN;
 
 public class atualizarVisitaDTO
 {
@@ -22,6 +22,8 @@ public class atualizarVisitaDTO
     [Required(ErrorMessage = "Um nome do que e qual sede será visitada, é obrigatório")]
     public string nomeSede { get; set; } = string.Empty;
 
+    public Guid clienteId { get; set; }
+    
     [Required(ErrorMessage = "Um nome de cliente pode ser necessário")]
     public string nomeCliente { get; set; } = string.Empty;
 

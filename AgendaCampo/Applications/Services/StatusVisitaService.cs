@@ -7,15 +7,16 @@ using System.Security.Cryptography;
 using System.Text;
 using AgendaCampo.Applications.Conversões;
 using AgendaCampo.Applications.Validações;
+using AgendaCampo.DTOs.VisitaDTO;
 
 namespace RoyalGamess.Aplications.Services
 {
-    public class UsuarioService
+    public class StatusVisitaService
     {
 
-        private readonly IUsuarioRepository _rep;
+        private readonly IStatusVisitaRepository _rep;
         
-        public UsuarioService(IUsuarioRepository repo) => _rep = repo;
+        public StatusVisitaService(IStatusVisitaRepository repo) => _rep = repo;
 
         private static byte[] HashSenha_(string senha)
         {
@@ -24,108 +25,76 @@ namespace RoyalGamess.Aplications.Services
             using var sha256 = SHA256.Create();
             return sha256.ComputeHash(Encoding.UTF8.GetBytes(senha));
         }
+
+        private static lerStatusVisitaDTO lerDTO(StatusVisita stsVisita)
+        {
+            return new lerStatusVisitaDTO
+            {
+                statusVisitaId = stsVisita.statusVisitaID,
+                nomeStatusVisita = stsVisita.nomeStatus
+            };
+        }
         
  
-        public List<lerUsuarioDTO> Listar()
+        public List<lerStatusVisitaDTO> Listar()
         {
-            List<Usuario> Listar = _rep.Listar();
+            List<StatusVisita> Listar = _rep.Listar();
 
-            List<lerUsuarioDTO> lerUsuarioDTO = Listar.Select(varAux => usuarioConversoes.lerUsuarioDTO(varAux)).ToList();
-            return lerUsuarioDTO;
+            List<lerStatusVisitaDTO> lerStatusDTO = Listar.Select(varAux => lerDTO(varAux)).ToList();
+            return lerStatusDTO;
         }
 
 
-        public lerUsuarioDTO BuscarPorID(Guid id)
+        public lerStatusVisitaDTO BuscarPorID(int id)
         {
-            Usuario usuarioDto = _rep.ObterPorId(id);
-            if(usuarioDto == null)
-                throw new DomainException("Usuário não encontrado");
+            StatusVisita? statusVisitaB = _rep.buscarStatusVisitaId(id);
+            if(statusVisitaB == null)
+                throw new DomainException("StatusVisita não encontrado");
 
-            return usuarioConversoes.lerUsuarioDTO(usuarioDto);
+            return lerDTO(statusVisitaB);
 
         }
 
-        public lerUsuarioDTO buscarPorEmail(string email)
+         
+        public lerStatusVisitaDTO Adicionar(criarStatusVisitaDTO stsDto)
         {
-            Usuario usuarioDTO = _rep.ObterPorEmail(email);
-            Validacoes.validarEmail(email);
-            if (usuarioDTO == null)
-                throw new DomainException("Usuário não encontrado");
+ 
+            if (_rep.existeStatus(stsDto.nomeStatusVisita))
+                throw new DomainException("Já existe um status com este nome");
 
-            return usuarioConversoes.lerUsuarioDTO(usuarioDTO);
-        }
-
-
-        public lerUsuarioDTO Adicionar(criarUsuarioDTO usuarioDTO)
-        {
-            Validacoes.validarEmail(usuarioDTO.email);
-            
-            Validacoes.validarNome(usuarioDTO.nome);
-
-            if (_rep.EmailExiste(usuarioDTO.email))
-                throw new DomainException("Já existe um usuário com esse e-mail");
-
-            Usuario usuario = new Usuario
+            StatusVisita statusVisitaBan = new StatusVisita
             {
-                nome = usuarioDTO.nome,
-                email = usuarioDTO.email,
-                senha = HashSenha_(usuarioDTO.senha),
-                statusUsuario = true,
-                Imagem = conversoesParaDTO.converterImg(usuarioDTO.img)
+               nomeStatus = stsDto.nomeStatusVisita
             };
             
-            _rep.Adicionar(usuario);
-            return usuarioConversoes.lerUsuarioDTO(usuario);
+            _rep.Adicionar(statusVisitaBan);
+            return lerDTO(statusVisitaBan);
         }
 
-        public lerUsuarioDTO Atualizar(Guid id, atualizarUsuarioDTO usuarioDTO)
-        {
-            Usuario usuarioBanco = _rep.ObterPorId(id);
+        // public lerUsuarioDTO Atualizar(int id, atualizarStatusVisitaDTO usuarioDTO)
+        // {
+        //     StatusVisita? stsBanco = _rep.buscarStatusVisitaId(id);
+        //
+        //     if (stsBanco == null)
+        //         throw new DomainException("StatusVisita não encontrado");
+        //
+        //     if (usuarioDTO != null && stsBanco.statusVisitaID != id)
+        //         throw new DomainException("StatusVisita inexistente");
+        //
+        //     if (_rep.existeStatus(usuarioDTO.nomeStatusVisita))
+        //         throw new DomainException("Já existe um StatusVisita com esse ");
+        //
+        //     usuarioBanco.email = usuarioDTO.email;
+        //     usuarioBanco.nome = usuarioDTO.nome;
+        //     usuarioBanco.senha = HashSenha_(usuarioDTO.senha);
+        //     usuarioBanco.Imagem = conversoesParaDTO.converterImg(usuarioDTO.img);
+        //     
+        //     _rep.Atualizar(stsBanco);
+        //     return usuarioConversoes.lerUsuarioDTO(stsBanco);
+        // }
+ 
 
-            if (usuarioBanco == null)
-                throw new DomainException("Usuario não encontrado");
-            
-            Validacoes.validarEmail(usuarioDTO.email);
-            Validacoes.validarNome(usuarioDTO.nome);
-
-            if (usuarioDTO != null && usuarioBanco.usuarioID != id)
-                throw new DomainException("Usuario inexistente");
-
-            if (_rep.EmailExiste(usuarioDTO.email))
-                throw new DomainException("Já existe um usuário com esse e-mail");
-
-            usuarioBanco.email = usuarioDTO.email;
-            usuarioBanco.nome = usuarioDTO.nome;
-            usuarioBanco.senha = HashSenha_(usuarioDTO.senha);
-            usuarioBanco.Imagem = conversoesParaDTO.converterImg(usuarioDTO.img);
-            
-            _rep.Atualizar(usuarioBanco);
-            return usuarioConversoes.lerUsuarioDTO(usuarioBanco);
-        }
-
-        public void AtualizarSenha(Guid id, atualizarSenhaDTO atualizarDTO)
-        {
-            
-            Usuario usuarioBanco = _rep.ObterPorId(id);
-
-            if (usuarioBanco == null)
-                throw new DomainException("Usuario não encontrado");
-            usuarioBanco.senha = HashSenha_(atualizarDTO.senha);
-            
-            _rep.AtualizarSenha(id, usuarioBanco.senha);
-            // return lerDTO(atualizarDTO);
-
-        }
-
-
-        public void Remover(Guid id)
-        {
-            Usuario usuario = _rep.ObterPorId(id);
-            if (usuario == null)
-                throw new DomainException("Usuário não encontrado");
-            
-            _rep.Remover(id);
-        }
+ 
         
     }
 

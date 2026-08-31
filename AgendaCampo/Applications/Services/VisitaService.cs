@@ -1,5 +1,7 @@
+using AgendaCampo.Applications.Conversões;
 using AgendaCampo.Domains;
-using AgendaCampo.DTOs.VisitaDTO;
+// using AgendaCampo.DTOs.VisitaDTO;
+using AgendaCampo.DTOs.VisitaDTONN;
 using AgendaCampo.Exceptions;
 using AgendaCampo.Interface;
 
@@ -8,80 +10,80 @@ namespace RoyalGamess.Aplications.Services;
 public class VisitaService
 {
     private readonly IVisitaRepository _rep;
-    private readonly IAgendamentoRepository _agndRep;
-
     private readonly IEnderecoRepository _endrcRep;
-    public VisitaService(IVisitaRepository rep, IAgendamentoRepository _agendRep, IEnderecoRepository endrcRep)
+    private readonly IUsuarioRepository _usrRep;
+    
+ 
+ 
+    public VisitaService(IVisitaRepository rep, IEnderecoRepository endrcRep, IUsuarioRepository usrRep)
     {
         _rep = rep;
-        _agndRep = _agendRep;
         _endrcRep = endrcRep;
+        _usrRep = usrRep;
     }
-
-
-    private static lerVisitaDTO lerDTO(Visita visita)
-    {
-        return new lerVisitaDTO
-        {
-            visitaID = visita.visitaID,
-            agendamentoId = visita.agendamentoID,
-            dataInicio = visita.dataInicio,
-            dataTermino = visita.dataTermino,
-            descricao = visita.descricao,
-            nomeEvento = visita.titulo,
-            nomeSede = visita.sedeVisitada,
-            statusRealizado = visita.statusRealizado,
-            enderecoId = visita.enderecoID,
-            
-            // dados para usar no front:
-            logadouroEndereco = visita.endereco?.logradouro,
-            nomeCliente = visita.agendamento?.empresaSede
-        };
-    }
-
-    // METODOS GET
+  
     public List<lerVisitaDTO> Listar()
     {
         List<Visita> visita = _rep.Listar();
 
-        List<lerVisitaDTO> lerVisitas = visita.Select(varAux => lerDTO(varAux)).ToList();
-
+        List<lerVisitaDTO> lerVisitas = visita.Select(varAux => visitaConversoes.lerVisitaDto(varAux)).ToList();
         return lerVisitas;
     }
-
-    public List<lerVisitaDTO> listarFuturasVisitas(Guid usuarioId)
-    {
-        return _rep
-            .listagemFuturosEvento(usuarioId)
-            .Select(lerDTO).ToList();
+    
+    
+    
+     
+     public List<lerVisitaDTO> listarFuturasVisitas(Guid usuarioId)
+     {
+         List<Visita> visita = _rep.listagemFuturosEventoPorUsuario(usuarioId);
+        List<lerVisitaDTO?> listagem = visita.Select(varAux => visitaConversoes.lerVisitaDto(varAux)).ToList();
+        if (!listagem.Any())
+            throw new DomainException("Visitas não encontradas");
+        return listagem;
+        // return _rep
+        //     .listagemFuturosEventoPorUsuario(usuarioId)
+        //     .Select(visitaConversoes.lerVisitaDto).ToList();
     }
-
+    
     // listagem para puxar apenas as concluidas
     public List<lerVisitaDTO> ListarConcluidas(Guid usuarioId)
     {
-        return _rep.listagemEventosConcluidos(usuarioId).Select(lerDTO).ToList();
+        List<Visita> visita = _rep.listagemEventosConcluidosPorUsuario(usuarioId);
+        List<lerVisitaDTO> listagem = visita.Select(varAux => visitaConversoes.lerVisitaDto(varAux)).ToList();
+        if (!listagem.Any())
+            throw new DomainException("Visitas não encontradas");
+        return listagem;
+    }
+
+    public List<lerVisitaDTO> ListarEventosPorUsuarios(Guid usuarioId)
+    {
+        List<Visita> visita = _rep.listarPorUsuario(usuarioId);
+        List<lerVisitaDTO> listagem = visita.Select(varAux => visitaConversoes.lerVisitaDto(varAux)).ToList();
+        if (!listagem.Any())
+            throw new DomainException("Visitas não encontradas");
+        return listagem;
     }
     
-
+    //
     public lerVisitaDTO buscarPorId(int id)
     {
         Visita visitaBanco = _rep.BuscarPorId(id);
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
-
-        return lerDTO(visitaBanco);
-
+    
+        return visitaConversoes.lerVisitaDto(visitaBanco);
+    
     }
-
+    //
     public lerVisitaDTO buscarPorAgendamento(DateTime date)
     {
         Visita visitaBanco = _rep.BuscarPorAgendamento(date);
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
-
-        return lerDTO(visitaBanco);
+    
+        return visitaConversoes.lerVisitaDto(visitaBanco);
     }
-
+    
     public lerVisitaDTO buscarPorEndereco(string logradouro)
     {
         //if (_rep.enderecoExiste(logradouro))
@@ -89,136 +91,158 @@ public class VisitaService
         Visita visitaBanco = _rep.BuscarPorEndereco(logradouro.ToLower());
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
-
-        return lerDTO(visitaBanco);
+    
+        return visitaConversoes.lerVisitaDto(visitaBanco);
     }
-
+    //
     public lerVisitaDTO buscarPorTitulo(string titulo)
     {
         Visita visitaBanco = _rep.BuscarPorTitulo(titulo.ToLower());
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
-
-        return lerDTO(visitaBanco);
+    
+        return visitaConversoes.lerVisitaDto(visitaBanco);
     }
-
-    public lerVisitaDTO Adicionar(criarVisitaDTO criarVisitaDto)
+    //
+    public lerVisitaDTO Adicionar(criarVisitaDTO criarVisitaDtos, Guid usuarioId)
     {
-        Agendamento? agndBanco = _agndRep.BuscarPorId(criarVisitaDto.agendamentoId);
-        Endereco? endrcBanco = _endrcRep.buscarPorId(criarVisitaDto.enderecoId);
-        if (agndBanco == null) //|| !(agndBanco.data.HasValue))    //era para funcionar o .value
-            throw new DomainException("Agendamento não encontrado!"); // if(agendamento) visita == true
+        Endereco? endrcBanco = _endrcRep.buscarPorId(criarVisitaDtos.enderecoId);
+ 
         if (endrcBanco == null)
             throw new DomainException("Endereço não encontrado..");
-        if (agndBanco.data.Date != criarVisitaDto.dataInicio.Date)
-            throw new DomainException("A visita deve ter a mesma data, hora de inicio do agendamento");
-
-        if (criarVisitaDto.dataTermino <= criarVisitaDto.dataInicio)
-            throw new DomainException("A data termino tem que ser depois da inicial");
         
-        if (!_rep.enderecoExiste(criarVisitaDto.enderecoId))
-            throw new DomainException("Endereco não existente..");
-      // falta adicionar o endereco de validação.
+    
+        if (criarVisitaDtos.dataTermino <= criarVisitaDtos.dataInicio)
+            throw new DomainException("A data termino tem que ser depois da inicial");
 
+        Usuario? usuarioBanco = _usrRep.ObterPorId(usuarioId);
+        if (usuarioBanco == null)
+            throw new DomainException("Usuario cliente não encontrado!");
+
+        bool temConflito = _rep.conflitoDeHorario(usuarioId, criarVisitaDtos.dataInicio, criarVisitaDtos.dataTermino);
+        if (temConflito)
+            throw new DomainException("Já existe uma visita agendada para este técnico no horário selecionado");
+        
+      // falta adicionar o endereco de validação.
+    
       Visita visita = new Visita
       {
-          agendamentoID = agndBanco.agendaID,
-          dataInicio = criarVisitaDto.dataInicio,
-          dataTermino = criarVisitaDto.dataTermino,
-          descricao = criarVisitaDto.descricao,
-          titulo = criarVisitaDto.nomeSede,
-          sedeVisitada = string.IsNullOrEmpty(criarVisitaDto.nomeSede) 
-                                    ? agndBanco.empresaSede // if para puxar o nome do agendamento
-                                    : criarVisitaDto.nomeSede, // else para caso não consiga
-          statusRealizado = criarVisitaDto.statusRealizado,
+          dataInicio = criarVisitaDtos.dataInicio,
+          dataTermino = criarVisitaDtos.dataTermino,
+          descricao = criarVisitaDtos.descricao,
+          titulo = criarVisitaDtos.nomeEvento,
+          sedeVisitada = criarVisitaDtos.nomeSede,
+          cliente = usuarioBanco.nome,
+          statusVisitaID = criarVisitaDtos.statusVisitaId,
           enderecoID = endrcBanco.enderecoID,
+          
+          usuario = new List<Usuario> {usuarioBanco}
       };
-
       _rep.Adicionar(visita);//);
-      return lerDTO(visita);
+      return visitaConversoes.lerVisitaDto(visita);
     }
     
-    public lerVisitaDTO Atualizar(int id, atualizarVisitaDTO atualizarDTO)
+    
+    //
+    public lerVisitaDTO Atualizar(int id, atualizarVisitaDTO atualizarDTO, Guid usuarioId)
     {
-        Visita visitaBanco = _rep.BuscarPorId(id);
+         Visita? visitaBanco = _rep.BuscarPorId(id);
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
 
-        if (!(_rep.agendamentoExiste(visitaBanco.agendamentoID)) || !(_rep.enderecoExiste(visitaBanco.enderecoID)))
-            throw new DomainException("Agendamento e/ou endereço não encontrado");
-        
-        
-        if (atualizarDTO.dataTermino <= atualizarDTO.dataInicio)
-            throw new DomainException("A data termino tem que ser depois da inicial");
+         if (!_rep.enderecoExiste(atualizarDTO.enderecoId))
+            throw new DomainException("Endereço informado não existe no sistema");
 
-        visitaBanco.titulo = atualizarDTO.nomeEvento;
+         if (atualizarDTO.dataTermino <= atualizarDTO.dataInicio)
+            throw new DomainException("A data de término deve ser posterior à data de início");
+
+         bool temConflito = _rep.conflitoDeHorario(usuarioId, atualizarDTO.dataInicio, atualizarDTO.dataTermino, id);
+        if (temConflito)
+            throw new DomainException("O técnico já possui outro compromisso no horário selecionado");
+
+ 
+        visitaBanco.titulo = atualizarDTO.titulo;
         visitaBanco.descricao = atualizarDTO.descricao;
-        // visitaBanco.dataTermino = atualizarDTO.dataTermino;
-        // visitaBanco.dataInicio = atualizarDTO.dataInicio; testando o de baixo
-        visitaBanco.dataTermino = atualizarDTO.dataTermino.UtcDateTime;
-        visitaBanco.dataInicio = atualizarDTO.dataInicio.UtcDateTime;
+        visitaBanco.dataInicio = atualizarDTO.dataInicio;
+        visitaBanco.dataTermino = atualizarDTO.dataTermino;
+        visitaBanco.cliente = atualizarDTO.nomeCliente;
+        visitaBanco.sedeVisitada = atualizarDTO.nomeSede;
+        visitaBanco.statusVisitaID = atualizarDTO.statusVisitaId;
+        visitaBanco.enderecoID = atualizarDTO.enderecoId;
 
-        visitaBanco.agendamentoID = visitaBanco.agendamentoID;
-        visitaBanco.enderecoID = visitaBanco.enderecoID;
+        _rep.Atualizar(visitaBanco);
 
-        _rep.Atualizar(visitaBanco, visitaBanco.agendamentoID, visitaBanco.enderecoID);
-
-        return lerDTO(visitaBanco);
-        //visitaBanco
-        //if(!(_rep.enderecoExiste))
-
+        return visitaConversoes.lerVisitaDto(visitaBanco);
     }
-
-
-    public void atualizarEndereco(int id, atualizarVisitaDTO atlDTO)
+ 
+    public lerVisitaDTO atualizarEndereco(int id, atualizarVisitaDTO atlDTO)
     {
         Visita visitaBanco = _rep.BuscarPorId(id);
-
+    
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
 
+        if (!_rep.enderecoExiste(atlDTO.enderecoId))
+            throw new DomainException("Endereço não encontrado..");
+    
         visitaBanco.enderecoID = atlDTO.enderecoId;
-
-        _rep.atualizarEndereco(id, visitaBanco.enderecoID);
+    
+        _rep.Atualizar(visitaBanco);
+        return visitaConversoes.lerVisitaDto(visitaBanco);
     }
 
-    //metodo necessario mas em analise    
-    public lerVisitaDTO Reagendar(int visitaId, DateTime novaDataInicio, DateTime novaDataTermino)
-    {
-        var visitaBanco = _rep.BuscarPorId(visitaId);
-        if (visitaBanco == null)
-            throw new DomainException("Visita nao encontrada");
-
-        if (novaDataTermino <= novaDataInicio)
-            throw new DomainException("A nova data de termino deve ser posterior a data de inicio");
-
-        _rep.Reagendar(visitaId, novaDataInicio, novaDataTermino);
-
-        visitaBanco.dataInicio = novaDataInicio;
-        visitaBanco.dataTermino = novaDataTermino;
-
-        return lerDTO(visitaBanco);
-    }
-
-    public void atualizarAgendamento(int id, atualizarVisitaDTO atlDTO)
+    public lerVisitaDTO atualizarData(int id, DateTime dataInicio, DateTime dataFinal, Guid usuarioId)
     {
         Visita visitaBanco = _rep.BuscarPorId(id);
-
+    
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
 
-        visitaBanco.agendamentoID = atlDTO.agendamentoId;
-
-        _rep.atualizarEndereco(id, visitaBanco.agendamentoID);
-        //return lerDTO(atlDTO);
+        if (dataFinal <= dataInicio)
+            throw new DomainException("Data inserida de forma incorreta");
+        bool temConflito = _rep.conflitoDeHorario(usuarioId, dataInicio, dataFinal, id);
+        if (temConflito)
+            throw new DomainException("O técnico já possui um compromisso agendado para este horário.");
+        visitaBanco.dataInicio = dataInicio;
+        visitaBanco.dataTermino = dataFinal;
+        
+        _rep.Atualizar(visitaBanco);
+        
+        return visitaConversoes.lerVisitaDto(visitaBanco);
     }
 
+    public lerVisitaDTO atualizarCliente(Guid usuarioId, int id, atualizarVisitaDTO atlDTO)
+    {
+        Visita visitaBanco = _rep.BuscarPorId(id);
+        if (visitaBanco == null)
+            throw new DomainException("Visita não encontrada");
+        if (atlDTO.clienteId != Guid.Empty)
+        {
+            Usuario? usuarioBanco = _usrRep.ObterPorId(usuarioId);
+            if (usuarioBanco == null)
+                throw new DomainException("Usuário não encontrado");
+
+            visitaBanco.cliente = usuarioBanco.nome;
+        }
+
+        else
+        {
+            visitaBanco.cliente = atlDTO.nomeCliente;
+        }
+    
+        
+        _rep.Atualizar(visitaBanco);
+
+        return visitaConversoes.lerVisitaDto(visitaBanco);
+
+    }
+ 
     public void Remover(int id)
     {
         Visita visitaBanco = _rep.BuscarPorId(id);
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
         _rep.Remover(id);
-
+    
     }
 }

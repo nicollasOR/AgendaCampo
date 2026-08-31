@@ -13,7 +13,7 @@ public class usuarioConversoes
             email = usuario.email,
             nome = usuario.nome,
             imgURL = $"usuario/{usuario.Imagem}/imagem",
-            statusUsuario = usuario.statusUsuario == true
+            statusUsuario = usuario.statusUsuario ? true : false
         };
     }
 
@@ -23,10 +23,8 @@ public class usuarioConversoes
         {
             nome = usuario.nome,
             email = usuario.email,
-            img = ImagemParaDTO.converterParaIFormFile(usuario.Imagem),
-            senha =
+            img = conversoesParaDTO.converterParaIFormFile(usuario.Imagem)
         };
     }
     
-    public static atualizarSenhaDTO atualizarSenhaUsuarioDTO()
 }

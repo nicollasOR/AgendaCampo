@@ -5,7 +5,7 @@ using AgendaCampo.Interface;
 using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
-
+using AgendaCampo.Applications.Conversões;
 using AgendaCampo.Applications.Validações;
 
 namespace RoyalGamess.Aplications.Services
@@ -25,24 +25,12 @@ namespace RoyalGamess.Aplications.Services
             return sha256.ComputeHash(Encoding.UTF8.GetBytes(senha));
         }
         
-        private static lerUsuarioDTO lerDTO(Usuario usuario)
-        {
-            lerUsuarioDTO usuarioDTO = new lerUsuarioDTO
-            {
-                usuarioID = usuario.usuarioID,
-                email = usuario.email,
-                nome = usuario.nome,
-                statusUsuario = usuario.statusUsuario ?? true
-            };
-
-            return usuarioDTO;
-        }
-        
+ 
         public List<lerUsuarioDTO> Listar()
         {
             List<Usuario> Listar = _rep.Listar();
 
-            List<lerUsuarioDTO> lerUsuarioDTO = Listar.Select(varAux => lerDTO(varAux)).ToList();
+            List<lerUsuarioDTO> lerUsuarioDTO = Listar.Select(varAux => usuarioConversoes.lerUsuarioDTO(varAux)).ToList();
             return lerUsuarioDTO;
         }
 
@@ -53,7 +41,7 @@ namespace RoyalGamess.Aplications.Services
             if(usuarioDto == null)
                 throw new DomainException("Usuário não encontrado");
 
-            return lerDTO(usuarioDto);
+            return usuarioConversoes.lerUsuarioDTO(usuarioDto);
 
         }
 
@@ -64,7 +52,7 @@ namespace RoyalGamess.Aplications.Services
             if (usuarioDTO == null)
                 throw new DomainException("Usuário não encontrado");
 
-            return lerDTO(usuarioDTO);
+            return usuarioConversoes.lerUsuarioDTO(usuarioDTO);
         }
 
 
@@ -82,11 +70,12 @@ namespace RoyalGamess.Aplications.Services
                 nome = usuarioDTO.nome,
                 email = usuarioDTO.email,
                 senha = HashSenha_(usuarioDTO.senha),
+                Imagem = conversoesParaDTO.converterImg(usuarioDTO.img),
                 statusUsuario = true
             };
             
             _rep.Adicionar(usuario);
-            return lerDTO(usuario);
+            return usuarioConversoes.lerUsuarioDTO(usuario);
         }
 
         public lerUsuarioDTO Atualizar(Guid id, atualizarUsuarioDTO usuarioDTO)
@@ -108,9 +97,10 @@ namespace RoyalGamess.Aplications.Services
             usuarioBanco.email = usuarioDTO.email;
             usuarioBanco.nome = usuarioDTO.nome;
             usuarioBanco.senha = HashSenha_(usuarioDTO.senha);
+            usuarioBanco.Imagem = conversoesParaDTO.converterImg(usuarioDTO.img);
             
             _rep.Atualizar(usuarioBanco);
-            return lerDTO(usuarioBanco);
+            return usuarioConversoes.lerUsuarioDTO(usuarioBanco);
         }
 
         public void AtualizarSenha(Guid id, atualizarSenhaDTO atualizarDTO)
@@ -127,12 +117,24 @@ namespace RoyalGamess.Aplications.Services
 
         }
 
+        public lerUsuarioDTO atualizarImg(Guid id, IFormFile img)
+        {
+            Usuario? usuarioBanco = _rep.ObterPorId(id);
+            if (usuarioBanco == null)
+                throw new DomainException("Usuario não encontrado");
+
+            usuarioBanco.Imagem = conversoesParaDTO.converterImg(img);
+            
+            _rep.Atualizar(usuarioBanco);
+            return usuarioConversoes.lerUsuarioDTO(usuarioBanco);
+        }
+
 
         public void Remover(Guid id)
         {
             Usuario usuario = _rep.ObterPorId(id);
             if (usuario == null)
-                throw new DomainException("Usuario não encontrado");
+                throw new DomainException("Usuário não encontrado");
             
             _rep.Remover(id);
         }

@@ -39,13 +39,16 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServer(conexaoBanco));
+builder.Services.AddDbContext<AgendaCampoNovoContext>(options => options.UseSqlServer(conexaoBanco));
 
-builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
-builder.Services.AddScoped<AgendamentoService>();
+// builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
+// builder.Services.AddScoped<AgendamentoService>();
 
 builder.Services.AddScoped<IVisitaRepository, VisitaRepository>();
 builder.Services.AddScoped<VisitaService>();
+
+builder.Services.AddScoped<IStatusVisitaRepository, StatusVisitaRepository>();
+builder.Services.AddScoped<StatusVisitaService>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
