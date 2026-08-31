@@ -20,6 +20,8 @@ import CriarIcon from "@/assets/svg/CriarIcon.svg";
 import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
 
 export default function Home() {
+  
+
   const router = useRouter();
 
   return (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { listarVisitasID, visitaGet } from "@/src/service/visitaService";
+import { listarVisitasID, visitaGet } from "@/src/app/service/visitaService";
 import { ScrollView, Image, Text, View, TouchableOpacity } from "react-native";
 import {
   Box,
