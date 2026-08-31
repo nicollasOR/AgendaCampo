@@ -5,6 +5,7 @@ import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 // ════════════════════════════════ //
 
 export const Colors = {
+<<<<<<< HEAD
   // Cores Principais
   blue: "hsl(225, 55%, 50%)",
   darkblue: "hsl(225, 85%, 15%)",
@@ -35,11 +36,26 @@ export const Colors = {
   border: "hsla(215, 84%, 15%, 0.05)",
   smoothGradient: ["hsl(215, 100%, 95%)", "hsl(0, 0%, 100%)"] as const,
 } as const;
+=======
+  blue: "#337DB2",
+  darkblue: "#063747",
+  lightblue: "#E7F1FE",
+  green: "#4DB266",
+  darkgreen: "#064721",
+  lightgreen: "#E7FEE9",
+  bgc: "#FFFFFF",
+  white: "#FFFFFF",
+  black: "#000000",
+  inactive: "#9FC5DF",
+  smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
+};
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
 
-export const Font = {
+const Font = {
   regular: "Outfit_400Regular",
   semibold: "Outfit_600SemiBold",
   bold: "Outfit_700Bold",
+<<<<<<< HEAD
 } as const;
 
 // ═════════════════ //
@@ -65,6 +81,8 @@ const baseInput: ViewStyle = {
   borderColor: Colors.lightgray,
   borderRadius: 10,
   paddingLeft: 35,
+=======
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
 };
 
 // ═══════════════ //
@@ -75,9 +93,9 @@ export const theme = StyleSheet.create({
   // --- Layout & Containers ---
   container: {
     flex: 1,
-    paddingHorizontal: 20,
     alignItems: "center",
     backgroundColor: Colors.bgc,
+<<<<<<< HEAD
   },
   scroll: {
     gap: 18,
@@ -86,18 +104,34 @@ export const theme = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 32,
   },
+=======
+  } as ViewStyle,
+
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
   center: {
+    gap: 10,
     alignItems: "center",
     justifyContent: "center",
+<<<<<<< HEAD
   },
+=======
+  } as ViewStyle,
+
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
   row: {
     gap: 10,
     alignItems: "center",
     flexDirection: "row",
+<<<<<<< HEAD
   },
+=======
+  } as ViewStyle,
+
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
   column: {
-    gap: 18,
+    gap: 12,
     flexDirection: "column",
+<<<<<<< HEAD
   },
   list: {
     gap: 6,
@@ -112,22 +146,44 @@ export const theme = StyleSheet.create({
     backgroundColor: Colors.blue,
     opacity: 0.2,
   },
+=======
+    justifyContent: "center",
+  } as ViewStyle,
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
 
   // --- Visual & Componentes Gerais ---
   info: {
     gap: 12,
-    padding: 20,
-    width: "100%",
+    padding: 32,
+    width: "90%",
     borderRadius: 32,
     alignItems: "center",
     justifyContent: "center",
+<<<<<<< HEAD
   },
+=======
+  } as ViewStyle,
+
+  round: {
+    borderWidth: 4,
+    borderColor: Colors.bgc,
+    overflow: "hidden",
+    borderRadius: 999,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
+  } as ViewStyle,
+
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
   icon: {
-    width: 48,
-    height: 48,
+    width: 60,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 999,
+<<<<<<< HEAD
   },
   profile: {
     ...baseShadow,
@@ -146,17 +202,17 @@ export const theme = StyleSheet.create({
     fontFamily: Font.bold,
     fontSize: 36,
   },
+=======
+  } as ViewStyle,
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
 
   // --- Cards ---
   card: {
-    ...baseShadow,
     width: "100%",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    padding: 20,
     borderRadius: 20,
-    borderWidth: 2,
-    borderColor: Colors.border,
     backgroundColor: Colors.bgc,
+<<<<<<< HEAD
   },
   cardInfo: {
     ...baseShadow,
@@ -273,17 +329,23 @@ export const theme = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: Colors.bgc,
   },
+=======
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
+  } as ViewStyle,
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
 
   // --- Botões ---
   btn: {
-    gap: 10,
     paddingVertical: 16,
-    height: 60,
     paddingHorizontal: 24,
-    width: "90%",
-    borderRadius: 999,
+    borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
+<<<<<<< HEAD
     flexDirection: "row",
     backgroundColor: Colors.btn,
   },
@@ -297,35 +359,61 @@ export const theme = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+=======
+    backgroundColor: Colors.blue,
+  } as ViewStyle,
+
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
   btnText: {
-    ...baseText,
     color: Colors.white,
     fontSize: 18,
     fontFamily: Font.semibold,
-  },
+  } as TextStyle,
 
   // --- Tipografia ---
   h1: {
-    ...baseText,
     fontSize: 32,
     fontFamily: Font.bold,
+<<<<<<< HEAD
   },
+=======
+    color: Colors.darkblue,
+  } as TextStyle,
+
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
   h2: {
-    ...baseText,
     fontSize: 26,
     fontFamily: Font.semibold,
+<<<<<<< HEAD
   },
+=======
+    color: Colors.darkblue,
+  } as TextStyle,
+
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
   h3: {
-    ...baseText,
     fontSize: 22,
+<<<<<<< HEAD
   },
+=======
+    fontFamily: Font.regular,
+    color: Colors.darkblue,
+  } as TextStyle,
+
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
   h4: {
-    ...baseText,
     fontSize: 18,
+<<<<<<< HEAD
   },
+=======
+    fontFamily: Font.regular,
+    color: Colors.darkblue,
+  } as TextStyle,
+
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
   p: {
-    ...baseText,
     fontSize: 15,
+<<<<<<< HEAD
   },
   label: {
     ...baseText,
@@ -391,3 +479,33 @@ export const {
   profileText: ProfileText,
   textImg: TextImg,
 } = theme;
+=======
+    fontFamily: Font.regular,
+    color: Colors.darkblue,
+  } as TextStyle,
+
+  line: {
+    height: 1,
+    width: "100%",
+    backgroundColor: Colors.blue,
+    opacity: 0.2,
+  } as ViewStyle,
+});
+
+export const Container = theme.container;
+export const Center = theme.center;
+export const Row = theme.row;
+export const Column = theme.column;
+export const Info = theme.info;
+export const Round = theme.round;
+export const Icon = theme.icon;
+export const Card = theme.card;
+export const Btn = theme.btn;
+export const BtnText = theme.btnText;
+export const H1 = theme.h1;
+export const H2 = theme.h2;
+export const H3 = theme.h3;
+export const H4 = theme.h4;
+export const P = theme.p;
+export const Line = theme.line;
+>>>>>>> 15d272fa05319d5f3c5c25cae4d62aa6cf4a2416
