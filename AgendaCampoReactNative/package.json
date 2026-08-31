@@ -21,6 +21,7 @@
     "expo-linear-gradient": "~15.0.8",
     "expo-router": "~6.0.24",
     "expo-secure-store": "~15.0.8",
+    "expo-splash-screen": "~31.0.13",
     "expo-status-bar": "~3.0.9",
     "jwt-decode": "^4.0.0",
     "lucide-react-native": "^1.31.0",
