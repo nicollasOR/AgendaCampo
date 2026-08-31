@@ -13,7 +13,7 @@ public partial class Usuario
 
     public byte[] senha { get; set; } = null!;
 
-    public string telefone { get; set; } = null!;
+    public string? telefone { get; set; }
 
     public bool statusUsuario { get; set; }
 

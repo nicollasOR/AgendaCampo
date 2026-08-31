@@ -19,6 +19,13 @@ public class conversoesParaDTO
         using var ms = new MemoryStream(img);
         return new FormFile(ms, 0, img.Length, string.Empty, string.Empty);
     }
+
+    public static string converterParaString(byte[] img)
+    {
+        string base64 = Convert.ToBase64String(img);
+        string caminhoURL = $"imagem/{base64}/";
+        return caminhoURL;
+    }
     // public static lerUsuarioDTO 
     
  

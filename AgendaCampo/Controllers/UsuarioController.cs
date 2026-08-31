@@ -34,6 +34,22 @@ namespace AgendaCampo.Controllers
             }
 
         }
+
+
+        [HttpGet("img/{id}")]
+        public ActionResult ObterImg(Guid id)
+        {
+            try
+            {
+                var img = _service.obterImg(id);
+                return File(img, "image/jpeg");
+            }
+
+            catch(DomainException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
         
         [HttpGet("{id}")]
         public ActionResult<lerUsuarioDTO> ObterPorId(Guid id)

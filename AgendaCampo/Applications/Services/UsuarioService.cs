@@ -55,6 +55,15 @@ namespace RoyalGamess.Aplications.Services
             return usuarioConversoes.lerUsuarioDTO(usuarioDTO);
         }
 
+        public byte[] obterImg(Guid id)
+        {
+            byte[] img = _rep.ObterImg(id);
+
+            if (img == null || img.Length == 0)
+                throw new DomainException("Imagem não encontrada");
+
+            return img;
+        }
 
         public lerUsuarioDTO Adicionar(criarUsuarioDTO usuarioDTO)
         {

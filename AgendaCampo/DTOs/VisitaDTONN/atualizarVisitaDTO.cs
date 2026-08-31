@@ -72,6 +72,7 @@ public class usuariosGET
     public Guid usuarioID { get; set; } = Guid.Empty;
     public string nome { get; set; } = string.Empty;
     public string email { get; set; } = string.Empty;
+    public string imgURL { get; set; }
 }
 
 

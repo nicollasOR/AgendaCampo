@@ -30,7 +30,9 @@ public class visitaConversoes
         {
             usuarioID = varAux.usuarioID,
             nome = varAux.nome,
-            email = varAux.email
+            email = varAux.email,
+            imgURL = conversoesParaDTO.converterParaString(varAux.Imagem)
+
         }).ToList()
         };
     }

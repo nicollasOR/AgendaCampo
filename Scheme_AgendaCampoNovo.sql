@@ -20,7 +20,7 @@ CREATE TABLE Usuario (
                          nome          NVARCHAR(60)     NOT NULL,
                          email         VARCHAR(60)      NOT NULL UNIQUE,
                          senha         VARBINARY(32)    NOT NULL,
-                         telefone      VARCHAR(18)      NOT NULL,
+                         telefone      VARCHAR(18)      NULL,
                          statusUsuario BIT              NOT NULL DEFAULT 1,
                          Imagem        VARBINARY(MAX)   NULL,
 

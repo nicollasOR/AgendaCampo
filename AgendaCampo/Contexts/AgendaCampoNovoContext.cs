@@ -25,15 +25,16 @@ public partial class AgendaCampoNovoContext : DbContext
     public virtual DbSet<Visita> Visita { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//         => optionsBuilder.UseSqlServer("Server=localhost,1433;Database=AgendaCampoNovo;User Id=sa;Password=Developer123@;Encrypt=True;TrustServerCertificate=True");
+{
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        //=> optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=AgendaCampoNovo;Trusted_Connection=True;TrustServerCertificate=True");
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Endereco>(entity =>
         {
-            entity.HasKey(e => e.enderecoID).HasName("PK__Endereco__39DEFC4AAFA4816A");
+            entity.HasKey(e => e.enderecoID).HasName("PK__Endereco__39DEFC4A076C27D1");
 
             entity.Property(e => e.bairro).HasMaxLength(40);
             entity.Property(e => e.cep).HasMaxLength(8);
@@ -42,18 +43,20 @@ public partial class AgendaCampoNovoContext : DbContext
 
         modelBuilder.Entity<StatusVisita>(entity =>
         {
-            entity.HasKey(e => e.statusVisitaID).HasName("PK__StatusVi__0C06C5FE482C9219");
+            entity.HasKey(e => e.statusVisitaID).HasName("PK__StatusVi__0C06C5FEB92498AC");
 
-            entity.HasIndex(e => e.nomeStatus, "UQ__StatusVi__127B2F2F491E9121").IsUnique();
+            entity.HasIndex(e => e.nomeStatus, "UQ__StatusVi__127B2F2FB6DA888D").IsUnique();
 
             entity.Property(e => e.nomeStatus).HasMaxLength(25);
         });
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.usuarioID).HasName("PK__Usuario__A5B1ABAEE6CA6899");
+            entity.HasKey(e => e.usuarioID).HasName("PK__Usuario__A5B1ABAE37687C64");
 
-            entity.HasIndex(e => e.email, "UQ__Usuario__AB6E61643D80EA0F").IsUnique();
+            entity.ToTable(tb => tb.HasTrigger("trg_softDelete_Usuario"));
+
+            entity.HasIndex(e => e.email, "UQ__Usuario__AB6E6164237F3B52").IsUnique();
 
             entity.Property(e => e.usuarioID).HasDefaultValueSql("(newid())");
             entity.Property(e => e.email)
@@ -84,7 +87,7 @@ public partial class AgendaCampoNovoContext : DbContext
 
         modelBuilder.Entity<Visita>(entity =>
         {
-            entity.HasKey(e => e.visitaID).HasName("PK__Visita__37DD75FD89AF8352");
+            entity.HasKey(e => e.visitaID).HasName("PK__Visita__37DD75FD53F529E1");
 
             entity.Property(e => e.cliente).HasMaxLength(50);
             entity.Property(e => e.sedeVisitada).HasMaxLength(60);
