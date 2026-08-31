@@ -16,8 +16,8 @@ import {
   SpaceBetween,
 } from "@/src/constants/theme";
 import AgendaCard from "@/src/components/agendaCard";
-import CriarIcon from "@/src/assets/svg/CriarIcon.svg";
-import VisitaIcon from "@/src/assets/svg/VisitaIcon.svg";
+import CriarIcon from "@/assets/svg/CriarIcon.svg";
+import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
 
 export default function Home() {
   const router = useRouter();
