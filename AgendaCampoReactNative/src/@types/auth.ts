@@ -29,3 +29,9 @@ export interface AuthContextData {
   login: (dados: Login) => Promise<void>;
   logout: () => Promise<void>;
 }
+
+export interface ImgUpload {
+  uri: string;
+  name?: string;
+  mimeType?: string;
+}

@@ -15,8 +15,8 @@ import {
   Scroll,
   SpaceBetween,
 } from "@/src/constants/theme";
-import AgendaCard from "@/src/components/agendaCard";
 import CriarIcon from "@/assets/svg/CriarIcon.svg";
+import AgendaCard from "@/src/components/agendaCard";
 import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
 
 export default function Home() {

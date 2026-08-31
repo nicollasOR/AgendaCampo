@@ -206,6 +206,19 @@ export const theme = StyleSheet.create({
     alignItems: "center",
     position: "relative",
   },
+  campoInputImg: {
+    gap: 5,
+    width: 160,
+    height: 160,
+    borderWidth: 2,
+    borderRadius: 40,
+    overflow: "hidden",
+    alignItems: "center",
+    flexDirection: "row",
+    borderStyle: "dashed",
+    justifyContent: "center",
+    borderColor: Colors.btn,
+  },
   inputIcon: {
     position: "absolute",
     left: 10,
@@ -216,6 +229,10 @@ export const theme = StyleSheet.create({
     height: 50,
     fontSize: 16,
     fontFamily: Font.semibold,
+  },
+  inputImg: {
+    width: "100%",
+    height: "100%",
   },
   textArea: {
     ...baseInput,
@@ -315,6 +332,11 @@ export const theme = StyleSheet.create({
     fontSize: 18,
     fontFamily: Font.semibold,
   },
+  textImg: {
+    ...baseText,
+    fontSize: 16,
+    fontFamily: Font.semibold,
+  },
 });
 
 // ════════════════ //
@@ -352,8 +374,10 @@ export const {
   form: Form,
   campoForm: CampoForm,
   campoInput: CampoInput,
+  campoInputImg: CampoInputImg,
   input: Input,
   inputIcon: InputIcon,
+  inputImg: InputImg,
   textArea: TextArea,
 
   // Tipografia
@@ -365,4 +389,5 @@ export const {
   label: Label,
   profile: Profile,
   profileText: ProfileText,
+  textImg: TextImg,
 } = theme;

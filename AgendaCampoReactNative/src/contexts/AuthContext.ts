@@ -6,17 +6,17 @@ import {
   useEffect,
   useState,
 } from "react";
-import { router } from "expo-router";
-import { jwtDecode } from "jwt-decode";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import { authService } from "@/src/service/authService";
 import {
   AuthContextData,
   Login,
   Usuario,
   UsuarioPayload,
 } from "@/src/@types/auth";
+import { router } from "expo-router";
+import { jwtDecode } from "jwt-decode";
+import { authService } from "@/src/service/authService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 const TOKEN_KEY = process.env.EXPO_PUBLIC_TOKEN_KEY ?? "chaveToken";
@@ -33,6 +33,7 @@ export function decodificarToken(token: string): Usuario | null {
         decoded[
           "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
         ],
+      img: "",
     };
   } catch {
     return null;

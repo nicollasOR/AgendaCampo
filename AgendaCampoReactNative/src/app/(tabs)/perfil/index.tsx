@@ -23,6 +23,7 @@ import {
   Profile,
   ProfileText,
 } from "@/src/constants/theme";
+import { FormatarIconNome } from "@/src/utils/formatarNome";
 import SairIcon from "@/assets/svg/SairIcon.svg";
 import AjudaIcon from "@/assets/svg/AjudaIcon.svg";
 import ArrowIcon from "@/assets/svg/ArrowIcon.svg";
@@ -31,7 +32,7 @@ import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
 import DetalheIcon from "@/assets/svg/DetalheIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
-import { FormatarIconNome } from "@/src/utils/formatarNome";
+import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
 
 export default function Perfil() {
   const router = useRouter();
@@ -119,12 +120,13 @@ export default function Perfil() {
           <TouchableOpacity
             style={[Box, { width: "100%" }]}
             activeOpacity={0.75}
+            onPress={() => router.push("/cadastro")}
           >
             <View style={Row}>
               <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
-                <PerfilIcon color={Colors.blue} />
+                <EditarPerfilIcon color={Colors.blue} />
               </View>
-              <Text style={H4}>Dados Pessoais</Text>
+              <Text style={H4}>Editar Perfil</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
