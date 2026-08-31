@@ -13,7 +13,11 @@ public partial class Usuario
 
     public byte[] senha { get; set; } = null!;
 
-    public bool? statusUsuario { get; set; }
+    public string telefone { get; set; } = null!;
+
+    public bool statusUsuario { get; set; }
+
+    public byte[]? Imagem { get; set; }
 
     public virtual ICollection<Visita> visita { get; set; } = new List<Visita>();
 }

@@ -1,40 +1,35 @@
 using System.ComponentModel.DataAnnotations;
+using AgendaCampo.DTOs.EnderecoDTO;
+using AgendaCampo.DTOs.VisitaDTO;
 
 namespace AgendaCampo.DTOs.VisitaDTO;
 
 public class atualizarVisitaDTO
 {
-    // [Required(ErrorMessage = "o id do evento é obrigatório")]
-    // public int? eventoid { get; set; } 
     [Required(ErrorMessage = "O nome do evento é obrigatório")]
     [MaxLength(70, ErrorMessage = "É permitido no maximo 50 caracteres")]
-    public string nomeEvento { get; set; } = null!;
+    public string titulo { get; set; } = null!;
 
     [Required(ErrorMessage = "a descricao é obrigatório")]
     public string descricao { get; set; } = null!;
-    
-    public bool? statusRealizado { get; set; }
 
-    [Required(ErrorMessage = "um id de agendamento é obrigatório")]
-    public int agendamentoId { get; set; }
+    [Required(ErrorMessage = "um id de statusVisita é obrigatório")]
+    public int statusVisitaId { get; set; }
     
     [Required(ErrorMessage = "um id de endereco é obrigatório")]
     public int enderecoId { get; set; }
 
-    //[Required(ErrorMessage = "Um nome do que e qual sede será visitada, é obrigatório")]
-    //public string nomeSede { get; set; } = string.Empty;
+    [Required(ErrorMessage = "Um nome do que e qual sede será visitada, é obrigatório")]
+    public string nomeSede { get; set; } = string.Empty;
 
-    // [Required(ErrorMessage = "uma data inicial é obrigatória")]
-    // public DateTime dataInicio { get; set; } 
-    // [Required(ErrorMessage = "uma data final é obrigatória")]
-    // public DateTime dataTermino { get; set; }
-    
-    //teste
-    
+    [Required(ErrorMessage = "Um nome de cliente pode ser necessário")]
+    public string nomeCliente { get; set; } = string.Empty;
+
     [Required(ErrorMessage = "uma data inicial é obrigatória")]
-    public DateTimeOffset dataInicio { get; set; } 
+    public DateTime dataInicio { get; set; } 
     [Required(ErrorMessage = "uma data final é obrigatória")]
-    public DateTimeOffset dataTermino { get; set; }
+    public DateTime dataTermino { get; set; }
+           //DateTimeOffSet
     
     
 }
@@ -49,24 +44,32 @@ public class lerVisitaDTO
     [Required(ErrorMessage = "a descricao é obrigatório")]
     public string descricao { get; set; } = null!;
     
-    public bool? statusRealizado { get; set; }
 
-    [Required(ErrorMessage = "um id de agendamento é obrigatório")]
-    public int? agendamentoId { get; set; }
+    // [Required(ErrorMessage = "um id de statusVisita é obrigatório")]
+    // public int statusVisitaId { get; set; }
+    //
+    // [Required(ErrorMessage = "um id de endereco é obrigatório")]
+    // public int enderecoId { get; set; }
     
-    [Required(ErrorMessage = "um id de endereco é obrigatório")]
-    public int? enderecoId { get; set; }
-
-    [Required(ErrorMessage = "Um nome do que e qual sede será visitada, é obrigatório")]
-    public string nomeSede { get; set; } = string.Empty;
-
+    public lerEnderecoDTO Endereco { get; set; }
+    public string statusVisita { get; set; } = string.Empty;
     [Required(ErrorMessage = "uma data inicial é obrigatória")]
-    public DateTimeOffset dataInicio { get; set; } 
+    public DateTime dataInicio { get; set; } 
     [Required(ErrorMessage = "uma data final é obrigatória")]
-    public DateTimeOffset dataTermino { get; set; }
+    public DateTime dataTermino { get; set; }
     
     public string? logadouroEndereco { get; set; } = string.Empty;
     public string? nomeCliente { get; set; } = string.Empty;
+
+    public List<usuariosGET> Tecnicos { get; set; } = new List<usuariosGET>();
+}
+
+
+public class usuariosGET
+{
+    public Guid usuarioID { get; set; } = Guid.Empty;
+    public string nome { get; set; } = string.Empty;
+    public string email { get; set; } = string.Empty;
 }
 
 

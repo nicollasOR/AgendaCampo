@@ -8,6 +8,7 @@ namespace AgendaCampo.Interface
         public List<Usuario> Listar();
         public Usuario? ObterPorId(Guid id);
         public Usuario? ObterPorEmail(string email);
+        public byte[] ObterImg(Guid id);
         public bool NomeExiste(string nome);
         public bool EmailExiste(string email);
         public void Adicionar(Usuario usuario);
