@@ -7,8 +7,8 @@ namespace AgendaCampo.Repositories
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private readonly AgendaCampoContext _context;
-        public UsuarioRepository(AgendaCampoContext context) => _context = context;
+        private readonly AgendaCampoNovoContext _context;
+        public UsuarioRepository(AgendaCampoNovoContext context) => _context = context;
 
         
         public bool NomeExiste(string nome)
@@ -33,6 +33,14 @@ namespace AgendaCampo.Repositories
         public Usuario? ObterPorEmail(string email)
         {
             return _context.Usuario.FirstOrDefault(varAux => varAux.email == email);
+        }
+
+        public byte[] ObterImg(Guid id)
+        {
+            return _context.Usuario.Where(varAux => varAux.usuarioID == id)
+                .Select(varImg => varImg.Imagem).FirstOrDefault();
+
+            
         }
 
         public void Adicionar(Usuario usuario)

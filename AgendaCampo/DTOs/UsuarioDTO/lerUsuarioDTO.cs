@@ -17,13 +17,15 @@ namespace AgendaCampo.DTOs.UsuarioDTO
         public string email { get; set; } = null!;
 
         public bool? statusUsuario { get; set; } = null!;
+        
+        public string imgURL { get; set; }
     }
 
 
     public class atualizarUsuarioDTO
     {
-        [Required(ErrorMessage = "O ID e obrigatorio!")]
-        public Guid usuarioID { get; set; } = Guid.Empty;
+        // [Required(ErrorMessage = "O ID e obrigatorio!")]
+        // public Guid usuarioID { get; set; } = Guid.Empty;
         
         [Required(ErrorMessage = "O nome é obrigatório")]
         [MaxLength(70, ErrorMessage = "É permitido no maximo 70 caracteres")]
@@ -35,6 +37,8 @@ namespace AgendaCampo.DTOs.UsuarioDTO
         
         [Required(ErrorMessage = "A senha é obrigatório")]
         public string senha { get; set; } = null!;
+        
+        public IFormFile img { get; set; }
 
         // public bool? statusUsuario { get; set; } = null!;
     }
@@ -45,5 +49,11 @@ namespace AgendaCampo.DTOs.UsuarioDTO
         [Required(ErrorMessage = "A senha é obrigatório")]
         public string senha { get; set; } = null!;
         
+    }
+
+    public class atualizarImg
+    {
+        [Required(ErrorMessage = "Uma imagem é obrigatória po")]
+        public IFormFile img { get; set; } = null!;
     }
 }

@@ -6,8 +6,8 @@ namespace AgendaCampo.Repositories;
 
 public class EnderecoRepository : IEnderecoRepository
 {
-    private readonly AgendaCampoContext _ctx;
-    public EnderecoRepository(AgendaCampoContext ctx) => _ctx = ctx;
+    private readonly AgendaCampoNovoContext _ctx;
+    public EnderecoRepository(AgendaCampoNovoContext ctx) => _ctx = ctx;
 
     public List<Endereco> Listar()
     {
