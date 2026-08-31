@@ -28,15 +28,17 @@ import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
 import CancelarIcon from "../../../../assets/svg/CancelarIcon.svg";
 import DescricaoIcon from "../../../../assets/svg/DescricaoIcon.svg";
 import { useEffect, useState } from "react";
-import { listarVisitasID, visitaGet } from "../../api/visitaService";
+import { listarVisitasID } from "../../api/visitaService";
+import { useVisitaServiceDetalhe } from "../../hooks/useVisitaService";
+import { visitaGet } from "../../@types";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function Detalhe() {
   const [visita, setVisita] = useState<visitaGet>();
-  let visitaID: number = 2;
-
+  
   async function buscarVisitaID() {
     try {
-      const response = await listarVisitasID(Number(visitaID));
+      const response = await listarVisitasID(Number(visita?.visitaID));
       setVisita(response.data);
     } catch (error: any) {
       return error.response.data;
@@ -49,21 +51,7 @@ export default function Detalhe() {
     }, 1000);
   }, []);
 
-  const detalhes = {
-    id: "ID: #VS-2023-084",
-    statusAgenda: "Agendada",
-    titulo: "Manutenção Preventiva - Trator John Deere",
-    data: "24 de Outubro, 2023 • 08:00 - 12:00",
-    descricao:
-      "Trator apresentando falha na injeção eletrônica de combustível. Perda de potência durante operação com carga pesada. ",
-    desc2:
-      "- Equipamento: Trator John Deere 8R - Horímetro: 4.520hrs - Obs: Levar scanner de diagnóstico e filtro de combustível sobressalente. ",
-    endereco: "Rodovia BR-163, Km 45, Zona Rural Sorriso - MT, 78890-000",
-  };
-
-  const client = {
-    nome: `Fazenda São João`,
-  };
+ const {id} = useLocalSearchParams<{id: number}>()
 
   // function dividirNome(nome:string) {
   //   if(client)
@@ -78,10 +66,10 @@ export default function Detalhe() {
       <View style={Column}>
         <View style={Row}>
           <View style={Box}>
-            <Text style={P}>{detalhes.id}</Text>
+            <Text style={P}>ID: #VS-{visita?.visitaID} </Text>
           </View>
           <View style={Box}>
-            <Text style={P}>{detalhes.statusAgenda}</Text>
+            <Text style={P}> {visita?.statusVisita}</Text>
           </View>
         </View>
         <ScrollView

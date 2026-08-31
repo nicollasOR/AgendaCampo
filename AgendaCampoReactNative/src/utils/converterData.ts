@@ -8,7 +8,7 @@ export const formatarData = (data?: Date): string | undefined => {
 
     if(isNaN(dataGet.getTime()))
     {
-        console.error(`Fudeu né fio${data}`)
+        console.error(`Deu B.O ${data}`)
         return undefined
     }
 
