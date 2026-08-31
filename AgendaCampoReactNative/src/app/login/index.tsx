@@ -1,193 +1,124 @@
 import React from "react";
-import { useRouter } from "expo-router";
+import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from "react-native";
-
-import EmailIcon from "../../../assets/svg/email.svg";
-import CadeadoIcon from "../../../assets/svg/cadeado.svg";
-import { Image } from "react-native";
+  Btn,
+  BtnText,
+  CampoForm,
+  CampoInput,
+  Center,
+  Colors,
+  Container,
+  H1,
+  H3,
+  Input,
+  InputIcon,
+  Label,
+} from "../../constants/theme";
+import Logo from "../../../assets/svg/Logo.svg";
+import EmailIcon from "../../../assets/svg/EmailIcon.svg";
+import ArrowIcon from "../../../assets/svg/ArrowIcon.svg";
+import CadeadoIcon from "../../../assets/svg/CadeadoIcon.svg";
+import { useAutenticacao } from "../../hooks/useAutenticacao";
 
 export default function Login() {
-  const router = useRouter();
+  const {
+    email,
+    setEmail,
+    senha,
+    setSenha,
+    loading,
+    erro,
+    handleLogin,
+  } = useAutenticacao();
 
   return (
-    <View style={styles.container}>
-
-      <View style={styles.card}>
-
-        <Image source={require("../../../assets/img/logo.png")}
-        style={styles.logo}/>
-
-          <Text style={styles.titulo}>
+    <SafeAreaView style={[Container, { justifyContent: "center", alignItems: "center" }]}>
+      <View style={{ width: "85%", maxWidth: 360, alignItems: "center", gap: 20 }}>
+        
+        <View style={[Center, { gap: 8 }]}>
+          <Logo width={88} height={68} color={Colors.blue} />
+          <Text style={[H1, { color: Colors.blue, fontWeight: "bold", marginTop: 8 }]}>
             AgendaCampo
           </Text>
-
-          <Text style={styles.descricao}>
+          <Text style={[H3, { color: Colors.gray, textAlign: "center", fontSize: 16 }]}>
             Acesse sua conta para continuar.
           </Text>
-
-        <View style={styles.campo}>
-
-          <Text style={styles.email}>
-            E-mail
-          </Text>
-
-          <View style={styles.inputContainer}>
-            <EmailIcon width={20} height={20} color={"#003EC7"} />
-
-            <TextInput
-              style={styles.input}
-              placeholder="  seu@email.com"
-            />
-          </View>
-
-
-          <Text style={styles.senha}>
-            Senha
-          </Text>
-
-          <View style={styles.inputContainer}>
-            <CadeadoIcon width={20} height={20} color={"#003EC7"} />
-
-            <TextInput
-              style={styles.input}
-              placeholder="  *******"
-              secureTextEntry
-            />
-          </View>
-
-
-          {/* Esqueci minha senha */}
-          <Text style={styles.senhaesquecida}>
-            Esqueci minha senha
-          </Text>
-
-
-          <TouchableOpacity style={styles.botao}>
-            <Text style={styles.textobotao}>
-              Acessar
-            </Text>
-          </TouchableOpacity>
-
-
-          <View style={styles.footer}>
-            <Text>
-              Uso exclusivo para técnicos e operacionais
-            </Text>
-          </View>
-
         </View>
 
-      </View>
+        <View style={[CampoForm, { width: "100%", gap: 14 }]}>
+          {erro && (
+            <Text style={{ color: "red", textAlign: "center", marginBottom: 6 }}>
+              {erro}
+            </Text>
+          )}
 
-    </View>
+          <Text style={Label}>E-mail</Text>
+          <View style={CampoInput}>
+            <EmailIcon color={Colors.blue} style={InputIcon} />
+            <TextInput
+              style={Input}
+              placeholder="seu@email.com"
+              placeholderTextColor="#A0AEC0"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+          </View>
+
+          <Text style={Label}>Senha</Text>
+          <View style={CampoInput}>
+            <CadeadoIcon color={Colors.blue} style={InputIcon} />
+            <TextInput
+              style={Input}
+              placeholder="********"
+              placeholderTextColor="#A0AEC0"
+              secureTextEntry
+              value={senha}
+              onChangeText={setSenha}
+            />
+          </View>
+
+          <TouchableOpacity style={{ alignSelf: "flex-start", marginTop: 4 }}>
+            <Text style={{ color: Colors.blue, fontWeight: "600", fontSize: 14 }}>
+              Esqueci minha senha
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style={[
+            Btn,
+            {
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 8,
+              paddingVertical: 14,
+              borderRadius: 12,
+              marginTop: 10,
+            },
+            loading && { opacity: 0.7 },
+          ]}
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color={Colors.white} />
+          ) : (
+            <>
+              <Text style={BtnText}>Acessar</Text>
+              <ArrowIcon color={Colors.white} width={18} height={18} />
+            </>
+          )}
+        </TouchableOpacity>
+
+        <Text style={{ fontSize: 12, color: Colors.gray, textAlign: "center", marginTop: 12 }}>
+          Uso exclusivo para técnicos e operacionais.
+        </Text>
+      </View>
+    </SafeAreaView>
   );
 }
-
-
-const styles = StyleSheet.create({
-
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  card: {
-    padding: 23,
-    marginLeft: 10,
-    marginRight: 10,
-    borderRadius: 10,
-  },
-
-  logo:{
-  width: 70,
-  height: 30,
-  resizeMode: "contain",
-  alignSelf: "center",
-  marginTop: 10,
-  marginBottom: 20,
-},
-
-  titulo: {
-    color: "#003EC7",
-    fontSize: 30,
-    marginTop: 30,
-    textAlign: "center"
-  },
-
-  descricao: {
-    margin: 8,
-    fontWeight: "300",
-    fontSize: 20,
-    textAlign: "center"
-  },
-
-  campo: {
-    margin: 35,
-  },
-
-  email: {
-    fontWeight: "600",
-    marginBottom: 8,
-  },
-
-  senha: {
-    fontWeight: "600",
-    marginTop: 20,
-    marginBottom: 8,
-  },
-
-  
-  inputContainer: {
-    width: 300,
-    height: 45,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 2,
-    borderColor: "#D0D5E2",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  
-  input: {
-    flex: 1,
-    marginLeft: 8,
-  },
-
-  senhaesquecida: {
-    marginTop: 20,
-    color: "#003EC7",
-  },
-
-  botao: {
-    width: 300,
-    marginTop: 20,
-    height: 50,
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: "#003EC7",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  textobotao: {
-    color: "#FFFFFF",
-    fontSize: 18,
-  },
-
-  footer: {
-    marginTop: 40,
-    fontWeight: "300",
-    alignItems: "center",
-  },
-
-});

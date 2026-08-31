@@ -1,7 +1,7 @@
 import { StyleSheet, ViewStyle, TextStyle } from "react-native";
 
 export const Colors = {
-  blue: "#337DB2",
+  blue: "#0041C2",
   darkblue: "#063747",
   lightblue: "#E7F1FE",
   green: "#4DB266",
@@ -11,6 +11,8 @@ export const Colors = {
   white: "#FFFFFF",
   black: "#000000",
   inactive: "#9FC5DF",
+  btn: "#337DB2",
+  gray: "#718096",
   smoothGradient: ["hsl(205, 100%, 95%)", "#FFFFFF"] as const,
 };
 
@@ -137,6 +139,41 @@ export const theme = StyleSheet.create({
     backgroundColor: Colors.blue,
     opacity: 0.2,
   } as ViewStyle,
+
+ campoForm: {
+    width: "100%",
+    gap: 16,
+  } as ViewStyle,
+
+
+  campoInput: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: Colors.inactive,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    width: "100%",
+  } as ViewStyle,
+
+  input: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    fontSize: 16,
+    color: Colors.darkblue,
+    outlineStyle: "none",
+  } as unknown as TextStyle,
+
+  inputIcon: {
+    marginRight: 8,
+  } as ViewStyle,
+
+  label: {
+    fontSize: 14,
+    fontFamily: Font.semibold,
+    color: Colors.darkblue,
+  } as TextStyle,
 });
 
 export const Container = theme.container;
@@ -155,3 +192,8 @@ export const H3 = theme.h3;
 export const H4 = theme.h4;
 export const P = theme.p;
 export const Line = theme.line;
+export const CampoForm = theme.campoForm
+export const CampoInput = theme.campoInput;
+export const Input = theme.input;
+export const InputIcon = theme.inputIcon;
+export const Label = theme.label;
