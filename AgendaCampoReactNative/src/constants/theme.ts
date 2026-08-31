@@ -122,19 +122,29 @@ export const theme = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  round: {
-    ...baseShadow,
-    borderWidth: 4,
-    borderColor: Colors.bgc,
-    overflow: "hidden",
-    borderRadius: 999,
-  },
   icon: {
     width: 48,
     height: 48,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 999,
+  },
+  profile: {
+    ...baseShadow,
+    borderWidth: 4,
+    borderColor: Colors.bgc,
+    overflow: "hidden",
+    borderRadius: 999,
+    width: 120,
+    height: 120,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.smoothBgc2,
+  },
+  profileText: {
+    ...baseText,
+    fontFamily: Font.bold,
+    fontSize: 36,
   },
 
   // --- Cards ---
@@ -324,7 +334,6 @@ export const {
 
   // Componentes
   info: Info,
-  round: Round,
   icon: Icon,
   card: Card,
   cardInfo: CardInfo,
@@ -354,4 +363,6 @@ export const {
   h4: H4,
   p: P,
   label: Label,
+  profile: Profile,
+  profileText: ProfileText,
 } = theme;
