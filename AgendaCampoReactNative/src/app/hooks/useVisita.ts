@@ -19,4 +19,9 @@ export function useVisita() {
         listarVisita();
     }, [])
 
+    return {
+        visita,
+        listarVisita
+    };
+
 }

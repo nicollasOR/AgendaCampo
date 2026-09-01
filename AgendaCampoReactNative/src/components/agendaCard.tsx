@@ -18,8 +18,9 @@ import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
 import ArrowMapIcon from "@/assets/svg/ArrowMapIcon.svg";
 import CalendarioIcon from "@/assets/svg/CalendarioIcon.svg";
 import VisitaCheckIcon from "@/assets/svg/VisitaCheckIcon.svg";
+import { visitaGet, visitaGetHome } from "../@types/visitas";
 
-export default function AgendaCard() {
+export default function AgendaCard({statusVisita, nomeEvento, visitaID, dataInicio, logradouroEndereco, dataTermino}:visitaGetHome) {
   const router = useRouter();
 
   return (
@@ -27,27 +28,27 @@ export default function AgendaCard() {
       <View style={{ padding: 16 }}>
         <View style={[Row, SpaceBetween]}>
           <View style={Status}>
-            <Text style={[P, { color: Colors.btn }]}>Agendada</Text>
+            <Text style={[P, { color: Colors.btn }]}>{statusVisita}</Text>
           </View>
           <VisitaCheckIcon color={Colors.darkblue} />
         </View>
 
-        <Text style={[H2, { color: Colors.black }]}>Fazenda Boa Esperança</Text>
-        <Text style={[P, { color: Colors.darkgray }]}>Ref: RN01</Text>
+        <Text style={[H2, { color: Colors.black }]}>{nomeEvento}</Text>
+        <Text style={[P, { color: Colors.darkgray }]}>Ref: RN{visitaID}</Text>
 
         <View style={List}>
           <View style={Row}>
             <CalendarioIcon color={Colors.darkblue} />
-            <Text style={[P, { color: Colors.gray }]}>24 Out 2023</Text>
+            <Text style={[P, { color: Colors.gray }]}>{String(dataInicio.getDate)}</Text>
           </View>
           <View style={Row}>
             <RelogioIcon color={Colors.darkblue} />
-            <Text style={[P, { color: Colors.gray }]}>08:00 - 10:00</Text>
+            <Text style={[P, { color: Colors.gray }]}>{String(dataInicio.getHours)} - {String(dataTermino.getHours)}</Text>
           </View>
           <View style={Row}>
             <LocalIcon color={Colors.darkblue} />
             <Text style={[P, { color: Colors.gray }]} numberOfLines={2}>
-              Rod. SP 340, Km 15, Mogi Mirim - SP
+              {logradouroEndereco}
             </Text>
           </View>
         </View>

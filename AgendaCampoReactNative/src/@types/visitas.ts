@@ -14,6 +14,14 @@ export interface enderecoGET_Visita{
     cep: string
 }
 
+export interface visitaGetHome {
+    visitaID: number,
+    nomeEvento: string,
+    statusVisita: string,
+    logradouroEndereco: string,
+    dataInicio: Date,
+    dataTermino: Date
+}
 
 export interface visitaGet {
     visitaID: number,
