@@ -1,204 +1,139 @@
-DROP DATABASE AgendaCampo
-CREATE DATABASE AgendaCampo
+DROP DATABASE AgendaCampoAtual
 GO
-USE AgendaCampo
-CREATE TABLE [Usuario] (
-                           [usuarioID] uniqueidentifier PRIMARY KEY NOT NULL default NEWID(),
-                           [nome] nvarchar(60) NOT NULL,
-                           [email] varchar(60) UNIQUE NOT NULL,
-                           [senha] varbinary(32) NOT NULL,
-                           [statusUsuario] bit default 1
-)
+CREATE DATABASE AgendaCampoAtual
+GO
+USE AgendaCampoAtual
+GO
+ 
+GO
+CREATE TABLE Usuario (
+                         usuarioID     UNIQUEIDENTIFIER PRIMARY KEY NOT NULL DEFAULT NEWID(),
+                         nome          NVARCHAR(60)     NOT NULL,
+                         email         VARCHAR(60)      NOT NULL UNIQUE,
+                         senha         VARBINARY(32)    NOT NULL,
+                         telefone      VARCHAR(18)      NULL,
+                         statusUsuario BIT              NOT NULL DEFAULT 1,
+                         Imagem        VARBINARY(MAX)   NULL,
 
-INSERT INTO Usuario(nome, email, senha)
-VALUES
-    ('teste', 'teste@gmail.com', HASHBYTES('SHA2_256', 'teste'))
+);
+SELECT * FROM Visita
+GO
+
+CREATE TABLE StatusVisita
+(
+                        statusVisitaID INT PRIMARY KEY IDENTITY(1,1),
+                        nomeStatus NVARCHAR(25) NOT NULL UNIQUE,
+
+)
+GO
+CREATE TABLE Visita (
+                        visitaID        INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+                        statusVisitaID  INT               NOT NULL,
+                        cliente         NVARCHAR(50)      NOT NULL,
+                        sedeVisitada    NVARCHAR(60)      NULL,
+                        titulo          NVARCHAR(50)      NOT NULL,
+                        descricao       NVARCHAR(MAX)     NULL,
+                        dataInicio      DATETIME2         NOT NULL,
+                        dataTermino     DATETIME2         NOT NULL,
+                        logradouro      NVARCHAR(60)      NOT NULL,
+                        bairro          NVARCHAR(40)      NOT NULL,
+                        numero          INT               NOT NULL,
+                        cep             NVARCHAR(9)       NOT NULL,
+
+                        CONSTRAINT FK_Visita_StatusVisita FOREIGN KEY (statusVisitaID)
+                            REFERENCES StatusVisita(statusVisitaID)
+                            ON DELETE CASCADE
+);
+
+GO
+
+
+-- tabela intermediária para relacionar usuario com visita
+CREATE TABLE UsuarioVisita (
+                               usuarioID UNIQUEIDENTIFIER NOT NULL,
+                               visitaID  INT              NOT NULL,
+
+                               CONSTRAINT PK_UsuarioVisita PRIMARY KEY (usuarioID, visitaID),
+                               CONSTRAINT FK_UsuarioVisita_Usuario FOREIGN KEY (usuarioID)
+                                   REFERENCES Usuario (usuarioID)
+                                   ON DELETE CASCADE,
+                               CONSTRAINT FK_UsuarioVisita_Visita FOREIGN KEY (visitaID)
+                                   REFERENCES Visita (visitaID) ON DELETE NO ACTION
+);
+
 GO
 SELECT * FROM Usuario
 
-CREATE TABLE [Agendamento] (
-    [agendaID] int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    [data] datetime2 NOT NULL,
-    [empresaSede] nvarchar(50) NOT NULL,
-                            [usuarioID] uniqueidentifier NOT NULL,
-                            [statusAgenda] bit default 1 NOT NULL,
-                               [agendaID] int PRIMARY KEY NOT NULL,
-                               [data] datetime2,
-                               [empresaSede] nvarchar(50) NOT NULL,
-                               [usuarioID] uniqueidentifier NOT NULL,
-                               [statusAgenda] bit default 1 NOT NULL,
 
+INSERT INTO Usuario (nome, email, senha, Imagem, telefone)
+VALUES
+    ('admConfia', 'adm@adm.com', HASHBYTES('SHA2_256', 'adm'), NULL, '4002892211'  )
 
-                               CONSTRAINT FK_Agendamento_Usuario FOREIGN KEY(usuarioID) REFERENCES Usuario(usuarioID) ON DELETE CASCADE
-)
-
-go
-
-CREATE TABLE [Endereco] (
-                            [enderecoID] int PRIMARY KEY identity(1,1) not null,
-                            [logradouro] nvarchar(60) NOT NULL,
-                            [bairro] nvarchar(40) NOT NULL,
-                            [numero] int NOT NULL,
-                            [cep] nvarchar(8) not null
-)
 GO
 
--- CREATE TABLE StatusVisita(
---     [statusVisitaID] INT PRIMARY KEY IDENTITY(1,1),
---     [nomeStatus] NVARCHAR(30) NOT NULL
--- )
+INSERT INTO StatusVisita(nomeStatus)
+VALUES
 
-CREATE TABLE [Visita] (
-                          [visitaID] int primary key identity(1,1) not null,
-                          [agendamentoID] int NOT NULL,
-                          [enderecoID] int NOT NULL,
-                          --[statusVisitaID] int not null,
-                          [sedeVisitada] NVARCHAR(60) null,
-                          [titulo] nvarchar(50) NOT NULL,
-                          [descricao] nvarchar(max),
-                          [statusRealizado] bit default 0 NOT NULL,
-                          [dataInicio] DATETIME2 NOT NULL,
-                          [dataTermino] DATETIME2 NOT NULL,
+    ('Concluída'),
+    ('Pendente'),
+    ('Confirmada'),
+    ('Cancelada')
 
 
 
-                          CONSTRAINT FK_Visita_AgendamentoID FOREIGN KEY(agendamentoID)
-                              REFERENCES Agendamento(agendaID) ON DELETE CASCADE,
-
-                          CONSTRAINT FK_Visita_Endereco FOREIGN KEY(enderecoID)
-                              REFERENCES Endereco(enderecoID) ON DELETE CASCADE,
-
-                          --CONSTRAINT FK_Visita_statusVisita FOREIGN KEY(statusVisitaID)
-                             -- REFERENCES StatusVisita(statusVisitaID) ON DELETE CASCADE
-)
 GO
 
+-- 1. Declarar variável para capturar o ID do usuário existente
+DECLARE @UsuarioID UNIQUEIDENTIFIER;
+SELECT TOP 1 @UsuarioID = usuarioID FROM Usuario WHERE email = 'adm@adm.com';
 
+-- 2. Tabela temporária para armazenar os IDs das visitas criadas
+DECLARE @NovasVisitas TABLE (visitaID INT);
+
+-- 3. Inserir as Visitas
+INSERT INTO Visita (enderecoID, statusVisitaID, cliente, sedeVisitada, titulo, descricao, dataInicio, dataTermino)
+OUTPUT INSERTED.visitaID INTO @NovasVisitas
+VALUES
+    (
+        1,
+        (SELECT statusVisitaID FROM StatusVisita WHERE nomeStatus = 'Confirmada'),
+        'Fazenda Sol Nascente',
+        'Matriz - Campo Novo',
+        'Vistoria de Colheita',
+        'Acompanhamento técnico da colheita de soja da safra atual.',
+        '2026-09-01 08:00:00',
+        '2026-09-01 12:00:00'
+    ),
+    (
+        2,
+        (SELECT statusVisitaID FROM StatusVisita WHERE nomeStatus = 'Pendente'),
+        'Agropecuária Ouro Verde',
+        'Filial Sul',
+        'Reunião Comercial',
+        'Apresentação do novo catálogo de insumos e maquinários.',
+        '2026-09-03 14:00:00',
+        '2026-09-03 16:30:00'
+    ),
+    (
+        3,
+        (SELECT statusVisitaID FROM StatusVisita WHERE nomeStatus = 'Concluída'),
+        'Cooperativa Agrícola',
+        'Unidade de Armazenamento',
+        'Auditoria de Silos',
+        'Inspeção periódica das condições de armazenamento de grãos.',
+        '2026-08-25 09:00:00',
+        '2026-08-25 17:00:00'
+    );
+GO
 
 CREATE TRIGGER trg_softDelete_Usuario
-ON Usuario
-INSTEAD OF DELETE
-AS
-BEGIN
-UPDATE usr SET statusUsuario = 0
-from Usuario usr
-INNER JOIN deleted d
-ON d.usuarioID = usr.usuarioID
-END
-GO
-
-
     ON Usuario
     INSTEAD OF DELETE
     AS
-    BEGIN
-      UPDATE usr SET statusUsuario = 0
-        from Usuario usr
-            INNER JOIN deleted d
-            ON d.usuarioID = usr.usuarioID
-    END
-    GO
-
--- CREATE TRIGGER trg_checagem_Agendamento
---     ON Agendamento
---     AFTER INSERT, UPDATE
---     AS
---     BEGIN
---     UPDATE Agnd
---         SET Agnd.statusAgenda = 0
---         FROM Agendamento Agnd
---             INNER JOIN inserted updtBit ON Agnd.agendaID = updtBit.agendaID
---                 WHERE updtBit.data > SYSDATETIME();
---     END
---     GO
---
---
--- CREATE TRIGGER trg_checagem_Visita
---     ON Visita
---     AFTER INSERT, UPDATE
---     AS
--- BEGIN
---     UPDATE vis
---     SET vis.statusRealizado = 1
---     FROM Visita vis
---              INNER JOIN inserted updtBit ON vis.statusRealizado = updtBIT.statusRealizado
---     WHERE updtBit.statusRealizado > SYSDATETIME();
--- END
--- GO
-
-
--- CREATE TRIGGER trg_softDelete_Visita
---     ON Visita
---     INSTEAD OF DELETE
---     AS
---     BEGIN
---         UPDATE vis set statusRealizado = 0
---     end
-
--- ==========================================
--- USUÁRIOS
--- ==========================================
-
-DECLARE @usuario1 UNIQUEIDENTIFIER = NEWID();
-DECLARE @usuario2 UNIQUEIDENTIFIER = NEWID();
-DECLARE @usuario3 UNIQUEIDENTIFIER = NEWID();
-
-INSERT INTO Usuario
-    (usuarioID, nome, email, senha, statusUsuario)
-VALUES
-    (@usuario1, 'João Silva', 'joao@agendacampo.com',
-     HASHBYTES('SHA2_256', '123456'), 1),
-
-    (@usuario2, 'Carlos Santos', 'carlos@agendacampo.com',
-     HASHBYTES('SHA2_256', '123456'), 1),
-
-    (@usuario3, 'Pedro Oliveira', 'pedro@agendacampo.com',
-     HASHBYTES('SHA2_256', '123456'), 1);
-
-     SELECT * FROM Usuario
-
--- ==========================================
--- ENDEREÇOS
--- ==========================================
-
-INSERT INTO Endereco
-    (enderecoID, logradouro, bairro, numero, cep)
-VALUES
-    (1, 'Rua das Flores', 'Centro', 100, '01000000'),
-
-    (2, 'Avenida Brasil', 'Jardim America', 250, '02000000'),
-
-    (3, 'Rua Sao Paulo', 'Vila Nova', 500, '03000000'),
-
-    (4, 'Avenida Central', 'Centro', 1200, '04000000');
-
-
--- ==========================================
--- AGENDAMENTOS
--- ==========================================
-
-INSERT INTO Agendamento
-    (data, empresaSede, usuarioID, statusAgenda)
-VALUES
-    ('2026-08-15 08:30:00', 'Tech Solutions', 'A1C44FBA-7182-430C-B53E-2D419B3549A5', 1),
-
-    ('2026-08-15 14:00:00', 'Empresa Alpha', 'C47E4AC5-51C9-43DB-A0CA-70BA445A2DF8', 1),
-
-    ('2026-08-16 09:00:00', 'Beta Sistemas', 'C47E4AC5-51C9-43DB-A0CA-70BA445A2DF8', 1),
-
-    ('2026-08-17 15:30:00', 'Gamma Tecnologia', '849AD641-8EDB-4E73-AAE5-A13B4410E6D3', 1);
-
-    select * from Agendamento
-
--- ==========================================
--- VISITAS
--- ==========================================
-
-INSERT INTO Visita
-(agendamentoID, enderecoID, titulo, descricao, dataInicio, dataTermino)
-VALUES
-    (1, 1, 'Manutencao de servidor',
-     'Realizar manutencao preventiva no servidor principal.', (SELECT data FROM Agendamento WHERE agendaID = 1), '2026-08-15 08:30:00')
-
+BEGIN
+    UPDATE usr SET statusUsuario = 0
+    from Usuario usr
+             INNER JOIN deleted d
+                        ON d.usuarioID = usr.usuarioID
+END
 GO
-select * from Visita;
