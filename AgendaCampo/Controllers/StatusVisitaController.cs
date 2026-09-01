@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using AgendaCampo.Applications;
-using AgendaCampo.DTOs.EnderecoDTO;
 using AgendaCampo.DTOs.VisitaDTO;
 using RoyalGamess.Aplications.Services;
 

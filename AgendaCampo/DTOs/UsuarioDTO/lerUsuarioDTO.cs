@@ -14,6 +14,8 @@ namespace AgendaCampo.DTOs.UsuarioDTO
 
         [Required(ErrorMessage = "O email é obrigatório")]
         [MaxLength(70, ErrorMessage = "É permitido no maximo 70 caracteres")]
+
+        public string telefone { get; set; }
         public string email { get; set; } = null!;
 
         public bool? statusUsuario { get; set; } = null!;
@@ -34,7 +36,10 @@ namespace AgendaCampo.DTOs.UsuarioDTO
         [Required(ErrorMessage = "O email é obrigatório")]
         [MaxLength(70, ErrorMessage = "É permitido no maximo 70 caracteres")]
         public string email { get; set; } = null!;
-        
+
+        public string telefone { get; set; }
+
+
         [Required(ErrorMessage = "A senha é obrigatório")]
         public string senha { get; set; } = null!;
         

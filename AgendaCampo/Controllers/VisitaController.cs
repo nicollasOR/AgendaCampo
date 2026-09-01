@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using AgendaCampo.Domains;
-using AgendaCampo.DTOs.VisitaDTONN;
+using AgendaCampo.DTOs.VisitaDTO;
 using AgendaCampo.DTOs.UsuarioDTO;
 using AgendaCampo.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -56,6 +56,7 @@ namespace AgendaCampo.Controllers
         {
             try
             {
+                //Guid? usuarioIds = obterUsuarioLogado();
                 var lista = _service.ListarConcluidas(usuarioId);
                 return Ok(lista);
             }
@@ -136,11 +137,11 @@ namespace AgendaCampo.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<lerVisitaDTO> Atualizar(int id, [FromBody] atualizarVisitaDTO lerDTO, Guid usuarioId)
+        public ActionResult<lerVisitaDTO> Atualizar(int id, [FromBody] atualizarVisitaDTO dto, Guid usuarioId)
         {
             try
             {
-                lerVisitaDTO lerDTOs = _service.Atualizar(id, lerDTO, usuarioId);
+                lerVisitaDTO lerDTOs = _service.Atualizar(id, dto, usuarioId);
                 return Ok(lerDTOs);
             }
             catch (DomainException ex)
