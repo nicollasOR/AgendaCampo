@@ -22,12 +22,7 @@
 */
 
 import React from "react";
-import {
-  ActivityIndicator,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { ActivityIndicator, View, Text, TouchableOpacity } from "react-native";
 
 // Rotas com Expo-router
 // npx expo install expo-router
@@ -51,7 +46,13 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
 // CSS
-import { Colors, Container, H2, Row, SpaceBetween } from "@/src/constants/theme";
+import {
+  Colors,
+  Container,
+  H2,
+  Row,
+  SpaceBetween,
+} from "@/src/constants/theme";
 
 // Logo
 import Logo from "@/assets/svg/Logo.svg";

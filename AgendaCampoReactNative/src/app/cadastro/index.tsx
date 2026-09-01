@@ -41,7 +41,7 @@ export default function Cadastro() {
   const [senha, setSenha] = useState<string>("");
   const [confirmarSenha, setConfirmarSenha] = useState<string>("");
 
-  const telaEditar = true;
+  const telaEditar = !true;
 
   return (
     <SafeAreaView style={[Container, Column, Center]}>

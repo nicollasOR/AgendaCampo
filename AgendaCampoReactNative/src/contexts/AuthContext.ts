@@ -17,7 +17,6 @@ import { jwtDecode } from "jwt-decode";
 import { authService } from "@/src/service/authService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 const TOKEN_KEY = process.env.EXPO_PUBLIC_TOKEN_KEY ?? "chaveToken";
 
