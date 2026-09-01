@@ -7,7 +7,7 @@ export const visitaService = {
         return response.data
     },
 
-    async buscarPorId(id: number): Promise<visitaGet>{
+    async buscarPorId(id: number | string): Promise<visitaGet>{
         const response = await api.get<visitaGet>(`Visita${id}`)
         return response.data
     },

@@ -34,35 +34,14 @@ import { visitaGet } from "../../@types";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function Detalhe() {
-  const [visita, setVisita] = useState<visitaGet>();
-  
-  async function buscarVisitaID() {
-    try {
-      const response = await listarVisitasID(Number(visita?.visitaID));
-      setVisita(response.data);
-    } catch (error: any) {
-      return error.response.data;
-    }
-  }
+  // const [visita, setVisita] = useState<visitaGet>();
+  const { id } = useLocalSearchParams<{ id: string }>()
+  // const {} useVisitaServiceDetalhe(id)
+  const { visita, dataFinalFormatada, dataInicialFormatada } = useVisitaServiceDetalhe(id)
 
-  useEffect(() => {
-    setTimeout(() => {
-      buscarVisitaID();
-    }, 1000);
-  }, []);
-
- const {id} = useLocalSearchParams<{id: number}>()
-
-  // function dividirNome(nome:string) {
-  //   if(client)
-  //     for(let i = 0; i < name.length; i++)
-  //   {
-  //     i = nome.length[i]
-  //   }
-  // }
 
   return (
-    <SafeAreaView style={[Container , {paddingTop: 0}]} edges={["top", "left", "right"]}>
+    <SafeAreaView style={[Container, { paddingTop: 0 }]} edges={["top", "left", "right"]}>
       <View style={Column}>
         <View style={Row}>
           <View style={Box}>
@@ -78,11 +57,11 @@ export default function Detalhe() {
         >
           <View style={Column}>
             <Text style={[H1, { color: Colors.darkblue }]}>
-              {detalhes.titulo}
+              {visita?.nomeEvento}
             </Text>
             <View style={Row}>
               <DetalheIcon color={Colors.gray} />
-              <Text style={[P, { color: Colors.gray }]}>{detalhes.data}</Text>
+              <Text style={[P, { color: Colors.gray }]}>{visita?.descricao}</Text>
             </View>
           </View>
           <View style={Line} />
@@ -96,11 +75,16 @@ export default function Detalhe() {
             <View style={Row}>
               <Image source={require("../../../../assets/img/logo.png")} />
               <View>
-                <Text style={H4}>Fazenda São João </Text>
-                <Text style={P}>Contato: Roberto Silva (Gerente)</Text>
+                <Text style={H4}>{visita?.logradouroEndereco} </Text>
+                {/* <Text style={P}>{Contato: Roberto Silva (Gerente)}</Text> */}
+                {visita?.tecnicos.map((varAux) => (
+                  <Text key={varAux.usuarioID} style={P}>{varAux.nome}</Text>
+                ))}
                 <View style={Row}>
                   <NumeroIcon />
-                  <Text style={P}>(11) 98765-4321</Text>
+                {visita?.tecnicos.map((varAux) => (
+                  <Text key={varAux.usuarioID} style={P}>{varAux.telefone}</Text>
+                ))}
                 </View>
               </View>
             </View>
@@ -110,7 +94,10 @@ export default function Detalhe() {
                 <LocalIcon />
                 <Text style={[H4, { color: Colors.black }]}>Endereço</Text>
               </View>
-              <Text style={P}>{detalhes.endereco}</Text>
+              {/* <Text style={P}>{detalhes.endereco}</Text> */}
+              {visita?.endereco.map((varAux) => (
+                <Text key={varAux.enderecoId}></Text>
+              ))}
             </View>
           </View>
           <TouchableOpacity style={Btn}>

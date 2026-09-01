@@ -6,7 +6,8 @@ export interface usuarioGET_Visita {
     usuarioID: string,
     nome: string,
     email: string,
-    imgURL: string
+    imgURL: string,
+    telefone?: string
 }
 
 export interface enderecoGET_Visita{
