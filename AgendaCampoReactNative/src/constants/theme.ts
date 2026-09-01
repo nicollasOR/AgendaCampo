@@ -36,7 +36,7 @@ export const Colors = {
   smoothGradient: ["hsl(215, 100%, 95%)", "hsl(0, 0%, 100%)"] as const,
 } as const;
 
-export const Font = {
+const Font = {
   regular: "Outfit_400Regular",
   semibold: "Outfit_600SemiBold",
   bold: "Outfit_700Bold",
@@ -75,7 +75,6 @@ export const theme = StyleSheet.create({
   // --- Layout & Containers ---
   container: {
     flex: 1,
-    paddingHorizontal: 20,
     alignItems: "center",
     backgroundColor: Colors.bgc,
   },
@@ -87,6 +86,7 @@ export const theme = StyleSheet.create({
     paddingBottom: 32,
   },
   center: {
+    gap: 10,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -96,7 +96,7 @@ export const theme = StyleSheet.create({
     flexDirection: "row",
   },
   column: {
-    gap: 18,
+    gap: 12,
     flexDirection: "column",
   },
   list: {
@@ -116,15 +116,15 @@ export const theme = StyleSheet.create({
   // --- Visual & Componentes Gerais ---
   info: {
     gap: 12,
-    padding: 20,
-    width: "100%",
+    padding: 32,
+    width: "90%",
     borderRadius: 32,
     alignItems: "center",
     justifyContent: "center",
   },
   icon: {
-    width: 48,
-    height: 48,
+    width: 60,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 999,
@@ -149,13 +149,9 @@ export const theme = StyleSheet.create({
 
   // --- Cards ---
   card: {
-    ...baseShadow,
     width: "100%",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    padding: 20,
     borderRadius: 20,
-    borderWidth: 2,
-    borderColor: Colors.border,
     backgroundColor: Colors.bgc,
   },
   cardInfo: {
@@ -199,7 +195,7 @@ export const theme = StyleSheet.create({
     gap: 30,
   },
   campoForm: {
-    gap: 4,
+    gap: 12,
   },
   campoInput: {
     flexDirection: "row",
@@ -276,15 +272,12 @@ export const theme = StyleSheet.create({
 
   // --- Botões ---
   btn: {
-    gap: 10,
-    paddingVertical: 16,
-    height: 60,
-    paddingHorizontal: 24,
-    width: "90%",
     borderRadius: 999,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     alignItems: "center",
-    justifyContent: "center",
     flexDirection: "row",
+    justifyContent: "center",
     backgroundColor: Colors.btn,
   },
   btn2: {
@@ -298,33 +291,27 @@ export const theme = StyleSheet.create({
     justifyContent: "center",
   },
   btnText: {
-    ...baseText,
     color: Colors.white,
     fontSize: 18,
     fontFamily: Font.semibold,
-  },
+  } as TextStyle,
 
   // --- Tipografia ---
   h1: {
-    ...baseText,
     fontSize: 32,
     fontFamily: Font.bold,
   },
   h2: {
-    ...baseText,
     fontSize: 26,
     fontFamily: Font.semibold,
   },
   h3: {
-    ...baseText,
     fontSize: 22,
   },
   h4: {
-    ...baseText,
     fontSize: 18,
   },
   p: {
-    ...baseText,
     fontSize: 15,
   },
   label: {
