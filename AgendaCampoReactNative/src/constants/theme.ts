@@ -205,6 +205,7 @@ export const theme = StyleSheet.create({
     ...baseInput,
     height: 50,
     fontSize: 16,
+    textAlignVertical: "center",
     fontFamily: Font.semibold,
   },
   textArea: {

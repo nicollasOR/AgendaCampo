@@ -94,19 +94,31 @@ export default function Agendamento() {
           <View style={Column}>
             <View style={CampoForm}>
               <Text style={[Label, { color: Colors.darkblue }]}>
-                Cliente / Propriedade
+                Cliente
               </Text>
               <View style={CampoInput}>
                 <PesquisaIcon style={InputIcon} color={Colors.gray} />
-                <TextInput style={Input} placeholder="Buscar cliente..." />
+                <TextInput style={Input} placeholder="Nome do cliente..." />
+              </View>
+            </View>
+
+            <View style={CampoForm}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
+                Local do Evento
+              </Text>
+              <View style={CampoInput}>
+                <PesquisaIcon style={InputIcon} color={Colors.gray} />
+                <TextInput style={Input} placeholder="Nome do evento..." />
               </View>
             </View>
 
             <View style={CampoForm}>
               <Text style={[Label, { color: Colors.darkblue }]}> Data da Visita </Text>
-              <Pressable style={Input} onPress={() => setMostrarCalendario(true)}>
+              <Pressable style={CampoInput} onPress={() => setMostrarCalendario(true)}>
                 <CalendarioIcon style={InputIcon} color={Colors.gray} />
-                <Text style={texto === 'Selecionar data...' ? {color: Colors.darkgray} : {color: Colors.black}}>{texto}</Text>
+                <Text style={[Input, texto === 'Selecionar data...' ? { color: Colors.darkgray } : { color: Colors.black }]}>
+                  {texto}
+                </Text>
               </Pressable>
 
               {/* Exibição do Calendário */}
@@ -147,6 +159,16 @@ export default function Agendamento() {
               <View style={CampoInput}>
                 <RuaIcon style={InputIcon} color={Colors.gray} />
                 <TextInput style={Input} placeholder="Rua Niterói" />
+              </View>
+            </View>
+
+            <View style={CampoForm}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
+                Bairro
+              </Text>
+              <View style={CampoInput}>
+                <RuaIcon style={InputIcon} color={Colors.gray} />
+                <TextInput style={Input} placeholder="Bairro" />
               </View>
             </View>
 
