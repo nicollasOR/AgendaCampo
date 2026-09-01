@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AgendaCampo.DTOs.VisitaDTO;
+namespace AgendaCampo.DTOs.VisitaDTONN;
 
 public class atualizarVisitaDTO
 {
@@ -15,9 +15,9 @@ public class atualizarVisitaDTO
     
     public bool? statusRealizado { get; set; }
 
-    [Required(ErrorMessage = "um id de agendamento é obrigatório")]
-    public int agendamentoId { get; set; }
-    
+    [Required(ErrorMessage = "Todo evento deve ter um usuário")]
+    public List<Guid?> usuarioIds { get; set; }
+
     [Required(ErrorMessage = "um id de endereco é obrigatório")]
     public int enderecoId { get; set; }
 
@@ -51,9 +51,9 @@ public class lerVisitaDTO
     
     public bool? statusRealizado { get; set; }
 
-    [Required(ErrorMessage = "um id de agendamento é obrigatório")]
-    public int? agendamentoId { get; set; }
-    
+    [Required(ErrorMessage = "Todo evento deve ter um usuário")]
+    public List<Guid?> usuarioIds { get; set; }
+
     [Required(ErrorMessage = "um id de endereco é obrigatório")]
     public int? enderecoId { get; set; }
 

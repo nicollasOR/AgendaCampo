@@ -41,8 +41,8 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddDbContext<AgendaCampoContext>(options => options.UseSqlServer(conexaoBanco));
 
-builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
-builder.Services.AddScoped<AgendamentoService>();
+//builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
+//builder.Services.AddScoped<AgendamentoService>();
 
 builder.Services.AddScoped<IVisitaRepository, VisitaRepository>();
 builder.Services.AddScoped<VisitaService>();

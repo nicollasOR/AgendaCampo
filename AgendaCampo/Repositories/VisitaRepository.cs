@@ -124,16 +124,15 @@ public class VisitaRepository : IVisitaRepository
         return _context.Visita.
             Include(varAux => varAux.endereco).
             Include(varAux => varAux.usuario).
-            Where(varAux => varAux.usuario.FirstOrDefault(varAux => varAux.usuarioID == usuarioId) && (varAux.statusRealizado && varAux.dataTermino < DateTime.UtcNow))
-
+            Where(varAux => varAux.usuario.Any(varAux => varAux.usuarioID == usuarioId) && 
+            varAux.statusRealizado && 
+            varAux.dataTermino < DateTime.UtcNow).
+            OrderByDescending(varAux => varAux.dataInicio).
+            ToList();
+ 
     }
 
-    
 
-    public bool agendamentoExiste(int id)
-    {
-        return _context.Agendamento.Any(varAux => varAux.agendaID == id);
-    }
 
     public bool enderecoExiste(int id)
     {
@@ -147,10 +146,10 @@ public class VisitaRepository : IVisitaRepository
 
     }
 
-    public void Atualizar(Visita visita, int? agendamentosIds, int? enderecoIds)
+    public void AtualizarUsuarios(Visita visita, Guid usuarioIds, int? enderecoIds)
     {
         Visita visitaBanco = _context.Visita
-            .Include(varAux => varAux.agendamentoID == agendamentosIds)
+            .Include(varAux => varAux.usuario.First(varAux => varAux.usuarioID == usuarioIds))
             .Include(varAux => varAux.enderecoID == enderecoIds)
             .FirstOrDefault(varAux => varAux.visitaID == visita.visitaID);
 
@@ -162,7 +161,7 @@ public class VisitaRepository : IVisitaRepository
         visitaBanco.dataTermino = visita.dataTermino;
         visitaBanco.dataInicio = visita.dataInicio;
         visitaBanco.titulo = visita.titulo;
-        visitaBanco.agendamentoID = visita.agendamentoID;
+
         visitaBanco.enderecoID = visita.enderecoID;
 
         _context.SaveChanges();
@@ -195,12 +194,13 @@ public class VisitaRepository : IVisitaRepository
     }
 
 
-    public void atualizarAgendamento(int id, int agendamentoId)
+    public void atualizarAgendamento(int id, DateTime dataInicio, DateTime dataFinal)
     {
         Visita visitaBanco = BuscarPorId(id);
         if (visitaBanco == null)
             return;
-        visitaBanco.agendamentoID = agendamentoId;
+        visitaBanco.dataTermino = dataFinal;
+        visitaBanco.dataInicio = dataInicio;
         _context.SaveChanges();
     }
 
