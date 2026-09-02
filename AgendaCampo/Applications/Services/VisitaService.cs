@@ -153,6 +153,7 @@ public class VisitaService
           cep = criarVisitaDtos.Cep,
           logradouro = criarVisitaDtos.Logradouro,
           numero = criarVisitaDtos.Numero,
+          StatusVisitaBit = true,
           
           usuario = listaTecnicos
       };
@@ -271,6 +272,11 @@ public class VisitaService
         Visita visitaBanco = _rep.BuscarPorId(id);
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
+        StatusVisita? stsBanco = _stsRep.buscarNomeStatus("Cancelada");
+        if (stsBanco == null)
+            throw new DomainException("Status não encontrado");
+
+        //visitaBanco.statusVisitaID = stsBanco.statusVisitaID;
         _rep.Remover(id);
     
     }

@@ -43,5 +43,7 @@ public class criarVisitaDTO
     [Required(ErrorMessage = "Um ou mais usuários são necessários (sejam técnicos ou não)")] //
     public List<Guid?> usuariosIds { get; set; } = new List<Guid?>();
 
+    public bool statusVisitaBit { get; set; } 
+
 
 }

@@ -49,6 +49,8 @@ public class visitaConversoes
             Numero = visita.numero,
             Bairro = visita.bairro,
             Logradouro = visita.logradouro,
+            statusVisitaBit = visita.StatusVisitaBit ? true : false,
+            
 
             Tecnicos = visita.usuario.Select(varAux => new usuariosGET
             {

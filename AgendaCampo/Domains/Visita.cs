@@ -29,6 +29,8 @@ public partial class Visita
 
     public string cep { get; set; } = null!;
 
+    public bool StatusVisitaBit { get; set; }
+
     public virtual StatusVisita statusVisita { get; set; } = null!;
 
     public virtual ICollection<Usuario> usuario { get; set; } = new List<Usuario>();

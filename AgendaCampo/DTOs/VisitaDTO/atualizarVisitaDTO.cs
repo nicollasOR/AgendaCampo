@@ -14,7 +14,7 @@ public class atualizarVisitaDTO
 
     //[Required(ErrorMessage = "um id de statusVisita é obrigatório")]
     //public int statusVisitaId { get; set; }
-
+    public bool statusVisitaBit { get; set; }
     public string statusVisita { get; set; }
 
     //[Required(ErrorMessage = "um id de endereco é obrigatório")]
@@ -42,7 +42,6 @@ public class atualizarVisitaDTO
     public string Cep { get; set; } = null!;
 
 
-
 }
 
 public class lerVisitaDTO
@@ -55,6 +54,7 @@ public class lerVisitaDTO
     [Required(ErrorMessage = "a descricao é obrigatório")]
     public string descricao { get; set; } = null!;
 
+    public bool statusVisitaBit { get; set; }
 
     // [Required(ErrorMessage = "um id de statusVisita é obrigatório")]
     // public int statusVisitaId { get; set; }

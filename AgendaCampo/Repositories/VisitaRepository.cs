@@ -8,9 +8,9 @@ namespace AgendaCampo.Repositories;
 
 public class VisitaRepository : IVisitaRepository
 {
-    private readonly AgendaCampoNovoContext _context;
+    private readonly AgendaCampoAtualContext _context;
 
-    public VisitaRepository(AgendaCampoNovoContext context) => _context = context;
+    public VisitaRepository(AgendaCampoAtualContext context) => _context = context;
 
 
     public List<Visita> Listar()
@@ -204,6 +204,7 @@ public class VisitaRepository : IVisitaRepository
          Visita? visitaBanco = _context.Visita.Find(id);
          if (visitaBanco == null)
              return;
+
          _context.Visita.Remove(visitaBanco);
          _context.SaveChanges();
      }

@@ -40,7 +40,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddDbContext<AgendaCampoNovoContext>(options => options.UseSqlServer(conexaoBanco));
+builder.Services.AddDbContext<AgendaCampoAtualContext>(options => options.UseSqlServer(conexaoBanco));
 
 // builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
 // builder.Services.AddScoped<AgendamentoService>();

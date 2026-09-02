@@ -7,8 +7,8 @@ namespace AgendaCampo.Repositories
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private readonly AgendaCampoNovoContext _context;
-        public UsuarioRepository(AgendaCampoNovoContext context) => _context = context;
+        private readonly AgendaCampoAtualContext _context;
+        public UsuarioRepository(AgendaCampoAtualContext context) => _context = context;
 
         
         public bool NomeExiste(string nome)
