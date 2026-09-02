@@ -7,10 +7,36 @@ import React, {
 } from "react";
 import { Keyboard } from "react-native";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 import { authService } from "@/src/service/authService";
-import { AuthContextData, Usuario } from "@/src/@types/auth";
+import { AuthContextData, Usuario, UsuarioPayload } from "@/src/@types/auth";
+
+const USER_KEY = "@agenda_campo:usuario";
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+
+export function decodificarToken(token: string): Usuario | null {
+  try {
+    const decoded = jwtDecode<UsuarioPayload>(token);
+    const nome =
+      decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ||
+      "Usuário";
+    const email =
+      decoded[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+      ] || "";
+
+    return {
+      nome,
+      email,
+      img: "",
+    };
+  } catch (err) {
+    console.log("Erro ao decodificar token JWT:", err);
+    return null;
+  }
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
@@ -24,9 +50,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     async function carregarDadosArmazenados() {
-      const tokenSalvo = await authService.getToken();
-      if (tokenSalvo) {
-        setToken(tokenSalvo);
+      try {
+        const tokenSalvo = await authService.getToken();
+        const usuarioSalvo = await AsyncStorage.getItem(USER_KEY);
+
+        if (tokenSalvo) {
+          setToken(tokenSalvo);
+
+          if (usuarioSalvo) {
+            setUsuario(JSON.parse(usuarioSalvo));
+          } else {
+            const usuarioDecodificado = decodificarToken(tokenSalvo);
+            if (usuarioDecodificado) {
+              setUsuario(usuarioDecodificado);
+            }
+          }
+        }
+      } catch (error) {
+        console.log("Erro ao carregar dados do AsyncStorage", error);
       }
     }
     carregarDadosArmazenados();
@@ -47,11 +88,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
 
-      const payload = { email: emailFormatado, senha: senhaFormatada };
-      const response = await authService.login(payload);
+      // 1. Chamada HTTP para autenticação
+      const response = await authService.login({
+        email: emailFormatado,
+        senha: senhaFormatada,
+      });
+
+      // 2. Extração do nome vindo das Claims do JWT
+      const usuarioDecodificado = decodificarToken(response.token);
+
+      const dadosUsuario: Usuario = {
+        email: emailFormatado,
+        nome: usuarioDecodificado?.nome || "Usuário",
+        img: "",
+      };
 
       setToken(response.token);
-      setUsuario({ email: emailFormatado });
+      setUsuario(dadosUsuario);
+
+      // 3. Gravação local no AsyncStorage
+      await AsyncStorage.setItem(USER_KEY, JSON.stringify(dadosUsuario));
 
       setEmail("");
       setSenha("");
@@ -59,9 +115,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       router.replace("/(tabs)/home");
     } catch (error: any) {
       console.log(">>> Erro completo:", error);
-      console.log(">>> Status do Erro:", error.response?.status);
-      console.log(">>> Dados da Resposta:", error.response?.data);
-
       const status = error.response?.status;
 
       if (status === 400 || status === 401) {
@@ -85,6 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function logout() {
     await authService.logout();
+    await AsyncStorage.removeItem(USER_KEY);
     setToken(null);
     setUsuario(null);
     setEmail("");

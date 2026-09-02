@@ -55,7 +55,7 @@ export default function Perfil() {
             />
           ) : (
             <Text style={ProfileText}>
-              {usuario?.nome ? FormatarIconNome(usuario.nome) : ":/"}
+              {usuario?.nome ? FormatarIconNome(usuario.nome) : ":)"}
             </Text>
           )}
         </View>
@@ -165,7 +165,7 @@ export default function Perfil() {
               },
             ]}
             activeOpacity={0.75}
-            // onPress={logout}
+            onPress={logout}
           >
             <SairIcon color={Colors.darkred} />
             <Text style={[BtnText, { color: Colors.darkred }]}>
