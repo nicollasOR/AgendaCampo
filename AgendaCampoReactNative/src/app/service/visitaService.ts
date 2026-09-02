@@ -12,4 +12,14 @@ export const visitaService = {
         return response.data
     },
 
+    async remover(id: number | string) : Promise<visitaGet>{
+        const response = await api.delete(`Visita${id}`)
+        return response.data
+    },
+
+    async reagendar(id: number | string) : Promise<visitaGet>{
+        const response = await api.patch(`Visita/reagendar/${id}`)
+        return response.data
+    }
+
 }

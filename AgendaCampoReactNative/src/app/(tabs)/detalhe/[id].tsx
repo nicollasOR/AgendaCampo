@@ -94,10 +94,7 @@ export default function Detalhe() {
                 <LocalIcon />
                 <Text style={[H4, { color: Colors.black }]}>Endereço</Text>
               </View>
-              {/* <Text style={P}>{detalhes.endereco}</Text> */}
-              {visita?.endereco.map((varAux) => (
-                <Text key={varAux.enderecoId}></Text>
-              ))}
+              <Text style={P}>{visita?.logradouro} - {visita?.numero} - {visita?.bairro}</Text>
             </View>
           </View>
           <TouchableOpacity style={Btn}>
@@ -135,8 +132,8 @@ export default function Detalhe() {
               </Text>
             </View>
             <View style={[Box, Column]}>
-              <Text style={[P, { color: "black" }]}>{detalhes.descricao}</Text>
-              <Text style={[P, { color: "black" }]}>{detalhes.desc2}</Text>
+              <Text style={[P, { color: "black" }]}>{visita?.descricao}</Text>
+              {/* <Text style={[P, { color: "black" }]}>{detalhes.desc2}</Text> */}
             </View>
           </View>
         </ScrollView>
