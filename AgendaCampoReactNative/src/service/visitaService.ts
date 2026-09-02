@@ -1,25 +1,43 @@
-import { CriarVisita, CriarVisita2, Visita } from "../@types/visita";
-import { formatarData } from "../utils/converterData";
+import { CriarVisita, Visita } from "../@types/visita";
 import { api } from "./api";
 
+function juntarDataHora(data: Date, horario: Date) {
+  const dataHora = new Date(data);
+
+  dataHora.setHours(
+    horario.getHours(),
+    horario.getMinutes(),
+    horario.getSeconds()
+  );
+
+  return dataHora;
+}
 
 
 export const visitaService = {
-
-  async cadastrar(dados: CriarVisita2) : Promise<Visita> {
+  async agendar(dados: CriarVisita): Promise<Visita> {
     const formData = new FormData();
 
-    const data =  dados.data + dados.horario;
+    const dataInicio = juntarDataHora(
+      dados.data,
+      dados.horario
+    );
 
     formData.append('nomeEvento', dados.nomeEvento);
     formData.append('descricao', dados.descricao);
-    formData.append('dataInicio', dados.dataInicio.toISOString());
-    formData.append('dataTermino', data);
-    const resposta = await api.post<Visita>("Visita", formData)
+    formData.append('nomeSede', dados.nomeSede);
+    formData.append('Logradouro', dados.logradouro);
+    formData.append('Bairro', dados.bairro);
+    formData.append('Numero', String(dados.numero));
+    formData.append('Cep', dados.cep);
+    formData.append('clienteNome', dados.cliente);
+    formData.append('dataInicio', dataInicio.toISOString());
 
-     console.log(resposta.data)
+    const resposta = await api.post<Visita>("Visita", formData);
 
-      return resposta.data;
+    console.log(resposta.data)
+
+    return resposta.data;
   }
 
 }

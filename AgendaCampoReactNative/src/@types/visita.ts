@@ -1,34 +1,28 @@
 export interface Visita {
     nomeEvento: string,
     descricao: string,
-    statusVisitaId: number,
     nomeSede: string,
+    Logradouro: string,
+    Bairro: string,
+    Numero: number,
+    Cep: string,
+    clienteNome: string,
     dataInicio: Date,
     dataTermino: Date,
-    // enderecoId: number,
-    // clienteId: number | string,
     usuariosIds: number | string,
+    statusVisitaBit: boolean
 }
 
 export interface CriarVisita {
     nomeEvento: string,
-    descricao: string,
     nomeSede: string,
-    dataInicio: Date,
-    dataTermino: Date,
-    // enderecoId: number,
-    // clienteId: number | string,
-    usuariosIds: number | string,
-}
-
-export interface CriarVisita2 {
-    cliente: string
-    nomeEvento: string,
+    cliente: string,
     data: Date,
     horario: Date,
     cep: string,
     logradouro: string,
     bairro: string,
     numero: number,
-    descricao: string
+    descricao: string,
+    tecnicos: string[]
 }
