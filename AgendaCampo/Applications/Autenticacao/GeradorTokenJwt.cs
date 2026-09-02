@@ -41,7 +41,8 @@ namespace AgendaCampo.Applications.Autenticacao
 
                new Claim(ClaimTypes.Name, usuario.nome), 
 
-               new Claim(ClaimTypes.Email, usuario.email) 
+               new Claim(ClaimTypes.Email, usuario.email),
+               new Claim(JwtRegisteredClaimNames.Sub, usuario.usuarioID.ToString())
            };
 
             var token = new JwtSecurityToken(

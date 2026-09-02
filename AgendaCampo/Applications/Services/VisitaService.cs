@@ -104,8 +104,8 @@ public class VisitaService
     {
 
         Usuario? usuarioNome = _usrRep.ObterPorNome(criarVisitaDtos.clienteNome);
-        if (usuarioNome == null)
-            throw new DomainException("Usuário não encontrado.");
+        // if (usuarioNome == null)
+        //     throw new DomainException("Usuário não encontrado.");
 
         StatusVisita? stsVisitaPendente = _stsRep.buscarNomeStatus("Pendente");
         if (stsVisitaPendente == null)
@@ -120,7 +120,24 @@ public class VisitaService
         bool temConflito = _rep.conflitoDeHorario(usuarioId, criarVisitaDtos.dataInicio, criarVisitaDtos.dataTermino);
         if (temConflito)
             throw new DomainException("Já existe uma visita agendada para este técnico no horário selecionado");
+        List<Usuario> listaTecnicos = new List<Usuario> { usuarioBanco };
         
+        if(criarVisitaDtos.usuariosIds != null && criarVisitaDtos.usuariosIds.Any())
+            foreach (Guid idTecnicos in criarVisitaDtos.usuariosIds)
+            {
+                if (idTecnicos == usuarioId)
+                    continue;
+
+                Usuario? outrosTecnicos = _usrRep.ObterPorId(idTecnicos);
+                if (outrosTecnicos != null)
+                {
+                    bool conflitoOutro = _rep.conflitoDeHorario(outrosTecnicos.usuarioID, criarVisitaDtos.dataInicio, criarVisitaDtos.dataTermino);
+                    if (conflitoOutro)
+                        throw new DomainException($"O técnico {outrosTecnicos.nome} já possui um compromisso nesse horário.");
+
+                    listaTecnicos.Add(outrosTecnicos);
+                }
+            }
       // falta adicionar o endereco de validação.
     
       Visita visita = new Visita
@@ -130,14 +147,14 @@ public class VisitaService
           descricao = criarVisitaDtos.descricao,
           titulo = criarVisitaDtos.nomeEvento,
           sedeVisitada = criarVisitaDtos.nomeSede,
-          cliente = usuarioNome.nome,
+          cliente = string.IsNullOrEmpty(usuarioBanco.nome) ? usuarioBanco.nome : criarVisitaDtos.clienteNome,
           statusVisitaID = stsVisitaPendente.statusVisitaID,
           bairro = criarVisitaDtos.Bairro,
           cep = criarVisitaDtos.Cep,
           logradouro = criarVisitaDtos.Logradouro,
           numero = criarVisitaDtos.Numero,
           
-          usuario = new List<Usuario> { usuarioBanco }
+          usuario = listaTecnicos
       };
       _rep.Adicionar(visita);//);
       return visitaConversoes.lerVisitaDto(visita);
@@ -148,10 +165,11 @@ public class VisitaService
     public lerVisitaDTO Atualizar(int id, atualizarVisitaDTO atualizarDTO, Guid usuarioId)
     {
         Usuario? usuarioBanco = _usrRep.ObterPorNome(atualizarDTO.nomeCliente);
-        if (usuarioBanco == null)
-            throw new DomainException("Usuário não encontrado.");
+        // if (usuarioBanco == null)
+        //     throw new DomainException("Usuário não encontrado.");
+        
         StatusVisita? stsVisitaPendente = _stsRep.buscarNomeStatus(atualizarDTO.statusVisita);
-        if (stsVisitaPendente == null)
+        if (stsVisitaPendente == null && !_stsRep.existeStatus(atualizarDTO.statusVisita))
             throw new DomainException("Status Visita não encontrado");
         Visita? visitaBanco = _rep.BuscarPorId(id);
         if (visitaBanco == null)
@@ -169,7 +187,8 @@ public class VisitaService
         visitaBanco.descricao = atualizarDTO.descricao;
         visitaBanco.dataInicio = atualizarDTO.dataInicio;
         visitaBanco.dataTermino = atualizarDTO.dataTermino;
-        visitaBanco.cliente = usuarioBanco.nome;
+        // visitaBanco.cliente = usuarioBanco ? usuarioBanco.nome : atualizarDTO.nomeCliente;
+        visitaBanco.cliente = !string.IsNullOrEmpty(usuarioBanco.nome) ? usuarioBanco.nome : atualizarDTO.nomeCliente;
         visitaBanco.sedeVisitada = atualizarDTO.nomeSede;
         //visitaBanco.statusVisitaID = atualizarDTO.statusVisitaId;
         visitaBanco.statusVisitaID = stsVisitaPendente.statusVisitaID;

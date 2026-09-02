@@ -18,6 +18,7 @@ public class VisitaRepository : IVisitaRepository
         return _context.Visita
               //.Include(varAux => varAux.endereco)
               .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
              .OrderBy(varAux => varAux.dataInicio < DateTime.Now)
              .ToList();
     }
@@ -27,6 +28,7 @@ public class VisitaRepository : IVisitaRepository
          return _context.Visita
               //.Include(varAux => varAux.endereco)
               .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
              .FirstOrDefault(varAux => varAux.titulo == titulo);
      }
 //
@@ -35,6 +37,7 @@ public class VisitaRepository : IVisitaRepository
          return _context.Visita
               //.Include(varAux => varAux.endereco)
               .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
              .FirstOrDefault(varAux => varAux.visitaID == id);
      }
 //
@@ -44,6 +47,7 @@ public class VisitaRepository : IVisitaRepository
              //.Include(varAux => varAux.endereco)
              .OrderBy(varAux => varAux.dataInicio)
              .Include(varAux => varAux.statusVisita)
+             .Include(varAux => varAux.usuario)
              .FirstOrDefault(varAux => varAux.dataInicio == data);
     }
 
@@ -52,6 +56,7 @@ public class VisitaRepository : IVisitaRepository
          return _context.Visita
               //.Include(varAux => varAux.endereco)
               .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
              .OrderBy(varAux => varAux.dataInicio)
              .FirstOrDefault(varAux => varAux.logradouro.ToLower() == logradouro.ToLower() || varAux.bairro.ToLower() == logradouro.ToLower());
      }
@@ -75,6 +80,7 @@ public class VisitaRepository : IVisitaRepository
 
               //.Include(varAux => varAux.endereco)
               .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
                .Where(varAux => varAux.usuario.Any(usrAux => usrAux.usuarioID == usuarioId))
               .OrderBy(varAux => varAux.dataInicio)
               .ToList();
@@ -98,6 +104,7 @@ public class VisitaRepository : IVisitaRepository
          
          return _context.Visita
              //.Include(varAux => varAux.endereco)
+             .Include(varAux => varAux.usuario)
              .Include(varAux => varAux.statusVisita) // se for necessário, carrega esses dados
              .Where(visitaAux => 
                      visitaAux.usuario.Any(usrAux => usrAux.usuarioID == usuarioId) && // Filtra a visita pelo usuário
@@ -116,6 +123,7 @@ public class VisitaRepository : IVisitaRepository
          return _context.Visita
              //.Include(varAux => varAux.endereco)
              .Include(varAux => varAux.statusVisita)
+             .Include(varAux => varAux.usuario)
              .Where(visitaAux =>
                  visitaAux.usuario.Any(varAux => varAux.usuarioID == usuarioId)
                  &&
