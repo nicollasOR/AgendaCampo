@@ -1,5 +1,6 @@
-import React from "react"
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { listarVisitasID, visitaGet } from "@/src/service/visitaService";
 import { ScrollView, Image, Text, View, TouchableOpacity } from "react-native";
 import {
   Box,
@@ -73,9 +74,9 @@ export default function Detalhe() {
               </Text>
             </View>
             <View style={Row}>
-              <Image source={require("../../../../assets/img/logo.png")} />
+              <Image source={require("@/assets/img/logo.png")} />
               <View>
-                <Text style={H4}>{visita?.logradouroEndereco} </Text>
+                <Text style={H4}>{visita?.logradouro} </Text>
                 {/* <Text style={P}>{Contato: Roberto Silva (Gerente)}</Text> */}
                 {visita?.tecnicos.map((varAux) => (
                   <Text key={varAux.usuarioID} style={P}>{varAux.nome}</Text>

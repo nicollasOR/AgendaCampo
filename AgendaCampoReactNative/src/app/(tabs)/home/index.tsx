@@ -1,6 +1,5 @@
-import React from "react";
-import { ScrollView } from "react-native";
 import { useRouter } from "expo-router";
+import { ScrollView } from "react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -15,10 +14,10 @@ import {
   Row,
   Scroll,
   SpaceBetween,
-} from "../../../constants/theme";
-import CriarIcon from "../../../../assets/svg/CriarIcon.svg";
-import AgendaCard from "../../../components/agendaCard";
-import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
+} from "@/src/constants/theme";
+import CriarIcon from "@/assets/svg/CriarIcon.svg";
+import AgendaCard from "@/src/components/agendaCard";
+import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
 
 export default function Home() {
   const router = useRouter();

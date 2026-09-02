@@ -1,5 +1,5 @@
-import React from "react"
-import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaskedView from "@react-native-masked-view/masked-view";
@@ -15,61 +15,56 @@ import {
   P,
   Icon,
   Info,
-  Round,
   Row,
   H4,
   H1,
   BtnText,
   Scroll,
-} from "../../../constants/theme";
-import SairIcon from "../../../../assets/svg/SairIcon.svg";
-import AjudaIcon from "../../../../assets/svg/AjudaIcon.svg";
-import ArrowIcon from "../../../../assets/svg/ArrowIcon.svg";
-import PerfilIcon from "../../../../assets/svg/PerfilIcon.svg";
-import VisitaIcon from "../../../../assets/svg/VisitaIcon.svg";
-import DetalheIcon from "../../../../assets/svg/DetalheIcon.svg";
-import RelogioIcon from "../../../../assets/svg/RelogioIcon.svg";
-import { buscarUsuarioID, usuarioPOST } from "../../api/usuarioService";
-
-interface usuarioGET extends usuarioPOST {
-  usuarioID: string;
-}
+  Profile,
+  ProfileText,
+} from "@/src/constants/theme";
+import { FormatarIconNome } from "@/src/utils/formatarNome";
+import SairIcon from "@/assets/svg/SairIcon.svg";
+import AjudaIcon from "@/assets/svg/AjudaIcon.svg";
+import ArrowIcon from "@/assets/svg/ArrowIcon.svg";
+import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
+import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
+import DetalheIcon from "@/assets/svg/DetalheIcon.svg";
+import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
+import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
+import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
 
 export default function Perfil() {
-  const [usuario, setUsuario] = useState<usuarioGET>();
+  const router = useRouter();
 
-  async function buscarUsuario(usuarioID: string) {
-    try {
-      const response = await buscarUsuarioID(String(usuarioID));
-      console.log(response);
-    } catch (error: any) {
-      console.log(error.message);
-    }
-  }
+  const { usuario, logout } = useAuth();
 
-  useEffect(() => {
-    // buscarUsuario()
-  });
   return (
-    <SafeAreaView style={Container} edges={["left", "right"]}>
+    <SafeAreaView style={Container} edges={["top", "left", "right"]}>
       <LinearGradient
         colors={Colors.smoothGradient}
         style={Info}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
-        <View style={[Round, { overflow: "hidden" }]}>
-          <Image
-            source={require("../../../../assets/img/perfil.jpg")}
-            style={{ width: 120, height: 120, borderRadius: 60 }}
-          />
+        <View style={[Profile, { overflow: "hidden" }]}>
+          {usuario?.img ? (
+            <Image
+              source={require("@/assets/img/perfil.jpg")}
+              style={{ width: 120, height: 120 }}
+            />
+          ) : (
+            <Text style={ProfileText}>
+              {usuario?.nome ? FormatarIconNome(usuario.nome) : ":/"}
+            </Text>
+          )}
         </View>
 
         <View style={{ alignItems: "center" }}>
-          <Text style={H1}>João Silva</Text>
+          <Text style={H1}>{usuario?.nome}</Text>
           <View style={Row}>
             <PerfilIcon color={Colors.darkblue} />
-            <Text style={H4}>Técnico de Campo</Text>
+            <Text style={H4}>{usuario?.email}</Text>
           </View>
         </View>
       </LinearGradient>
@@ -121,12 +116,13 @@ export default function Perfil() {
           <TouchableOpacity
             style={[Box, { width: "100%" }]}
             activeOpacity={0.75}
+            onPress={() => router.push("/cadastro")}
           >
             <View style={Row}>
               <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
-                <PerfilIcon color={Colors.blue} />
+                <EditarPerfilIcon color={Colors.blue} />
               </View>
-              <Text style={H4}>Dados Pessoais</Text>
+              <Text style={H4}>Editar Perfil</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
@@ -145,6 +141,20 @@ export default function Perfil() {
           </TouchableOpacity>
 
           <TouchableOpacity
+            style={[Box, { width: "100%" }]}
+            activeOpacity={0.75}
+            onPress={() => router.push("/alterarsenha")}
+          >
+            <View style={Row}>
+              <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
+                <CadeadoIcon color={Colors.blue} />
+              </View>
+              <Text style={H4}>Alterar Senha</Text>
+            </View>
+            <ArrowIcon color={Colors.darkblue} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
             style={[
               Btn2,
               Row,
@@ -155,6 +165,7 @@ export default function Perfil() {
               },
             ]}
             activeOpacity={0.75}
+            // onPress={logout}
           >
             <SairIcon color={Colors.darkred} />
             <Text style={[BtnText, { color: Colors.darkred }]}>

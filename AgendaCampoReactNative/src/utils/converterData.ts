@@ -1,5 +1,3 @@
-
-
 export const formatarData = (data?: Date): string | undefined => {
     if(!data) 
         throw new Error("Faz o L ne pae, cade a data")
