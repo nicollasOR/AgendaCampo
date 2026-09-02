@@ -1,21 +1,15 @@
 {
   "expo": {
-    "name": "AgendaCampoReactNative",
+    "name": "Agenda Campo",
     "slug": "AgendaCampoReactNative",
+    "scheme": "agendacampo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/img/logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/img/logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
+      "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/img/logo.png",
         "backgroundColor": "#ffffff"
@@ -30,7 +24,18 @@
       "expo-router",
       "expo-font",
       "expo-secure-store",
+<<<<<<< HEAD
       "@react-native-community/datetimepicker"
+=======
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/img/splashicon.png",
+          "backgroundColor": "#ffffff",
+          "imageWidth": 200
+        }
+      ]
+>>>>>>> acf1011a9e8754e70556f63abe293c2590933415
     ]
   }
 }

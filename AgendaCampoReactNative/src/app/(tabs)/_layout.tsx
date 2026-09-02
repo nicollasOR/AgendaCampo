@@ -4,6 +4,7 @@ import { View } from "react-native";
 // import { Colors } from "@/src/constants/theme";
 import { Colors } from "../../constants/theme";
 
+<<<<<<< HEAD
 // import HomeIcon from "@/assets/svg/HomeIcon.svg";
 // import CriarIcon from "@/src/assets/svg/CriarIcon.svg";
 // import PerfilIcon from "@/src/assets/svg/PerfilIcon.svg";
@@ -11,6 +12,11 @@ import { Colors } from "../../constants/theme";
 import HomeIcon from "../../../assets/svg/HomeIcon.svg";
 import CriarIcon from "../../../assets/svg/CriarIcon.svg";
 import PerfilIcon from "../../../assets/svg/PerfilIcon.svg";
+=======
+import HomeIcon from "@/assets/svg/HomeIcon.svg";
+import CriarIcon from "@/assets/svg/CriarIcon.svg";
+import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
+>>>>>>> acf1011a9e8754e70556f63abe293c2590933415
 
 function TabIconWrapper({
   children,

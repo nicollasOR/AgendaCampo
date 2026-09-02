@@ -1,4 +1,4 @@
-export interface Login {
+export interface LoginRequest {
   email: string;
   senha: string;
 }
@@ -10,6 +10,7 @@ export interface LoginResponse {
 export interface Usuario {
   nome: string;
   email: string;
+  img: string;
 }
 
 export interface UsuarioPayload {
@@ -24,7 +25,18 @@ export interface UsuarioPayload {
 export interface AuthContextData {
   usuario: Usuario | null;
   token: string | null;
+  email: string;
+  setEmail: (email: string) => void;
+  senha: string;
+  setSenha: (senha: string) => void;
   loading: boolean;
-  login: (dados: Login) => Promise<void>;
+  erro: string | null;
+  handleLogin: () => Promise<void>;
   logout: () => Promise<void>;
+}
+
+export interface ImgUpload {
+  uri: string;
+  name: string;
+  mimeType: string;
 }

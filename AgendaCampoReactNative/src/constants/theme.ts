@@ -122,19 +122,29 @@ export const theme = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  round: {
-    ...baseShadow,
-    borderWidth: 4,
-    borderColor: Colors.bgc,
-    overflow: "hidden",
-    borderRadius: 999,
-  },
   icon: {
     width: 48,
     height: 48,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 999,
+  },
+  profile: {
+    ...baseShadow,
+    borderWidth: 4,
+    borderColor: Colors.bgc,
+    overflow: "hidden",
+    borderRadius: 999,
+    width: 120,
+    height: 120,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.smoothBgc2,
+  },
+  profileText: {
+    ...baseText,
+    fontFamily: Font.bold,
+    fontSize: 36,
   },
 
   // --- Cards ---
@@ -196,6 +206,19 @@ export const theme = StyleSheet.create({
     alignItems: "center",
     position: "relative",
   },
+  campoInputImg: {
+    gap: 5,
+    width: 160,
+    height: 160,
+    borderWidth: 2,
+    borderRadius: 40,
+    overflow: "hidden",
+    alignItems: "center",
+    flexDirection: "row",
+    borderStyle: "dashed",
+    justifyContent: "center",
+    borderColor: Colors.btn,
+  },
   inputIcon: {
     position: "absolute",
     left: 10,
@@ -207,6 +230,10 @@ export const theme = StyleSheet.create({
     fontSize: 16,
     textAlignVertical: "center",
     fontFamily: Font.semibold,
+  },
+  inputImg: {
+    width: "100%",
+    height: "100%",
   },
   textArea: {
     ...baseInput,
@@ -306,6 +333,11 @@ export const theme = StyleSheet.create({
     fontSize: 18,
     fontFamily: Font.semibold,
   },
+  textImg: {
+    ...baseText,
+    fontSize: 16,
+    fontFamily: Font.semibold,
+  },
 });
 
 // ════════════════ //
@@ -325,7 +357,6 @@ export const {
 
   // Componentes
   info: Info,
-  round: Round,
   icon: Icon,
   card: Card,
   cardInfo: CardInfo,
@@ -344,8 +375,10 @@ export const {
   form: Form,
   campoForm: CampoForm,
   campoInput: CampoInput,
+  campoInputImg: CampoInputImg,
   input: Input,
   inputIcon: InputIcon,
+  inputImg: InputImg,
   textArea: TextArea,
 
   // Tipografia
@@ -355,4 +388,7 @@ export const {
   h4: H4,
   p: P,
   label: Label,
+  profile: Profile,
+  profileText: ProfileText,
+  textImg: TextImg,
 } = theme;

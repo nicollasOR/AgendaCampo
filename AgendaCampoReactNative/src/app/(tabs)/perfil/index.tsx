@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaskedView from "@react-native-masked-view/masked-view";
-import { decodificarToken, useAuth } from "@/src/contexts/AuthContext";
 import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import {
   Box,
@@ -15,13 +15,15 @@ import {
   P,
   Icon,
   Info,
-  Round,
   Row,
   H4,
   H1,
   BtnText,
   Scroll,
+  Profile,
+  ProfileText,
 } from "@/src/constants/theme";
+import { FormatarIconNome } from "@/src/utils/formatarNome";
 import SairIcon from "@/assets/svg/SairIcon.svg";
 import AjudaIcon from "@/assets/svg/AjudaIcon.svg";
 import ArrowIcon from "@/assets/svg/ArrowIcon.svg";
@@ -30,15 +32,12 @@ import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
 import DetalheIcon from "@/assets/svg/DetalheIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
+import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
 
 export default function Perfil() {
   const router = useRouter();
 
-  // const { usuario, logout } = useAuth();
-  
-  const usuario = decodificarToken(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImFmNTZiMDdmLTQxNDMtNDdjYy1hMmFjLWM5OTI0ZTMwMmY0NyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbsO0bmltbyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFAYSIsImV4cCI6MTc4NzkyOTkzMCwiYXVkIjoiQWdlbmRhQ2FtcG9Gcm9udCJ9.PhEzxmDTKfkNriVrILwzbzB_BLrk0yP0O8KH-RbQZtk",
-  );
+  const { usuario, logout } = useAuth();
 
   return (
     <SafeAreaView style={Container} edges={["top", "left", "right"]}>
@@ -48,11 +47,17 @@ export default function Perfil() {
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
-        <View style={[Round, { overflow: "hidden" }]}>
-          <Image
-            source={require("@/assets/img/perfil.jpg")}
-            style={{ width: 120, height: 120, borderRadius: 60 }}
-          />
+        <View style={[Profile, { overflow: "hidden" }]}>
+          {usuario?.img ? (
+            <Image
+              source={require("@/assets/img/perfil.jpg")}
+              style={{ width: 120, height: 120 }}
+            />
+          ) : (
+            <Text style={ProfileText}>
+              {usuario?.nome ? FormatarIconNome(usuario.nome) : ":)"}
+            </Text>
+          )}
         </View>
 
         <View style={{ alignItems: "center" }}>
@@ -111,12 +116,13 @@ export default function Perfil() {
           <TouchableOpacity
             style={[Box, { width: "100%" }]}
             activeOpacity={0.75}
+            onPress={() => router.push("/cadastro")}
           >
             <View style={Row}>
               <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
-                <PerfilIcon color={Colors.blue} />
+                <EditarPerfilIcon color={Colors.blue} />
               </View>
-              <Text style={H4}>Dados Pessoais</Text>
+              <Text style={H4}>Editar Perfil</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
@@ -159,7 +165,7 @@ export default function Perfil() {
               },
             ]}
             activeOpacity={0.75}
-            // onPress={logout}
+            onPress={logout}
           >
             <SairIcon color={Colors.darkred} />
             <Text style={[BtnText, { color: Colors.darkred }]}>
