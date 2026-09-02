@@ -35,9 +35,9 @@ import { visitaGet } from "../../@types";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function Detalhe() {
-  // const [visita, setVisita] = useState<visitaGet>();
+
   const { id } = useLocalSearchParams<{ id: string }>()
-  // const {} useVisitaServiceDetalhe(id)
+
   const { visita, dataFinalFormatada, dataInicialFormatada } = useVisitaServiceDetalhe(id)
 
 
