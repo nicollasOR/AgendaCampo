@@ -1,19 +1,9 @@
-DROP DATABASE AgendaCampoNovo
+DROP DATABASE AgendaCampoAtual
 GO
-CREATE DATABASE AgendaCampoNovo
+CREATE DATABASE AgendaCampoAtual
 GO
-USE AgendaCampoNovo
-GO
-CREATE TABLE Endereco (
-                          enderecoID INT PRIMARY KEY NOT NULL IDENTITY(1,1),
-                          logradouro NVARCHAR(60) NOT NULL,
-                          bairro     NVARCHAR(40) NOT NULL,
-                          numero     INT NOT NULL,
-                          cep        NVARCHAR(8) NOT NULL,
-
-
-);
-
+USE AgendaCampoAtual
+ 
 GO
 CREATE TABLE Usuario (
                          usuarioID     UNIQUEIDENTIFIER PRIMARY KEY NOT NULL DEFAULT NEWID(),
@@ -25,7 +15,7 @@ CREATE TABLE Usuario (
                          Imagem        VARBINARY(MAX)   NULL,
 
 );
-
+SELECT * FROM Visita
 GO
 
 CREATE TABLE StatusVisita
@@ -37,7 +27,6 @@ CREATE TABLE StatusVisita
 GO
 CREATE TABLE Visita (
                         visitaID        INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-                        enderecoID      INT               NOT NULL,
                         statusVisitaID  INT               NOT NULL,
                         cliente         NVARCHAR(50)      NOT NULL,
                         sedeVisitada    NVARCHAR(60)      NULL,
@@ -45,15 +34,17 @@ CREATE TABLE Visita (
                         descricao       NVARCHAR(MAX)     NULL,
                         dataInicio      DATETIME2         NOT NULL,
                         dataTermino     DATETIME2         NOT NULL,
-
-                        CONSTRAINT FK_Visita_Endereco FOREIGN KEY (enderecoID)
-                            REFERENCES Endereco (enderecoID)
-                            ON DELETE CASCADE,
+                        logradouro      NVARCHAR(60)      NOT NULL,
+                        bairro          NVARCHAR(40)      NOT NULL,
+                        numero          INT               NOT NULL,
+                        cep             NVARCHAR(9)       NOT NULL,
+                        StatusVisitaBit BIT DEFAULT 1 NOT NULL
 
                         CONSTRAINT FK_Visita_StatusVisita FOREIGN KEY (statusVisitaID)
                             REFERENCES StatusVisita(statusVisitaID)
-                            ON DELETE CASCADE
+                            
 );
+
 GO
 
 
@@ -71,15 +62,7 @@ CREATE TABLE UsuarioVisita (
 );
 
 GO
-
-
-INSERT INTO Endereco (logradouro, bairro, numero, cep)
-VALUES
-    ('Av. Central', 'Centro', 100, '78300000'),
-    ('Rua das Palmeiras', 'Jardim Europa', 452, '78300010'),
-    ('Rodovia BR-163, Km 45', 'Zona Rural', 0, '78300999');
-
-GO
+SELECT * FROM Usuario
 
 
 INSERT INTO Usuario (nome, email, senha, Imagem, telefone)
@@ -100,48 +83,7 @@ VALUES
 
 GO
 
--- 1. Declarar variável para capturar o ID do usuário existente
-DECLARE @UsuarioID UNIQUEIDENTIFIER;
-SELECT TOP 1 @UsuarioID = usuarioID FROM Usuario WHERE email = 'adm@adm.com';
 
--- 2. Tabela temporária para armazenar os IDs das visitas criadas
-DECLARE @NovasVisitas TABLE (visitaID INT);
-
--- 3. Inserir as Visitas
-INSERT INTO Visita (enderecoID, statusVisitaID, cliente, sedeVisitada, titulo, descricao, dataInicio, dataTermino)
-OUTPUT INSERTED.visitaID INTO @NovasVisitas
-VALUES
-    (
-        1,
-        (SELECT statusVisitaID FROM StatusVisita WHERE nomeStatus = 'Confirmada'),
-        'Fazenda Sol Nascente',
-        'Matriz - Campo Novo',
-        'Vistoria de Colheita',
-        'Acompanhamento técnico da colheita de soja da safra atual.',
-        '2026-09-01 08:00:00',
-        '2026-09-01 12:00:00'
-    ),
-    (
-        2,
-        (SELECT statusVisitaID FROM StatusVisita WHERE nomeStatus = 'Pendente'),
-        'Agropecuária Ouro Verde',
-        'Filial Sul',
-        'Reunião Comercial',
-        'Apresentação do novo catálogo de insumos e maquinários.',
-        '2026-09-03 14:00:00',
-        '2026-09-03 16:30:00'
-    ),
-    (
-        3,
-        (SELECT statusVisitaID FROM StatusVisita WHERE nomeStatus = 'Concluída'),
-        'Cooperativa Agrícola',
-        'Unidade de Armazenamento',
-        'Auditoria de Silos',
-        'Inspeção periódica das condições de armazenamento de grãos.',
-        '2026-08-25 09:00:00',
-        '2026-08-25 17:00:00'
-    );
-GO
 
 CREATE TRIGGER trg_softDelete_Usuario
     ON Usuario
@@ -152,5 +94,17 @@ BEGIN
     from Usuario usr
              INNER JOIN deleted d
                         ON d.usuarioID = usr.usuarioID
+END
+GO
+
+CREATE TRIGGER trg_softDelete_Visita
+    ON Visita
+    INSTEAD OF DELETE
+    AS
+    BEGIN
+        UPDATE vst SET StatusVisitaBit = 0
+            from Visita vst
+                    INNER JOIN deleted d 
+                            ON d.visitaID = vst.visitaID
 END
 GO
