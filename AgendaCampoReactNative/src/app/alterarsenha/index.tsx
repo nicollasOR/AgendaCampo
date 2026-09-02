@@ -20,8 +20,8 @@ import {
 } from "@/src/constants/theme";
 import Logo from "@/assets/svg/Logo.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
-import ConfirmarIcon from "@/assets/svg/ConfirmarIcon.svg";
 import ArrowBackIcon from "@/assets/svg/ArrowBackIcon.svg";
+import ConfirmarIcon from "@/assets/svg/ConfirmarIcon.svg";
 
 export default function AlterarSenha() {
   const router = useRouter();
