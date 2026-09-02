@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "Agenda Campo",
+    "slug": "AgendaCampoReactNative",
+    "scheme": "agendacampo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/img/logo.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "android": {
+      "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/img/logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/img/logo.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/img/splashicon.png",
+          "backgroundColor": "#ffffff",
+          "imageWidth": 200
+        }
+      ]
+    ]
+  }
+}
