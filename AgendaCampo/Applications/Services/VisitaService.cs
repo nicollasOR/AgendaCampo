@@ -1,7 +1,7 @@
 using AgendaCampo.Applications.Conversões;
 using AgendaCampo.Domains;
-// using AgendaCampo.DTOs.VisitaDTO;
-using AgendaCampo.DTOs.VisitaDTONN;
+ using AgendaCampo.DTOs.VisitaDTO;
+//using AgendaCampo.DTOs.VisitaDTONN;
 using AgendaCampo.Exceptions;
 using AgendaCampo.Interface;
 
@@ -10,16 +10,16 @@ namespace RoyalGamess.Aplications.Services;
 public class VisitaService
 {
     private readonly IVisitaRepository _rep;
-    private readonly IEnderecoRepository _endrcRep;
-    private readonly IUsuarioRepository _usrRep;
     
+    private readonly IUsuarioRepository _usrRep;
+    private readonly IStatusVisitaRepository _stsRep;
  
  
-    public VisitaService(IVisitaRepository rep, IEnderecoRepository endrcRep, IUsuarioRepository usrRep)
+    public VisitaService(IVisitaRepository rep, IUsuarioRepository usrRep, IStatusVisitaRepository stsRep)
     {
         _rep = rep;
-        _endrcRep = endrcRep;
         _usrRep = usrRep;
+        _stsRep = stsRep;
     }
   
     public List<lerVisitaDTO> Listar()
@@ -64,7 +64,6 @@ public class VisitaService
         return listagem;
     }
     
-    //
     public lerVisitaDTO buscarPorId(int id)
     {
         Visita visitaBanco = _rep.BuscarPorId(id);
@@ -74,7 +73,6 @@ public class VisitaService
         return visitaConversoes.lerVisitaDto(visitaBanco);
     
     }
-    //
     public lerVisitaDTO buscarPorAgendamento(DateTime date)
     {
         Visita visitaBanco = _rep.BuscarPorAgendamento(date);
@@ -86,9 +84,7 @@ public class VisitaService
     
     public lerVisitaDTO buscarPorEndereco(string logradouro)
     {
-        //if (_rep.enderecoExiste(logradouro))
-        //    throw new DomainException("");
-        Visita visitaBanco = _rep.BuscarPorEndereco(logradouro.ToLower());
+         Visita visitaBanco = _rep.BuscarPorEndereco(logradouro.ToLower());
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
     
@@ -106,12 +102,14 @@ public class VisitaService
     //
     public lerVisitaDTO Adicionar(criarVisitaDTO criarVisitaDtos, Guid usuarioId)
     {
-        Endereco? endrcBanco = _endrcRep.buscarPorId(criarVisitaDtos.enderecoId);
- 
-        if (endrcBanco == null)
-            throw new DomainException("Endereço não encontrado..");
-        
-    
+
+        Usuario? usuarioNome = _usrRep.ObterPorNome(criarVisitaDtos.clienteNome);
+        // if (usuarioNome == null)
+        //     throw new DomainException("Usuário não encontrado.");
+
+        StatusVisita? stsVisitaPendente = _stsRep.buscarNomeStatus("Pendente");
+        if (stsVisitaPendente == null)
+            throw new DomainException("Status Visita não encontrado");
         if (criarVisitaDtos.dataTermino <= criarVisitaDtos.dataInicio)
             throw new DomainException("A data termino tem que ser depois da inicial");
 
@@ -122,7 +120,24 @@ public class VisitaService
         bool temConflito = _rep.conflitoDeHorario(usuarioId, criarVisitaDtos.dataInicio, criarVisitaDtos.dataTermino);
         if (temConflito)
             throw new DomainException("Já existe uma visita agendada para este técnico no horário selecionado");
+        List<Usuario> listaTecnicos = new List<Usuario> { usuarioBanco };
         
+        if(criarVisitaDtos.usuariosIds != null && criarVisitaDtos.usuariosIds.Any())
+            foreach (Guid idTecnicos in criarVisitaDtos.usuariosIds)
+            {
+                if (idTecnicos == usuarioId)
+                    continue;
+
+                Usuario? outrosTecnicos = _usrRep.ObterPorId(idTecnicos);
+                if (outrosTecnicos != null)
+                {
+                    bool conflitoOutro = _rep.conflitoDeHorario(outrosTecnicos.usuarioID, criarVisitaDtos.dataInicio, criarVisitaDtos.dataTermino);
+                    if (conflitoOutro)
+                        throw new DomainException($"O técnico {outrosTecnicos.nome} já possui um compromisso nesse horário.");
+
+                    listaTecnicos.Add(outrosTecnicos);
+                }
+            }
       // falta adicionar o endereco de validação.
     
       Visita visita = new Visita
@@ -132,11 +147,14 @@ public class VisitaService
           descricao = criarVisitaDtos.descricao,
           titulo = criarVisitaDtos.nomeEvento,
           sedeVisitada = criarVisitaDtos.nomeSede,
-          cliente = usuarioBanco.nome,
-          statusVisitaID = criarVisitaDtos.statusVisitaId,
-          enderecoID = endrcBanco.enderecoID,
+          cliente = string.IsNullOrEmpty(usuarioBanco.nome) ? usuarioBanco.nome : criarVisitaDtos.clienteNome,
+          statusVisitaID = stsVisitaPendente.statusVisitaID,
+          bairro = criarVisitaDtos.Bairro,
+          cep = criarVisitaDtos.Cep,
+          logradouro = criarVisitaDtos.Logradouro,
+          numero = criarVisitaDtos.Numero,
           
-          usuario = new List<Usuario> {usuarioBanco}
+          usuario = listaTecnicos
       };
       _rep.Adicionar(visita);//);
       return visitaConversoes.lerVisitaDto(visita);
@@ -146,12 +164,16 @@ public class VisitaService
     //
     public lerVisitaDTO Atualizar(int id, atualizarVisitaDTO atualizarDTO, Guid usuarioId)
     {
-         Visita? visitaBanco = _rep.BuscarPorId(id);
+        Usuario? usuarioBanco = _usrRep.ObterPorNome(atualizarDTO.nomeCliente);
+        // if (usuarioBanco == null)
+        //     throw new DomainException("Usuário não encontrado.");
+        
+        StatusVisita? stsVisitaPendente = _stsRep.buscarNomeStatus(atualizarDTO.statusVisita);
+        if (stsVisitaPendente == null && !_stsRep.existeStatus(atualizarDTO.statusVisita))
+            throw new DomainException("Status Visita não encontrado");
+        Visita? visitaBanco = _rep.BuscarPorId(id);
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
-
-         if (!_rep.enderecoExiste(atualizarDTO.enderecoId))
-            throw new DomainException("Endereço informado não existe no sistema");
 
          if (atualizarDTO.dataTermino <= atualizarDTO.dataInicio)
             throw new DomainException("A data de término deve ser posterior à data de início");
@@ -165,10 +187,16 @@ public class VisitaService
         visitaBanco.descricao = atualizarDTO.descricao;
         visitaBanco.dataInicio = atualizarDTO.dataInicio;
         visitaBanco.dataTermino = atualizarDTO.dataTermino;
-        visitaBanco.cliente = atualizarDTO.nomeCliente;
+        // visitaBanco.cliente = usuarioBanco ? usuarioBanco.nome : atualizarDTO.nomeCliente;
+        visitaBanco.cliente = !string.IsNullOrEmpty(usuarioBanco.nome) ? usuarioBanco.nome : atualizarDTO.nomeCliente;
         visitaBanco.sedeVisitada = atualizarDTO.nomeSede;
-        visitaBanco.statusVisitaID = atualizarDTO.statusVisitaId;
-        visitaBanco.enderecoID = atualizarDTO.enderecoId;
+        //visitaBanco.statusVisitaID = atualizarDTO.statusVisitaId;
+        visitaBanco.statusVisitaID = stsVisitaPendente.statusVisitaID;
+        //
+        visitaBanco.cep = atualizarDTO.Cep;
+        visitaBanco.numero = atualizarDTO.Numero;
+        visitaBanco.logradouro = atualizarDTO.Logradouro;
+        visitaBanco.bairro = atualizarDTO.Bairro;
 
         _rep.Atualizar(visitaBanco);
 
@@ -182,11 +210,12 @@ public class VisitaService
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
 
-        if (!_rep.enderecoExiste(atlDTO.enderecoId))
-            throw new DomainException("Endereço não encontrado..");
-    
-        visitaBanco.enderecoID = atlDTO.enderecoId;
-    
+
+        visitaBanco.cep = atlDTO.Cep;
+        visitaBanco.numero = atlDTO.Numero;
+        visitaBanco.descricao = atlDTO.descricao;
+        visitaBanco.bairro = atlDTO.Bairro;
+
         _rep.Atualizar(visitaBanco);
         return visitaConversoes.lerVisitaDto(visitaBanco);
     }
@@ -216,7 +245,7 @@ public class VisitaService
         Visita visitaBanco = _rep.BuscarPorId(id);
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
-        if (atlDTO.clienteId != Guid.Empty)
+        if (atlDTO.nomeCliente != string.Empty)
         {
             Usuario? usuarioBanco = _usrRep.ObterPorId(usuarioId);
             if (usuarioBanco == null)

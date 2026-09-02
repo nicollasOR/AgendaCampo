@@ -7,8 +7,6 @@ public partial class Visita
 {
     public int visitaID { get; set; }
 
-    public int enderecoID { get; set; }
-
     public int statusVisitaID { get; set; }
 
     public string cliente { get; set; } = null!;
@@ -23,7 +21,13 @@ public partial class Visita
 
     public DateTime dataTermino { get; set; }
 
-    public virtual Endereco endereco { get; set; } = null!;
+    public string logradouro { get; set; } = null!;
+
+    public string bairro { get; set; } = null!;
+
+    public int numero { get; set; }
+
+    public string cep { get; set; } = null!;
 
     public virtual StatusVisita statusVisita { get; set; } = null!;
 

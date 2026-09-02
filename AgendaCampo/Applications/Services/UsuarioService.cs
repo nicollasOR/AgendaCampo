@@ -35,6 +35,16 @@ namespace RoyalGamess.Aplications.Services
         }
 
 
+        public lerUsuarioDTO BuscarPorTelefone(string telefone)
+        {
+            Usuario? usuarioD = _rep.ObterPorTelefone(telefone);
+            if (usuarioD == null)
+                throw new DomainException("Telefone não encontrado");
+
+            return usuarioConversoes.lerUsuarioDTO(usuarioD);
+        }
+
+
         public lerUsuarioDTO BuscarPorID(Guid id)
         {
             Usuario usuarioDto = _rep.ObterPorId(id);
@@ -80,6 +90,7 @@ namespace RoyalGamess.Aplications.Services
                 email = usuarioDTO.email,
                 senha = HashSenha_(usuarioDTO.senha),
                 Imagem = conversoesParaDTO.converterImg(usuarioDTO.img),
+                telefone = usuarioDTO.telefone,
                 statusUsuario = true
             };
             

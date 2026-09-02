@@ -35,6 +35,21 @@ namespace AgendaCampo.Controllers
 
         }
 
+        [HttpGet("telefone/{telefone}")]
+        public ActionResult<lerUsuarioDTO> BuscarPorTelefone(string telefone)
+        {
+            try
+            {
+                lerUsuarioDTO lerDTO = _service.BuscarPorTelefone(telefone);
+                return Ok(lerDTO);
+            }
+
+            catch(DomainException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
 
         [HttpGet("img/{id}")]
         public ActionResult ObterImg(Guid id)

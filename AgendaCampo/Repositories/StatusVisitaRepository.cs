@@ -21,6 +21,11 @@ public class StatusVisitaRepository : IStatusVisitaRepository
         return statusVisitaBanco;
     }
 
+    public StatusVisita? buscarNomeStatus(string nomeStatus)
+    {
+        return _ctx.StatusVisita.FirstOrDefault(varAux => varAux.nomeStatus == nomeStatus);
+    }
+
     public bool existeStatus(string nomeStatus)
     {
         return _ctx.StatusVisita.Any(varAux => varAux.nomeStatus == nomeStatus);

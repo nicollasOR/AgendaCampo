@@ -1,8 +1,9 @@
 using System.Security.Claims;
 using AgendaCampo.Domains;
-using AgendaCampo.DTOs.VisitaDTONN;
+using AgendaCampo.DTOs.VisitaDTO;
 using AgendaCampo.DTOs.UsuarioDTO;
 using AgendaCampo.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoyalGamess.Aplications.Services;
@@ -25,7 +26,7 @@ namespace AgendaCampo.Controllers
         {
             string? idTexto = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(idTexto))
-                throw new DomainException("Usuário não encontrado");
+                throw new DomainException("Usuário não encontrado ee");
 
             return Guid.Parse(idTexto);
         }
@@ -36,12 +37,16 @@ namespace AgendaCampo.Controllers
             var list = _service.Listar();
             return Ok(list);
         }
+        
+        [Authorize]
+        [HttpGet("futurasVisitas/")] 
+        // [HttpGet("futurasVisitas/{usuarioId}")] 
 
-        [HttpGet("futurasVisitas/{usuarioId}")]
-        public ActionResult<List<lerVisitaDTO>> ListarFuturas(Guid usuarioId)
+        public ActionResult<List<lerVisitaDTO>> ListarFuturas()//(Guid usuarioId)
         {
             try
             {
+                Guid usuarioId = obterUsuarioLogado();
                 var lista = _service.listarFuturasVisitas(usuarioId);
                 return Ok(lista);
             }
@@ -50,12 +55,16 @@ namespace AgendaCampo.Controllers
                 return NotFound(new { mensagem = ex.Message });
             }
         }
+        
+        [Authorize]
+        //[HttpGet("concluidas/{usuarioId}")]
+        [HttpGet("concluidas/")]
 
-        [HttpGet("concluidas/{usuarioId}")]
-        public ActionResult<List<lerVisitaDTO>> ListarConcluidas(Guid usuarioId)
+        public ActionResult<List<lerVisitaDTO>> ListarConcluidas() // Guid usuarioId
         {
             try
             {
+                Guid usuarioId = obterUsuarioLogado();
                 var lista = _service.ListarConcluidas(usuarioId);
                 return Ok(lista);
             }
@@ -120,14 +129,17 @@ namespace AgendaCampo.Controllers
                 return NotFound(new { mensagem = ex.Message });
             }
         }
-
-        [HttpPost("{usuarioId}")]
-        public ActionResult<lerVisitaDTO> Adicionar([FromBody] criarVisitaDTO criarDTO, Guid usuarioId)
+        
+        [Authorize]
+        // [HttpPost("{usuarioId}")]
+        [HttpPost]
+        public ActionResult<lerVisitaDTO> Adicionar([FromBody] criarVisitaDTO criarDTO)
         {
             try
             {
+                Guid usuarioId = obterUsuarioLogado();
                 lerVisitaDTO postDTO = _service.Adicionar(criarDTO, usuarioId);
-                return Created();
+                return StatusCode(201, postDTO);
             }
             catch (DomainException ex)
             {
@@ -135,12 +147,13 @@ namespace AgendaCampo.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public ActionResult<lerVisitaDTO> Atualizar(int id, [FromBody] atualizarVisitaDTO lerDTO, Guid usuarioId)
+        [HttpPut("{id}")]
+        public ActionResult<lerVisitaDTO> Atualizar(int id, [FromBody] atualizarVisitaDTO dto)//, Guid usuarioId)
         {
             try
             {
-                lerVisitaDTO lerDTOs = _service.Atualizar(id, lerDTO, usuarioId);
+                Guid usuarioId = obterUsuarioLogado();
+                lerVisitaDTO lerDTOs = _service.Atualizar(id, dto, usuarioId);
                 return Ok(lerDTOs);
             }
             catch (DomainException ex)
@@ -149,12 +162,13 @@ namespace AgendaCampo.Controllers
             }
         }
 
+        [Authorize]
         [HttpPatch("reagendar/{id}")]
         public ActionResult<lerVisitaDTO> Reagendar(int id, [FromBody] reagendarVisita request)
         {
             try
             {
-                var usuarioId = obterUsuarioLogado();
+                Guid usuarioId = obterUsuarioLogado();
                 var visitaReagendada = _service.atualizarData(id, request.dataInicio, request.dataFinal, usuarioId);
                 return Ok(visitaReagendada);
             }

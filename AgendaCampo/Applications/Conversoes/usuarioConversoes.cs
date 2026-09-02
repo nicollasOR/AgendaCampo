@@ -13,6 +13,7 @@ public class usuarioConversoes
             email = usuario.email,
             nome = usuario.nome,
             imgURL = $"usuario/{usuario.Imagem}/imagem",
+            telefone = usuario.telefone,
             statusUsuario = usuario.statusUsuario ? true : false
         };
     }
@@ -23,7 +24,9 @@ public class usuarioConversoes
         {
             nome = usuario.nome,
             email = usuario.email,
-            img = conversoesParaDTO.converterParaIFormFile(usuario.Imagem)
+            img = conversoesParaDTO.converterParaIFormFile(usuario.Imagem),
+            telefone = usuario.telefone
+            
         };
     }
     

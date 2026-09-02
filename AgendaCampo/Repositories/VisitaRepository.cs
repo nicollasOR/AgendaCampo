@@ -16,8 +16,9 @@ public class VisitaRepository : IVisitaRepository
     public List<Visita> Listar()
     {
         return _context.Visita
-             .Include(varAux => varAux.endereco)
-             .Include(varAux => varAux.statusVisita)
+              //.Include(varAux => varAux.endereco)
+              .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
              .OrderBy(varAux => varAux.dataInicio < DateTime.Now)
              .ToList();
     }
@@ -25,36 +26,47 @@ public class VisitaRepository : IVisitaRepository
      public Visita BuscarPorTitulo(string titulo)
      {
          return _context.Visita
-             .Include(varAux => varAux.endereco)            
-             .Include(varAux => varAux.statusVisita)
+              //.Include(varAux => varAux.endereco)
+              .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
              .FirstOrDefault(varAux => varAux.titulo == titulo);
      }
 //
      public Visita BuscarPorId(int id)
      {
          return _context.Visita
-             .Include(varAux => varAux.endereco)
-             .Include(varAux => varAux.statusVisita)
+              //.Include(varAux => varAux.endereco)
+              .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
              .FirstOrDefault(varAux => varAux.visitaID == id);
      }
 //
      public Visita BuscarPorAgendamento(DateTime data)
      {
          return _context.Visita
-             .Include(varAux => varAux.endereco)
+             //.Include(varAux => varAux.endereco)
              .OrderBy(varAux => varAux.dataInicio)
              .Include(varAux => varAux.statusVisita)
+             .Include(varAux => varAux.usuario)
              .FirstOrDefault(varAux => varAux.dataInicio == data);
     }
 
      public Visita BuscarPorEndereco(string logradouro)
      {
          return _context.Visita
-             .Include(varAux => varAux.endereco)
-             .Include(varAux => varAux.statusVisita)
+              //.Include(varAux => varAux.endereco)
+              .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
              .OrderBy(varAux => varAux.dataInicio)
-             .FirstOrDefault(varAux => varAux.endereco.logradouro.ToLower() == logradouro.ToLower());
+             .FirstOrDefault(varAux => varAux.logradouro.ToLower() == logradouro.ToLower() || varAux.bairro.ToLower() == logradouro.ToLower());
      }
+
+    //public Visita? buscarImg(Guid id)
+    //{
+    //    Visita? visitaBanco = _context.Visita
+    //        .Include(varAux => varAux.endereco)
+    //        .Where(varAux => varAux.usuario.Where(usrAux => usrAux.usuarioID == id).Select(varImg => varImg.Imagem).FirstOrDefault().ToList();
+    // }
 //
      public bool visita_dataExistir(DateTime data)
      {
@@ -65,9 +77,10 @@ public class VisitaRepository : IVisitaRepository
       {
                   
           return _context.Visita
- 
-              .Include(varAux => varAux.endereco)
+
+              //.Include(varAux => varAux.endereco)
               .Include(varAux => varAux.statusVisita)
+              .Include(varAux => varAux.usuario)
                .Where(varAux => varAux.usuario.Any(usrAux => usrAux.usuarioID == usuarioId))
               .OrderBy(varAux => varAux.dataInicio)
               .ToList();
@@ -90,7 +103,8 @@ public class VisitaRepository : IVisitaRepository
      {
          
          return _context.Visita
-             .Include(varAux => varAux.endereco)
+             //.Include(varAux => varAux.endereco)
+             .Include(varAux => varAux.usuario)
              .Include(varAux => varAux.statusVisita) // se for necessário, carrega esses dados
              .Where(visitaAux => 
                      visitaAux.usuario.Any(usrAux => usrAux.usuarioID == usuarioId) && // Filtra a visita pelo usuário
@@ -107,8 +121,9 @@ public class VisitaRepository : IVisitaRepository
      {
           
          return _context.Visita
-             .Include(varAux => varAux.endereco)
+             //.Include(varAux => varAux.endereco)
              .Include(varAux => varAux.statusVisita)
+             .Include(varAux => varAux.usuario)
              .Where(visitaAux =>
                  visitaAux.usuario.Any(varAux => varAux.usuarioID == usuarioId)
                  &&
@@ -137,10 +152,10 @@ public class VisitaRepository : IVisitaRepository
  
 
 //
-     public bool enderecoExiste(int id)
-     {
-         return _context.Endereco.Any(varAux => varAux.enderecoID == id);
-     }
+     //public bool enderecoExiste(int id)
+     //{
+     //    return _context.Endereco.Any(varAux => varAux.enderecoID == id);
+     //}
 
      public bool eventoExiste(int id)
      {
@@ -170,7 +185,7 @@ public class VisitaRepository : IVisitaRepository
          visitaBanco.sedeVisitada = visita.sedeVisitada;
          
          visitaBanco.statusVisitaID = visita.statusVisitaID;
-         visitaBanco.enderecoID = visita.enderecoID;
+         //visitaBanco.enderecoID = visita.enderecoID;
 
 
          _context.SaveChanges();
@@ -193,53 +208,5 @@ public class VisitaRepository : IVisitaRepository
          _context.SaveChanges();
      }
 
-     // public bool Reagendar(int visitaId, DateTime novaDataInicio, DateTime novaDataTermino)
-     // {
-     //     
-     // }
-     //
-//     public bool Reagendar(int visitaId, DateTime novaDataInicio, DateTime novaDataTermino)
-//     {
-//         Visita visitaBanco = BuscarPorId(visitaId);
-//         if (visitaBanco == null) return false;
-//
-//         visitaBanco.dataInicio = novaDataInicio;
-//         visitaBanco.dataTermino = novaDataTermino;
-//
-//         _context.SaveChanges();
-//         return true;
-//     }
-//     
-//     public void atualizarEndereco(int id, int enderecoId)
-//     {
-//         Visita visitaBanco = BuscarPorId(id);
-//         if (visitaBanco == null)
-//             return;
-//
-//         visitaBanco.enderecoID = enderecoId;
-//
-//         _context.SaveChanges();
-//     }
-//
-//
-//     public void atualizarAgendamento(int id, int agendamentoId)
-//     {
-//         Visita visitaBanco = BuscarPorId(id);
-//         if (visitaBanco == null)
-//             return;
-//         visitaBanco.agendamentoID = agendamentoId;
-//         _context.SaveChanges();
-//     }
-//
-//     public void Remover(int id)
-//     {
-//         Visita visitaBanco = BuscarPorId(id);
-//
-//         if (visitaBanco == null)
-//             return;
-//
-//         _context.Visita.Remove(visitaBanco);
-//         _context.SaveChanges();
-//
-//     }
+     
 }

@@ -19,6 +19,11 @@ namespace AgendaCampo.Repositories
         {
             return _context.Usuario.Any(varAux => varAux.email == email);
         }
+
+        public Usuario ObterPorNome(string nome)
+        {
+            return _context.Usuario.FirstOrDefault(varAux => varAux.nome == nome);
+        }
         
         public List<Usuario> Listar()
         {
@@ -29,7 +34,10 @@ namespace AgendaCampo.Repositories
         {
             return _context.Usuario.Find(id);
         }
-
+        public Usuario? ObterPorTelefone(string telefone)
+        {
+            return _context.Usuario.FirstOrDefault(varAux => varAux.telefone == telefone);
+        }
         public Usuario? ObterPorEmail(string email)
         {
             return _context.Usuario.FirstOrDefault(varAux => varAux.email == email);

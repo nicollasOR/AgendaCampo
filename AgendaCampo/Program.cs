@@ -14,6 +14,7 @@ using System.Text;
 using AgendaCampo.Applications;
 
 Env.Load();
+System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 var builder = WebApplication.CreateBuilder(args);
 
 string conexaoBanco = Environment.GetEnvironmentVariable("CONNECTION_STRING");
@@ -53,8 +54,8 @@ builder.Services.AddScoped<StatusVisitaService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
 
-builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
-builder.Services.AddScoped<EnderecoService>();
+//builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+//builder.Services.AddScoped<EnderecoService>();
 // builder.Services.AddScoped<testeService>();
 
 
