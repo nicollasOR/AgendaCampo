@@ -1,90 +1,122 @@
-import {
+import React, {
   createContext,
-  createElement,
-  type ReactNode,
   useContext,
-  useEffect,
   useState,
+  useEffect,
+  ReactNode,
 } from "react";
-import {
-  AuthContextData,
-  Login,
-  Usuario,
-  UsuarioPayload,
-} from "@/src/@types/auth";
-import { router } from "expo-router";
-import { jwtDecode } from "jwt-decode";
+import { Keyboard } from "react-native";
+import { useRouter } from "expo-router";
 import { authService } from "@/src/service/authService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContextData, Usuario } from "@/src/@types/auth";
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
-const TOKEN_KEY = process.env.EXPO_PUBLIC_TOKEN_KEY ?? "chaveToken";
 
-export function decodificarToken(token: string): Usuario | null {
-  try {
-    const decoded = jwtDecode<UsuarioPayload>(token);
-
-    return {
-      nome: decoded[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-      ],
-      email:
-        decoded[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-        ],
-      img: "",
-    };
-  } catch {
-    return null;
-  }
-}
-
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
-    AsyncStorage.getItem(TOKEN_KEY)
-      .then((tokenSalvo) => {
-        if (tokenSalvo) {
-          const usuarioDecodificado = decodificarToken(tokenSalvo);
-          if (usuarioDecodificado) {
-            setToken(tokenSalvo);
-            setUsuario(usuarioDecodificado);
-          } else {
-            AsyncStorage.removeItem(TOKEN_KEY);
-          }
-        }
-      })
-      .catch((error) => console.error("Erro ao carregar token:", error))
-      .finally(() => setLoading(false));
+    async function carregarDadosArmazenados() {
+      const tokenSalvo = await authService.getToken();
+      if (tokenSalvo) {
+        setToken(tokenSalvo);
+      }
+    }
+    carregarDadosArmazenados();
   }, []);
 
-  async function login(dados: Login) {
-    const resposta = await authService.login(dados);
+  async function handleLogin() {
+    Keyboard.dismiss();
+    setErro(null);
 
-    if (resposta.token) {
-      await AsyncStorage.setItem(TOKEN_KEY, resposta.token);
-      setToken(resposta.token);
-      setUsuario(decodificarToken(resposta.token));
+    const emailFormatado = email.trim().toLowerCase();
+    const senhaFormatada = senha.trim();
+
+    if (!emailFormatado || !senhaFormatada) {
+      setErro("Preencha todos os campos.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const payload = { email: emailFormatado, senha: senhaFormatada };
+      const response = await authService.login(payload);
+
+      setToken(response.token);
+      setUsuario({ email: emailFormatado });
+
+      setEmail("");
+      setSenha("");
+
+      router.replace("/(tabs)/home");
+    } catch (error: any) {
+      console.log(">>> Erro completo:", error);
+      console.log(">>> Status do Erro:", error.response?.status);
+      console.log(">>> Dados da Resposta:", error.response?.data);
+
+      const status = error.response?.status;
+
+      if (status === 400 || status === 401) {
+        const mensagemCustomizada =
+          typeof error.response?.data === "string"
+            ? error.response.data
+            : error.response?.data?.message;
+
+        setErro(mensagemCustomizada || "E-mail ou senha inválidos.");
+      } else if (!error.response) {
+        setErro(
+          "Não foi possível conectar ao servidor.\nVerifique sua conexão.",
+        );
+      } else {
+        setErro("Ocorreu um erro no servidor. Tente novamente mais tarde.");
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
   async function logout() {
-    await AsyncStorage.removeItem(TOKEN_KEY);
+    await authService.logout();
     setToken(null);
     setUsuario(null);
+    setEmail("");
+    setSenha("");
+    setErro(null);
     router.replace("/login");
   }
 
-  return createElement(
+  return React.createElement(
     AuthContext.Provider,
-    { value: { usuario, token, loading, login, logout } },
+    {
+      value: {
+        usuario,
+        token,
+        email,
+        setEmail,
+        senha,
+        setSenha,
+        loading,
+        erro,
+        handleLogin,
+        logout,
+      },
+    },
     children,
   );
-};
+}
 
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth deve ser usado dentro de um AuthProvider");
+  }
+  return context;
 }

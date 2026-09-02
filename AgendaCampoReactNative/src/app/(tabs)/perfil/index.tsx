@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaskedView from "@react-native-masked-view/masked-view";
-import { decodificarToken, useAuth } from "@/src/contexts/AuthContext";
 import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import {
   Box,
@@ -37,11 +37,7 @@ import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
 export default function Perfil() {
   const router = useRouter();
 
-  // const { usuario, logout } = useAuth();
-
-  const usuario = decodificarToken(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImFmNTZiMDdmLTQxNDMtNDdjYy1hMmFjLWM5OTI0ZTMwMmY0NyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbsO0bmltbyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFAYSIsImV4cCI6MTc4NzkyOTkzMCwiYXVkIjoiQWdlbmRhQ2FtcG9Gcm9udCJ9.PhEzxmDTKfkNriVrILwzbzB_BLrk0yP0O8KH-RbQZtk",
-  );
+  const { usuario, logout } = useAuth();
 
   return (
     <SafeAreaView style={Container} edges={["top", "left", "right"]}>

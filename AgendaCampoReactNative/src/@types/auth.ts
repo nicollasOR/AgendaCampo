@@ -1,4 +1,4 @@
-export interface Login {
+export interface LoginRequest {
   email: string;
   senha: string;
 }
@@ -8,25 +8,30 @@ export interface LoginResponse {
 }
 
 export interface Usuario {
-  nome: string;
+  nome?: string;
   email: string;
-  img: string;
+  img?: string;
 }
 
 export interface UsuarioPayload {
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": string;
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
-  exp: number;
-  iss: string;
-  aud: string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"?: string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"?: string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"?: string;
+  exp?: number;
+  iss?: string;
+  aud?: string;
 }
 
 export interface AuthContextData {
   usuario: Usuario | null;
   token: string | null;
+  email: string;
+  setEmail: (email: string) => void;
+  senha: string;
+  setSenha: (senha: string) => void;
   loading: boolean;
-  login: (dados: Login) => Promise<void>;
+  erro: string | null;
+  handleLogin: () => Promise<void>;
   logout: () => Promise<void>;
 }
 

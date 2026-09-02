@@ -56,6 +56,7 @@ import {
 
 // Logo
 import Logo from "@/assets/svg/Logo.svg";
+import { AuthProvider } from "@/src/contexts/AuthContext";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -74,52 +75,54 @@ export default function RootLayout() {
   const router = useRouter();
 
   return (
-    <SafeAreaProvider>
-      <StatusBar style="light" />
-      <Stack
-        screenOptions={{
-          headerStyle: { backgroundColor: Colors.blue },
-          headerTitleStyle: {
-            color: Colors.white,
-            fontFamily: "Outfit_600SemiBold",
-          },
-          headerTitle: () => (
-            <View style={[Row, SpaceBetween]}>
-              <Text style={[H2, { color: Colors.white }]}>Agenda Campo</Text>
-              <TouchableOpacity onPress={() => router.push("/home")}>
-                <Logo color={Colors.white} height={32} width={32} />
-              </TouchableOpacity>
-            </View>
-          ),
-          headerTintColor: Colors.white,
-          animation: "fade",
-        }}
-      >
-        <Stack.Screen
-          name="login/index"
-          options={{
-            headerShown: false,
+    <AuthProvider>
+      <SafeAreaProvider>
+        <StatusBar style="light" />
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: Colors.blue },
+            headerTitleStyle: {
+              color: Colors.white,
+              fontFamily: "Outfit_600SemiBold",
+            },
+            headerTitle: () => (
+              <View style={[Row, SpaceBetween]}>
+                <Text style={[H2, { color: Colors.white }]}>Agenda Campo</Text>
+                <TouchableOpacity onPress={() => router.push("/home")}>
+                  <Logo color={Colors.white} height={32} width={32} />
+                </TouchableOpacity>
+              </View>
+            ),
+            headerTintColor: Colors.white,
+            animation: "fade",
           }}
-        />
-        <Stack.Screen
-          name="cadastro/index"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="alterarsenha/index"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="(tabs)"
-          options={{
-            title: "Sair",
-          }}
-        />
-      </Stack>
-    </SafeAreaProvider>
+        >
+          <Stack.Screen
+            name="login/index"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="cadastro/index"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="alterarsenha/index"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(tabs)"
+            options={{
+              title: "Sair",
+            }}
+          />
+        </Stack>
+      </SafeAreaProvider>
+    </AuthProvider>
   );
 }
