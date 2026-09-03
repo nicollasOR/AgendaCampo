@@ -176,7 +176,11 @@ export default function Cadastro() {
             borderColor: Colors.blue,
           },
         ]}
-        onPress={() => router.replace("/login")}
+        onPress={
+          telaEditar
+            ? () => router.replace("/(tabs)/perfil")
+            : () => router.replace("/login")
+        }
       >
         <ArrowBackIcon color={Colors.blue} />
         <Text style={[BtnText, { color: Colors.blue }]}>Voltar</Text>

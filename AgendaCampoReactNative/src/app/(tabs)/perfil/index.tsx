@@ -23,7 +23,7 @@ import {
   Profile,
   ProfileText,
 } from "@/src/constants/theme";
-import { useImagePicker } from "@/src/hooks/useImagePicker";
+import { useImage } from "@/src/hooks/useImage";
 import { FormatarIconNome } from "@/src/utils/formatarNome";
 import SairIcon from "@/assets/svg/SairIcon.svg";
 import AjudaIcon from "@/assets/svg/AjudaIcon.svg";
@@ -39,12 +39,10 @@ export default function Perfil() {
   const router = useRouter();
 
   const { usuario, logout } = useAuth();
-
-  // Extrai a função de dentro do hook
-  const { getImagemUrl } = useImagePicker();
+  const { getImagemUrl } = useImage();
 
   // Formata o valor retornado pela API (usuario.img)
-  const fotoPerfilUri = getImagemUrl(usuario?.img);
+  const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
 
   return (
     <SafeAreaView style={Container} edges={["top", "left", "right"]}>

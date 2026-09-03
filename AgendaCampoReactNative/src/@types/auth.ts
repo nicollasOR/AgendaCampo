@@ -10,7 +10,7 @@ export interface LoginResponse {
 export interface Usuario {
   nome: string;
   email: string;
-  img: ImgUpload | null;
+  imgURL: string | null;
 }
 
 export interface UsuarioPayload {
