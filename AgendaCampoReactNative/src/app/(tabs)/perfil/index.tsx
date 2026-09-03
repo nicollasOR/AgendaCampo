@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaskedView from "@react-native-masked-view/masked-view";
-import { decodificarToken, useAuth } from "@/src/contexts/AuthContext";
 import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import {
   Box,
@@ -23,6 +23,7 @@ import {
   Profile,
   ProfileText,
 } from "@/src/constants/theme";
+import { useImagePicker } from "@/src/hooks/useImagePicker";
 import { FormatarIconNome } from "@/src/utils/formatarNome";
 import SairIcon from "@/assets/svg/SairIcon.svg";
 import AjudaIcon from "@/assets/svg/AjudaIcon.svg";
@@ -37,11 +38,13 @@ import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
 export default function Perfil() {
   const router = useRouter();
 
-  // const { usuario, logout } = useAuth();
+  const { usuario, logout } = useAuth();
 
-  const usuario = decodificarToken(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImFmNTZiMDdmLTQxNDMtNDdjYy1hMmFjLWM5OTI0ZTMwMmY0NyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJBbsO0bmltbyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFAYSIsImV4cCI6MTc4NzkyOTkzMCwiYXVkIjoiQWdlbmRhQ2FtcG9Gcm9udCJ9.PhEzxmDTKfkNriVrILwzbzB_BLrk0yP0O8KH-RbQZtk",
-  );
+  // Extrai a função de dentro do hook
+  const { getImagemUrl } = useImagePicker();
+
+  // Formata o valor retornado pela API (usuario.img)
+  const fotoPerfilUri = getImagemUrl(usuario?.img);
 
   return (
     <SafeAreaView style={Container} edges={["top", "left", "right"]}>
@@ -52,14 +55,14 @@ export default function Perfil() {
         end={{ x: 0, y: 1 }}
       >
         <View style={[Profile, { overflow: "hidden" }]}>
-          {usuario?.img ? (
+          {fotoPerfilUri ? (
             <Image
-              source={require("@/assets/img/perfil.jpg")}
+              source={{ uri: fotoPerfilUri }}
               style={{ width: 120, height: 120 }}
             />
           ) : (
             <Text style={ProfileText}>
-              {usuario?.nome ? FormatarIconNome(usuario.nome) : ":/"}
+              {usuario?.nome ? FormatarIconNome(usuario.nome) : ":)"}
             </Text>
           )}
         </View>
@@ -169,7 +172,7 @@ export default function Perfil() {
               },
             ]}
             activeOpacity={0.75}
-            // onPress={logout}
+            onPress={logout}
           >
             <SairIcon color={Colors.darkred} />
             <Text style={[BtnText, { color: Colors.darkred }]}>

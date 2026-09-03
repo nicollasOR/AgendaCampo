@@ -39,12 +39,22 @@ export default function AlterarSenha() {
         <Text style={Label}>Nova Senha</Text>
         <View style={CampoInput}>
           <CadeadoIcon color={Colors.blue} style={InputIcon} />
-          <TextInput style={Input} placeholder="*******" secureTextEntry />
+          <TextInput
+            style={Input}
+            placeholder="*******"
+            placeholderTextColor={Colors.inactive}
+            secureTextEntry
+          />
         </View>
         <Text style={Label}>Nova Confirmar Senha</Text>
         <View style={CampoInput}>
           <CadeadoIcon color={Colors.blue} style={InputIcon} />
-          <TextInput style={Input} placeholder="*******" secureTextEntry />
+          <TextInput
+            style={Input}
+            placeholder="*******"
+            placeholderTextColor={Colors.inactive}
+            secureTextEntry
+          />
         </View>
       </View>
       <TouchableOpacity style={Btn} onPress={() => router.push("/(tabs)/home")}>
