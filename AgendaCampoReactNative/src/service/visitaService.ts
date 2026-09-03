@@ -19,19 +19,20 @@ export const visitaService = {
     const formData = new FormData();
 
     const dataInicio = juntarDataHora(
-      dados.data,
+      dados.dataInicial,
       dados.horario
     );
 
     formData.append('nomeEvento', dados.nomeEvento);
     formData.append('descricao', dados.descricao);
     formData.append('nomeSede', dados.nomeSede);
-    formData.append('Logradouro', dados.logradouro);
-    formData.append('Bairro', dados.bairro);
-    formData.append('Numero', String(dados.numero));
-    formData.append('Cep', dados.cep);
+    formData.append('logradouro', dados.logradouro);
+    formData.append('bairro', dados.bairro);
+    formData.append('numero', String(dados.numero));
+    formData.append('cep', dados.cep);
     formData.append('clienteNome', dados.cliente);
     formData.append('dataInicio', dataInicio.toISOString());
+    formData.append('dataTermino', dados.dataFinal.toISOString());
 
     const resposta = await api.post<Visita>("Visita", formData);
 
