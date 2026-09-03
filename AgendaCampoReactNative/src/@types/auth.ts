@@ -32,6 +32,7 @@ export interface AuthContextData {
   loading: boolean;
   erro: string | null;
   handleLogin: () => Promise<void>;
+  handleMockLogin: () => Promise<void>;
   logout: () => Promise<void>;
 }
 

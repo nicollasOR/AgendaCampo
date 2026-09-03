@@ -35,7 +35,7 @@ import ArrowIcon from "@/assets/svg/ArrowIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 
 export default function Login() {
-  const { email, setEmail, senha, setSenha, loading, erro, handleLogin } =
+  const { email, setEmail, senha, setSenha, loading, erro, handleMockLogin } =
     useAuth();
 
   return (
@@ -82,7 +82,11 @@ export default function Login() {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={Btn} onPress={handleLogin} disabled={loading}>
+      <TouchableOpacity
+        style={Btn}
+        onPress={handleMockLogin}
+        disabled={loading}
+      >
         {loading ? (
           <ActivityIndicator color={Colors.white} />
         ) : (

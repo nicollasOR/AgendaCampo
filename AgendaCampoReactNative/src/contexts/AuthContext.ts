@@ -147,6 +147,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.replace("/login");
   }
 
+  async function handleMockLogin() {
+    Keyboard.dismiss();
+    setErro(null);
+    setLoading(true);
+
+    try {
+      const usuarioMock: Usuario = {
+        nome: "Usuário de Teste",
+        email: "teste@teste",
+        img: "",
+      };
+
+      const tokenMock = "mock-jwt-token-para-testes-locais";
+
+      setToken(tokenMock);
+      setUsuario(usuarioMock);
+
+      // Salva nos storages locais
+      await AsyncStorage.setItem(USER_KEY, JSON.stringify(usuarioMock));
+      // Se o seu authService salvar o token no SecureStore/AsyncStorage, chame-o aqui se necessário:
+      // await authService.saveToken(tokenMock);
+
+      router.replace("/(tabs)/home");
+    } catch (err) {
+      setErro("Erro ao efetuar login de teste.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return React.createElement(
     AuthContext.Provider,
     {
@@ -160,6 +190,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         erro,
         handleLogin,
+        handleMockLogin,
         logout,
       },
     },
