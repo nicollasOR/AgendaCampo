@@ -156,7 +156,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const usuarioMock: Usuario = {
         nome: "Usuário de Teste",
-        email: "teste@teste",
+        email: "",
         imgURL: "",
       };
 

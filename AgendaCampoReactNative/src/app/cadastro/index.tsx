@@ -56,17 +56,14 @@ export default function Cadastro() {
     <SafeAreaView style={[Container, Column, Center]}>
       <StatusBar style="dark" />
       <View style={Center}>
-        {telaEditar ? (
-          <View style={Row}>
-            <Logo width={60} height={60} color={Colors.btn} />
-            <Text style={[H1, { color: Colors.btn }]}>AgendaCampo</Text>
-          </View>
-        ) : (
-          <>
-            <Logo color={Colors.btn} />
-            <Text style={[H1, { color: Colors.btn }]}>AgendaCampo</Text>
-          </>
-        )}
+        <View style={telaEditar ? Row : Center}>
+          <Logo
+            width={telaEditar ? 60 : 120}
+            height={telaEditar ? 60 : 120}
+            color={Colors.btn}
+          />
+          <Text style={[H1, { color: Colors.btn }]}>Agenda Campo</Text>
+        </View>
         <Text style={[H3, { color: Colors.gray }]}>
           {telaEditar
             ? "Edite as informações do seu perfil"
@@ -79,7 +76,10 @@ export default function Cadastro() {
           <View style={Center}>
             <Text style={Label}>Foto de Perfil</Text>
             <TouchableOpacity
-              style={CampoInputImg}
+              style={[
+                CampoInputImg,
+                fotoPerfilUri ? "" : { borderStyle: "dashed" },
+              ]}
               onPress={selecionarOpcaoImagem}
               activeOpacity={0.7}
             >
@@ -109,20 +109,22 @@ export default function Cadastro() {
           </View>
         )}
 
-        <Text style={Label}>Nome</Text>
-        <View style={CampoInput}>
-          <PerfilIcon color={Colors.blue} style={InputIcon} />
-          <TextInput
-            style={Input}
-            placeholder="Nome"
-            placeholderTextColor={Colors.inactive}
-            value={usuario?.nome ? usuario.nome : nome}
-            onChangeText={setNome}
-          />
+        <View>
+          <Text style={Label}>Nome</Text>
+          <View style={CampoInput}>
+            <PerfilIcon color={Colors.blue} style={InputIcon} />
+            <TextInput
+              style={Input}
+              placeholder="Nome"
+              placeholderTextColor={Colors.inactive}
+              value={usuario?.nome ? usuario.nome : nome}
+              onChangeText={setNome}
+            />
+          </View>
         </View>
 
         {!telaEditar && (
-          <>
+          <View>
             <Text style={Label}>E-mail</Text>
             <View style={CampoInput}>
               <EmailIcon color={Colors.blue} style={InputIcon} />
@@ -136,24 +138,26 @@ export default function Cadastro() {
                 autoCapitalize="none"
               />
             </View>
-          </>
+          </View>
         )}
 
-        <Text style={Label}>Senha</Text>
-        <View style={CampoInput}>
-          <CadeadoIcon color={Colors.blue} style={InputIcon} />
-          <TextInput
-            style={Input}
-            placeholder="*******"
-            placeholderTextColor={Colors.inactive}
-            secureTextEntry
-            value={senha}
-            onChangeText={setSenha}
-          />
+        <View>
+          <Text style={Label}>Senha</Text>
+          <View style={CampoInput}>
+            <CadeadoIcon color={Colors.blue} style={InputIcon} />
+            <TextInput
+              style={Input}
+              placeholder="*******"
+              placeholderTextColor={Colors.inactive}
+              secureTextEntry
+              value={senha}
+              onChangeText={setSenha}
+            />
+          </View>
         </View>
 
         {!telaEditar && (
-          <>
+          <View>
             <Text style={Label}>Confirmar Senha</Text>
             <View style={CampoInput}>
               <CadeadoIcon color={Colors.blue} style={InputIcon} />
@@ -166,7 +170,7 @@ export default function Cadastro() {
                 onChangeText={setConfirmarSenha}
               />
             </View>
-          </>
+          </View>
         )}
       </View>
 

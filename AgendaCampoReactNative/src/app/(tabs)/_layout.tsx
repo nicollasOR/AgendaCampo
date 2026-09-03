@@ -1,12 +1,13 @@
 import { Tabs } from "expo-router";
-import { View } from "react-native";
+import { Animated } from "react-native";
+import { useEffect, useRef } from "react";
+import { StatusBar } from "expo-status-bar";
 
 import { Colors } from "@/src/constants/theme";
 
 import HomeIcon from "@/assets/svg/HomeIcon.svg";
 import CriarIcon from "@/assets/svg/CriarIcon.svg";
 import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
-import { StatusBar } from "expo-status-bar";
 
 function TabIconWrapper({
   children,
@@ -15,8 +16,18 @@ function TabIconWrapper({
   children: React.ReactNode;
   focused: boolean;
 }) {
+  const scaleAnim = useRef(new Animated.Value(focused ? 1 : 0.8)).current;
+
+  useEffect(() => {
+    Animated.spring(scaleAnim, {
+      toValue: focused ? 1.1 : 1,
+      friction: 4,
+      useNativeDriver: true,
+    }).start();
+  }, [focused]);
+
   return (
-    <View
+    <Animated.View
       style={{
         width: 40,
         height: 40,
@@ -24,17 +35,18 @@ function TabIconWrapper({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: focused ? Colors.smoothBgc2 : "transparent",
+        transform: [{ scale: scaleAnim }],
       }}
     >
       {children}
-    </View>
+    </Animated.View>
   );
 }
 
 export default function TabsLayout() {
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <Tabs
         screenOptions={{
           headerShown: false,
@@ -43,13 +55,15 @@ export default function TabsLayout() {
             borderColor: Colors.lightblue,
             borderTopWidth: 1,
             paddingBottom: 8,
-            paddingTop: 10,
+            paddingTop: 8,
+            height: 80,
           },
           tabBarActiveTintColor: Colors.blue,
           tabBarInactiveTintColor: Colors.inactive,
           tabBarLabelStyle: {
-            fontSize: 14,
+            fontSize: 12,
             fontFamily: "Outfit_700Bold",
+            marginTop: 4,
           },
         }}
       >
