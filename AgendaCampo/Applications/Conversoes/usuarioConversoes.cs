@@ -12,7 +12,7 @@ public class usuarioConversoes
             usuarioID = usuario.usuarioID,
             email = usuario.email,
             nome = usuario.nome,
-            imgURL = $"usuario/{usuario.Imagem}/imagem",
+            imgURL = $"api/Usuario/img/{usuario.usuarioID}",
             telefone = usuario.telefone,
             statusUsuario = usuario.statusUsuario ? true : false
         };

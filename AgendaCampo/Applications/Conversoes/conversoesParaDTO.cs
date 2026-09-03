@@ -9,6 +9,8 @@ public class conversoesParaDTO
 {
     public static byte[] converterImg(IFormFile img)
     {
+        if (img == null || img.Length == 0) return Array.Empty<byte>();
+
         using var ms = new MemoryStream();
         img.CopyTo(ms);
         return ms.ToArray();
@@ -16,8 +18,11 @@ public class conversoesParaDTO
 
     public static IFormFile converterParaIFormFile(byte[] img)
     {
-        using var ms = new MemoryStream(img);
-        return new FormFile(ms, 0, img.Length, string.Empty, string.Empty);
+        if (img == null || img.Length == 0) return null!;
+
+        var ms = new MemoryStream(img);
+        ms.Position = 0;
+        return new FormFile(ms, 0, img.Length, "img", "foto.jpg");
     }
 
     public static string converterParaString(byte[] img)
