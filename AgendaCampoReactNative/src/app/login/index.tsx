@@ -1,5 +1,5 @@
-import React from "react";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -40,6 +40,7 @@ export default function Login() {
 
   return (
     <SafeAreaView style={[Container, Column, Center]}>
+      <StatusBar style="dark" />
       <View style={Center}>
         <Logo color={Colors.btn} />
         <Text style={[H1, { color: Colors.btn }]}>AgendaCampo</Text>

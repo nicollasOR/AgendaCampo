@@ -40,7 +40,6 @@ export default function Perfil() {
 
   const { usuario, logout } = useAuth();
   
-  // Formata o valor retornado pela API (usuario.img)
   const { getImagemUrl } = useImage();
   const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
 

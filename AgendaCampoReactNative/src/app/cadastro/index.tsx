@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useImage } from "@/src/hooks/useImage";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useImagePicker } from "@/src/hooks/useImagePicker";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -33,7 +35,6 @@ import UploadIcon from "@/assets/svg/UploadIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 import ArrowBackIcon from "@/assets/svg/ArrowBackIcon.svg";
 import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
-import { useImage } from "@/src/hooks/useImage";
 
 export default function Cadastro() {
   const router = useRouter();
@@ -48,12 +49,12 @@ export default function Cadastro() {
 
   const telaEditar = true;
 
-  // Formata o valor retornado pela API (usuario.img)
   const { getImagemUrl } = useImage();
   const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
 
   return (
     <SafeAreaView style={[Container, Column, Center]}>
+      <StatusBar style="dark" />
       <View style={Center}>
         {telaEditar ? (
           <View style={Row}>
