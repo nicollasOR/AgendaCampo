@@ -47,20 +47,6 @@ export default function Agendamento() {
   const [data, setData] = useState<Date>(new Date());
   const [mostrarCalendario, setMostrarCalendario] = useState<boolean>(false);
   const [textoCalendario, setTextoCalendario] = useState<string>('Selecionar data...'); // Texto inicial que vai estar escrito no botão, muda quando a data for selecionada
-        // <View style={Form}>
-        //   <View style={Column}>
-        //     <View style={CampoForm}>
-        //       <Text style={[Label, { color: Colors.darkblue }]}>
-        //         Cliente / Propriedade
-        //       </Text>
-        //       <View style={CampoInput}>
-        //         <PesquisaIcon style={InputIcon} color={Colors.gray} />
-        //         <TextInput
-        //           style={[Input, { color: Colors.red }]}
-        //           placeholder="Buscar cliente..."
-        //         />
-        //       </View>
-        //     </View>
 
   // Controlar a formatação do horário 
   const [horario, setHorario] = useState<Date>(new Date());

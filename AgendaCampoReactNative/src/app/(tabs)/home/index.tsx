@@ -15,14 +15,8 @@ import {
   Scroll,
   SpaceBetween,
 } from "@/src/constants/theme";
-<<<<<<< HEAD
-
-import AgendaCard from "@/src/components/agendaCard";
-import CriarIcon from "@/assets/svg/CriarIcon.svg";
-=======
 import CriarIcon from "@/assets/svg/CriarIcon.svg";
 import AgendaCard from "@/src/components/agendaCard";
->>>>>>> acf1011a9e8754e70556f63abe293c2590933415
 import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
 
 export default function Home() {
