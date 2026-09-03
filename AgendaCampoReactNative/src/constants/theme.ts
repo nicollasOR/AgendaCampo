@@ -122,6 +122,17 @@ export const theme = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  round: {
+    borderWidth: 4,
+    borderColor: Colors.bgc,
+    overflow: "hidden",
+    borderRadius: 999,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
+  },
   icon: {
     width: 48,
     height: 48,
@@ -272,6 +283,11 @@ export const theme = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: Colors.bgc,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
   },
 
   // --- Botões ---
@@ -297,6 +313,7 @@ export const theme = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+
   btnText: {
     ...baseText,
     color: Colors.white,
@@ -318,10 +335,12 @@ export const theme = StyleSheet.create({
   h3: {
     ...baseText,
     fontSize: 22,
+    fontFamily: Font.regular,
   },
   h4: {
     ...baseText,
     fontSize: 18,
+    fontFamily: Font.regular,
   },
   p: {
     ...baseText,
@@ -356,6 +375,7 @@ export const {
 
   // Componentes
   info: Info,
+  round: Round,
   icon: Icon,
   card: Card,
   cardInfo: CardInfo,

@@ -110,7 +110,7 @@ export default function Login() {
         onPress={() => router.replace("/cadastro")}
       >
         <Text style={[BtnText, { color: Colors.blue }]}>Cadastre-se</Text>
-        <ArrowIcon color={Colors.btn} />
+        <ArrowIcon color={Colors.blue} />
       </TouchableOpacity>
 
       <Text style={[P, { position: "absolute", bottom: 40 }]}>

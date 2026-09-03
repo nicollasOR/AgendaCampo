@@ -23,6 +23,7 @@ import {
   Profile,
   ProfileText,
 } from "@/src/constants/theme";
+import { useImage } from "@/src/hooks/useImage";
 import { FormatarIconNome } from "@/src/utils/formatarNome";
 import SairIcon from "@/assets/svg/SairIcon.svg";
 import AjudaIcon from "@/assets/svg/AjudaIcon.svg";
@@ -38,6 +39,10 @@ export default function Perfil() {
   const router = useRouter();
 
   const { usuario, logout } = useAuth();
+  const { getImagemUrl } = useImage();
+
+  // Formata o valor retornado pela API (usuario.img)
+  const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
 
   return (
     <SafeAreaView style={Container} edges={["top", "left", "right"]}>
@@ -48,9 +53,9 @@ export default function Perfil() {
         end={{ x: 0, y: 1 }}
       >
         <View style={[Profile, { overflow: "hidden" }]}>
-          {usuario?.img ? (
+          {fotoPerfilUri ? (
             <Image
-              source={require("@/assets/img/perfil.jpg")}
+              source={{ uri: fotoPerfilUri }}
               style={{ width: 120, height: 120 }}
             />
           ) : (
