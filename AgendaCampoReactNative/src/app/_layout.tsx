@@ -125,6 +125,7 @@ function AnimatedSplashScreen({
     </View>
   );
 }
+
 function CustomHeaderTitle() {
   const router = useRouter();
   const scaleAnim = useRef(new Animated.Value(1)).current;
