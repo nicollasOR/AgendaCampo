@@ -12,4 +12,8 @@ export const visitaService = {
         return response.data
     },
 
+    async listarFuturasVisitas(): Promise<visitaGet[]>{
+        const response = await api.get<visitaGet[]>("Visita/futurasVisitas")
+        return response.data
+    }
 }

@@ -6,9 +6,9 @@ import { Alert } from "react-native";
 export function useVisita() {
     const [visita, setVisita] = useState<visitaGet[]>([]);
 
-    async function listarVisita() {
+    async function listarFuturasVisitas() {
         try {
-            const dados = await visitaService.listar();
+            const dados = await visitaService.listarFuturasVisitas();
             setVisita(dados);
         } catch (error) {
             Alert.alert("Erro ao listar!")
@@ -16,12 +16,12 @@ export function useVisita() {
     }
 
     useEffect(() => {
-        listarVisita();
+        listarFuturasVisitas();
     }, [])
 
     return {
         visita,
-        listarVisita
+        listarFuturasVisitas
     };
 
 }

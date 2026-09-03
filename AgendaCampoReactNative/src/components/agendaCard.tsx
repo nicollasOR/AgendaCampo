@@ -20,8 +20,50 @@ import CalendarioIcon from "@/assets/svg/CalendarioIcon.svg";
 import VisitaCheckIcon from "@/assets/svg/VisitaCheckIcon.svg";
 import { visitaGet, visitaGetHome } from "../@types/visitas";
 
-export default function AgendaCard({statusVisita, nomeEvento, visitaID, dataInicio, logradouroEndereco, dataTermino}:visitaGetHome) {
+export default function AgendaCard({statusVisita, nomeEvento, visitaID, dataInicio, logradouro, bairro, numero, dataTermino}:visitaGetHome) {
   const router = useRouter();
+
+      function formatarData(dt : string) {
+        if (!dt) return '';
+        try {
+            const data = new Date(dt);
+            return isNaN(data.getTime()) ? dt : data.toLocaleString('pt-BR');
+        } catch {
+            return dt;
+        }
+    };
+
+    function formatarHora(dt: string) {
+    if (!dt) return '';
+
+    try {
+        const data = new Date(dt);
+
+        return isNaN(data.getTime())
+            ? dt
+            : data.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+    } catch {
+        return dt;
+    }
+}
+
+    function formatarDataSemHoras(dt: string) {
+    if (!dt) return '';
+
+    try {
+        const data = new Date(dt);
+
+        return isNaN(data.getTime())
+            ? dt
+            : data.toLocaleDateString('pt-BR');
+    } catch {
+        return dt;
+    }
+    
+}
 
   return (
     <View style={CardInfo}>
@@ -39,16 +81,16 @@ export default function AgendaCard({statusVisita, nomeEvento, visitaID, dataInic
         <View style={List}>
           <View style={Row}>
             <CalendarioIcon color={Colors.darkblue} />
-            <Text style={[P, { color: Colors.gray }]}>{String(dataInicio.getDate)}</Text>
+            <Text style={[P, { color: Colors.gray }]}>{formatarDataSemHoras(String(dataInicio))}</Text>
           </View>
           <View style={Row}>
             <RelogioIcon color={Colors.darkblue} />
-            <Text style={[P, { color: Colors.gray }]}>{String(dataInicio.getHours)} - {String(dataTermino.getHours)}</Text>
+            <Text style={[P, { color: Colors.gray }]}>{formatarHora(String(dataInicio))} - {formatarHora(String(dataTermino))}</Text>
           </View>
           <View style={Row}>
             <LocalIcon color={Colors.darkblue} />
             <Text style={[P, { color: Colors.gray }]} numberOfLines={2}>
-              {logradouroEndereco}
+              {logradouro}, {numero}, {bairro}
             </Text>
           </View>
         </View>
@@ -59,10 +101,10 @@ export default function AgendaCard({statusVisita, nomeEvento, visitaID, dataInic
           <Text style={[P, { color: Colors.btn }]}>Detalhes</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[Row, Box2]}>
+        {/* <TouchableOpacity style={[Row, Box2]}>
           <ArrowMapIcon color={Colors.white} />
           <Text style={[P, { color: Colors.white }]}>Iniciar Rota</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

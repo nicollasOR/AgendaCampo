@@ -165,7 +165,7 @@ export default function Perfil() {
               },
             ]}
             activeOpacity={0.75}
-            // onPress={logout}
+             onPress={logout}
           >
             <SairIcon color={Colors.darkred} />
             <Text style={[BtnText, { color: Colors.darkred }]}>

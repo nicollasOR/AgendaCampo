@@ -6,19 +6,13 @@ export interface usuarioGET_Visita {
     imgURL: string
 }
 
-export interface enderecoGET_Visita{
-    enderecoId: number,
-    logradouro: string,
-    bairro: string,
-    numero: number,
-    cep: string
-}
-
 export interface visitaGetHome {
     visitaID: number,
     nomeEvento: string,
     statusVisita: string,
-    logradouroEndereco: string,
+    logradouro: string, 
+    numero: number,
+    bairro: string, 
     dataInicio: Date,
     dataTermino: Date
 }
@@ -28,10 +22,11 @@ export interface visitaGet {
     nomeEvento: string,
     descricao: string,
     statusVisita: string,
-    endereco: enderecoGET_Visita[],
+    logradouro: string, 
+    numero: number,
+    bairro: string, 
     dataInicio: Date,
     dataTermino: Date,
-    logradouroEndereco: string,
     nomeCliente: string,
     tecnicos: usuarioGET_Visita[]
 }
@@ -44,9 +39,10 @@ export interface visitaPost{
     
     statusVisitaId: number,
     clienteId: string,
-    enderecoId: number,
+    logradouro: string, 
+    numero: number,
+    bairro: string, 
     dataInicio: Date,
     dataTermino: Date,
     usuariosIds: string[]
-      
 }

@@ -24,13 +24,13 @@ import { useAuth } from "@/src/contexts/AuthContext";
 
 export default function Home() {
   const {usuario} = useAuth();
-  const{visita, listarVisita} = useVisita();
+  const{visita, listarFuturasVisitas} = useVisita();
   const router = useRouter();
 
 
   useFocusEffect(
     useCallback(() => {
-      listarVisita();
+      listarFuturasVisitas();
     }, [])
   );
 
@@ -60,10 +60,11 @@ export default function Home() {
               </View>
 
               <View style={Box2}>
-                <Text style={[P, { color: Colors.white }]}>2 Hoje</Text>
+                <Text style={[P, { color: Colors.white }]}>{visita.length} Hoje</Text>
               </View>
             </View>
             <FlatList
+              style={[{gap: 15}]}
               data={visita}
               keyExtractor={(item) => String(item.visitaID)}
               // keyExtractor={(item: OrdemServico) => String(item.osId)}
@@ -74,19 +75,15 @@ export default function Home() {
                   statusVisita={item.statusVisita}
                   dataInicio={item.dataInicio}
                   dataTermino={item.dataTermino}
-                  logradouroEndereco={item.logradouroEndereco}
+                  logradouro={item.logradouro}
+                  bairro={item.bairro}
+                  numero={item.numero}
                   nomeEvento={item.nomeEvento}
                 />
               )}
             />
           </View>
         </View>
-        <TouchableOpacity style={Btn}>
-          <CriarIcon color={Colors.white} />
-          <Text style={[BtnText, { color: Colors.white }]}>
-            Agendar Nova Visita
-          </Text>
-        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
