@@ -39,9 +39,9 @@ export default function Perfil() {
   const router = useRouter();
 
   const { usuario, logout } = useAuth();
-  const { getImagemUrl } = useImage();
-
+  
   // Formata o valor retornado pela API (usuario.img)
+  const { getImagemUrl } = useImage();
   const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
 
   return (
