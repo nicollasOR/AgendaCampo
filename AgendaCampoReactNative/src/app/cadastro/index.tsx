@@ -32,22 +32,25 @@ import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
 import UploadIcon from "@/assets/svg/UploadIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 import ArrowBackIcon from "@/assets/svg/ArrowBackIcon.svg";
+import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
+import { useImage } from "@/src/hooks/useImage";
 
 export default function Cadastro() {
   const router = useRouter();
+  const { usuario } = useAuth();
+
   const { imagem, selecionarOpcaoImagem } = useImagePicker();
 
-  const [nome, setNome] = useState<string | undefined>("");
+  const [nome, setNome] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
   const [confirmarSenha, setConfirmarSenha] = useState<string>("");
 
   const telaEditar = true;
 
-  // if (telaEditar) {
-  //   const { usuario } = useAuth();
-  //   setNome(usuario?.nome);
-  // }
+  // Formata o valor retornado pela API (usuario.img)
+  const { getImagemUrl } = useImage();
+  const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
 
   return (
     <SafeAreaView style={[Container, Column, Center]}>
@@ -79,12 +82,20 @@ export default function Cadastro() {
               onPress={selecionarOpcaoImagem}
               activeOpacity={0.7}
             >
-              {imagem ? (
-                <Image
-                  source={{ uri: imagem.uri }}
-                  style={InputImg}
-                  resizeMode="cover"
-                />
+              {fotoPerfilUri ? (
+                <>
+                  <Image
+                    source={{ uri: fotoPerfilUri }}
+                    style={InputImg}
+                    resizeMode="cover"
+                  />
+                  <EditarPerfilIcon
+                    color={Colors.white}
+                    width={32}
+                    height={32}
+                    style={{ position: "absolute" }}
+                  />
+                </>
               ) : (
                 <>
                   <UploadIcon color={Colors.blue} />
@@ -94,9 +105,6 @@ export default function Cadastro() {
                 </>
               )}
             </TouchableOpacity>
-            {imagem && (
-              <Text style={[P, { color: Colors.btn }]}>{imagem.name}</Text>
-            )}
           </View>
         )}
 
@@ -107,7 +115,7 @@ export default function Cadastro() {
             style={Input}
             placeholder="Nome"
             placeholderTextColor={Colors.inactive}
-            value={nome}
+            value={usuario?.nome ? usuario.nome : nome}
             onChangeText={setNome}
           />
         </View>
