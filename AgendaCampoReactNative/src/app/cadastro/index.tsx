@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useRouter } from "expo-router";
-import { useImagePicker } from "../../hooks/useImagePicker";
+import { useAuth } from "@/src/contexts/AuthContext";
+import { useImagePicker } from "@/src/hooks/useImagePicker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import {
@@ -36,12 +37,17 @@ export default function Cadastro() {
   const router = useRouter();
   const { imagem, selecionarOpcaoImagem } = useImagePicker();
 
-  const [nome, setNome] = useState<string>("");
+  const [nome, setNome] = useState<string | undefined>("");
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
   const [confirmarSenha, setConfirmarSenha] = useState<string>("");
 
-  const telaEditar = !true;
+  const telaEditar = true;
+
+  // if (telaEditar) {
+  //   const { usuario } = useAuth();
+  //   setNome(usuario?.nome);
+  // }
 
   return (
     <SafeAreaView style={[Container, Column, Center]}>
@@ -100,6 +106,7 @@ export default function Cadastro() {
           <TextInput
             style={Input}
             placeholder="Nome"
+            placeholderTextColor={Colors.inactive}
             value={nome}
             onChangeText={setNome}
           />
@@ -113,6 +120,7 @@ export default function Cadastro() {
               <TextInput
                 style={Input}
                 placeholder="Nome@email.com"
+                placeholderTextColor={Colors.inactive}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -128,6 +136,7 @@ export default function Cadastro() {
           <TextInput
             style={Input}
             placeholder="*******"
+            placeholderTextColor={Colors.inactive}
             secureTextEntry
             value={senha}
             onChangeText={setSenha}
@@ -142,6 +151,7 @@ export default function Cadastro() {
               <TextInput
                 style={Input}
                 placeholder="*******"
+                placeholderTextColor={Colors.inactive}
                 secureTextEntry
                 value={confirmarSenha}
                 onChangeText={setConfirmarSenha}

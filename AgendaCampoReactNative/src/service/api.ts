@@ -8,9 +8,6 @@ const BASE_URL = "http://10.0.2.2:5100/api/";
 export const api = axios.create({
   baseURL: BASE_URL,
   timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 api.interceptors.request.use(async (config) => {

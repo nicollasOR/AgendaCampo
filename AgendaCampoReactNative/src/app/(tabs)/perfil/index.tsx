@@ -23,6 +23,7 @@ import {
   Profile,
   ProfileText,
 } from "@/src/constants/theme";
+import { useImagePicker } from "@/src/hooks/useImagePicker";
 import { FormatarIconNome } from "@/src/utils/formatarNome";
 import SairIcon from "@/assets/svg/SairIcon.svg";
 import AjudaIcon from "@/assets/svg/AjudaIcon.svg";
@@ -39,6 +40,12 @@ export default function Perfil() {
 
   const { usuario, logout } = useAuth();
 
+  // Extrai a função de dentro do hook
+  const { getImagemUrl } = useImagePicker();
+
+  // Formata o valor retornado pela API (usuario.img)
+  const fotoPerfilUri = getImagemUrl(usuario?.img);
+
   return (
     <SafeAreaView style={Container} edges={["top", "left", "right"]}>
       <LinearGradient
@@ -48,9 +55,9 @@ export default function Perfil() {
         end={{ x: 0, y: 1 }}
       >
         <View style={[Profile, { overflow: "hidden" }]}>
-          {usuario?.img ? (
+          {fotoPerfilUri ? (
             <Image
-              source={require("@/assets/img/perfil.jpg")}
+              source={{ uri: fotoPerfilUri }}
               style={{ width: 120, height: 120 }}
             />
           ) : (

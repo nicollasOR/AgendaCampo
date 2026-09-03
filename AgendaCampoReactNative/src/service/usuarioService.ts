@@ -16,20 +16,6 @@ export async function listarUsuario() {
   }
 }
 
-class usuarioPostMethod {
-  static toFormData(dados: usuarioPOST): FormData {
-    const formData = new FormData();
-
-    if (dados.nome && dados.email && dados.senha) {
-      formData.append("nome", dados.nome);
-      formData.append("email", dados.email);
-      formData.append("senha", dados.senha);
-    }
-
-    return formData;
-  }
-}
-
 export async function criarUsuario(dados: usuarioPOST) {
   try {
     const response = toFormData(dados);
