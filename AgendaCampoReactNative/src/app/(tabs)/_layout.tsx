@@ -87,7 +87,7 @@ export default function TabsLayout() {
       />
 
       <Tabs.Screen
-        name="detalhe/index"
+        name="detalhe/[id]"
         options={{
           href: null,
         }}

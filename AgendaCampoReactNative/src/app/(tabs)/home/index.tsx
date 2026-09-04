@@ -18,7 +18,7 @@ import {
 import CriarIcon from "@/assets/svg/CriarIcon.svg";
 import AgendaCard from "@/src/components/agendaCard";
 import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
-import { useVisita } from "../../hooks/useVisita";
+import { useVisita } from "../../../hooks/useVisita";
 import { useCallback } from "react";
 import { useAuth } from "@/src/contexts/AuthContext";
 
@@ -26,7 +26,7 @@ export default function Home() {
   const {usuario} = useAuth();
   const{visita, listarFuturasVisitas} = useVisita();
   const router = useRouter();
-
+console.log(visita)
 
   useFocusEffect(
     useCallback(() => {
@@ -63,7 +63,7 @@ export default function Home() {
                 <Text style={[P, { color: Colors.white }]}>{visita.length} Hoje</Text>
               </View>
             </View>
-            <FlatList
+            {/* <FlatList
               style={[{gap: 15}]}
               data={visita}
               keyExtractor={(item) => String(item.visitaID)}
@@ -81,7 +81,17 @@ export default function Home() {
                   nomeEvento={item.nomeEvento}
                 />
               )}
-            />
+            /> */}
+            <View style={{ gap: 15 }}>
+        {
+        visita?.map((item) => (
+          
+          <AgendaCard 
+            key={item.visitaID} 
+            {...item} 
+          />
+        ))}
+      </View>
           </View>
         </View>
       </ScrollView>

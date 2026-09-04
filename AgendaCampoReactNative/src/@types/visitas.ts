@@ -28,6 +28,7 @@ export interface visitaGet {
     dataInicio: Date,
     dataTermino: Date,
     nomeCliente: string,
+    cep: string,
     tecnicos: usuarioGET_Visita[]
 }
 

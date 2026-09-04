@@ -9,7 +9,7 @@ import { router } from "expo-router";
 import { jwtDecode } from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { authService } from "@/src/app/service/authService";
+import { authService } from "@/src/service/authService";
 import {
   AuthContextData,
   Usuario,

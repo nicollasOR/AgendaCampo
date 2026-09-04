@@ -97,7 +97,7 @@ export default function AgendaCard({statusVisita, nomeEvento, visitaID, dataInic
       </View>
 
       <View style={CardFooter}>
-        <TouchableOpacity style={Box3} onPress={() => router.push("/detalhe")}>
+        <TouchableOpacity style={Box3} onPress={() => router.push("/detalhe/" + visitaID)}>
           <Text style={[P, { color: Colors.btn }]}>Detalhes</Text>
         </TouchableOpacity>
 
