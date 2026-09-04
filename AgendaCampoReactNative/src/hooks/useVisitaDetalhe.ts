@@ -7,7 +7,7 @@ import { Alert } from "react-native";
 
 export function useVisitaDetalhes(id: number | string) {
 
-    const [visita, setVisita] = useState<visitaGet>()
+    const [visita, setVisita] = useState<visitaGet | undefined>()
     const [loading, setLoading] = useState(false);
 
     async function loadVisita() {

@@ -41,20 +41,21 @@ export default function Detalhe() {
 
 
   
-// function dividirTextoNaMetade(texto: string): [string, string] {
-//   const meio: number = Math.floor(texto.length / 2);
+function dividirTextoNaMetade(texto2: string | undefined): [string, string] {
+  const texto = String(texto2)
+  const meio: number = Math.floor(texto.length / 2);
   
-//   // Encontra o primeiro espaço após o ponto médio
-//   let pontoDeCorte: number = texto.indexOf(" ", meio);
+  // Encontra o primeiro espaço após o ponto médio
+  let pontoDeCorte: number = texto.indexOf(" ", meio);
   
-//   // Se não encontrar espaço depois, usa a metade exata
-//   if (pontoDeCorte === -1) pontoDeCorte = meio;
+  // Se não encontrar espaço depois, usa a metade exata
+  if (pontoDeCorte === -1) pontoDeCorte = meio;
 
-//   const parte1: string = texto.slice(0, pontoDeCorte).trim();
-//   const parte2: string = texto.slice(pontoDeCorte).trim();
+  const parte1: string = texto.slice(0, pontoDeCorte).trim();
+  const parte2: string = texto.slice(pontoDeCorte).trim();
 
-//   return [parte1, parte2];
-// }
+  return [parte1, parte2];
+}
 
 // const partes = visita?.descricao.split(". ");
 // const primeiraFrase = partes.shift();
@@ -172,9 +173,8 @@ export default function Detalhe() {
               </Text>
             </View>
             <View style={[Box, Column]}>
-              <Text style={[P, { color: "black" }]}>{visita?.descricao} </Text>
-              {/* Procurar função para dividir o texto pela metade.. */}
-              {/* <Text style={[P, { color: "black" }]}>{visita?.descricao}</Text> */}
+              <Text style={[P, { color: "black" }]}>{dividirTextoNaMetade(visita?.descricao)} </Text>
+              <Text style={[P, { color: "black" }]}>{dividirTextoNaMetade(visita?.descricao)} </Text>
             </View>
           </View>
         </ScrollView>
