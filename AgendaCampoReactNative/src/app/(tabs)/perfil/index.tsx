@@ -79,7 +79,7 @@ export default function Perfil() {
         maskElement={
           <LinearGradient
             colors={["transparent", "black", "black", "transparent"]}
-            locations={[0, 0.1, 0.975, 1]}
+            locations={[0, 0.1, 1, 1]}
             style={{ flex: 1 }}
           />
         }

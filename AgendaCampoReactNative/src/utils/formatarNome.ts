@@ -11,3 +11,15 @@ export function FormatarIconNome(nome: string) {
     .join("")
     .toUpperCase();
 }
+
+export function FormatarPrimeiroEUltimoNome(nome: string) {
+  if (!nome) return "";
+
+  const partes = nome.trim().split(/\s+/);
+
+  if (partes.length === 1) {
+    return partes[0];
+  }
+
+  return `${partes[0]} ${partes[partes.length - 1]}`;
+}

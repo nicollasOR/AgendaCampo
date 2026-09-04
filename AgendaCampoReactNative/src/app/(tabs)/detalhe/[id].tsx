@@ -141,7 +141,7 @@ export default function Detalhe() {
             <Text style={P}>AÇÕES SECUNDÁRIAS</Text>
             <TouchableOpacity
               style={Btn}
-              onPress={() => router.replace("../reagendar/" + id)}
+              onPress={() => router.replace("/reagendar/" + id)}
             >
               <EditarIcon color={Colors.white} />
               <Text style={[BtnText, { color: Colors.white }]}>Reagendar</Text>

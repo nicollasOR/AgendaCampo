@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Btn,
@@ -29,14 +29,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ReagendaCard from "@/src/components/reagendaCard";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useVisitaDetalhes } from "@/src/hooks/useVisitaDetalhe";
-import ReagendarIcon from "@/assets/svg/CalendarioReagendarIcon.svg";
+import ReagendarIcon from "@/assets/svg/EditarIcon.svg";
 
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { formatacoes } from "@/src/utils/converterData";
 import { visitaPatch } from "@/src/@types/visita";
 
