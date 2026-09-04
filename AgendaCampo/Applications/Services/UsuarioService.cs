@@ -70,7 +70,7 @@ namespace RoyalGamess.Aplications.Services
             byte[] img = _rep.ObterImg(id);
 
             if (img == null || img.Length == 0)
-                throw new DomainException("Imagem não encontrada");
+                throw new DomainException("imagem não encontrada");
 
             return img;
         }
@@ -110,14 +110,19 @@ namespace RoyalGamess.Aplications.Services
 
             if (usuarioDTO != null && usuarioBanco.usuarioID != id)
                 throw new DomainException("Usuario inexistente");
-
-            if (_rep.EmailExiste(usuarioDTO.email))
-                throw new DomainException("Já existe um usuário com esse e-mail");
-
+        
+            
+            Usuario usuarioExistenteEmail = _rep.ObterPorEmail(usuarioDTO.email);
+            if (usuarioExistenteEmail != null && usuarioExistenteEmail.usuarioID != id)
+                throw new DomainException("Já existe outro usuário com esse e-mail");
+            
             usuarioBanco.email = usuarioDTO.email;
             usuarioBanco.nome = usuarioDTO.nome;
-            usuarioBanco.senha = HashSenha_(usuarioDTO.senha);
-            usuarioBanco.Imagem = conversoesParaDTO.converterImg(usuarioDTO.img);
+            if (!string.IsNullOrEmpty(usuarioDTO.senha))
+                usuarioBanco.senha = HashSenha_(usuarioDTO.senha);
+
+            if (usuarioDTO.img != null && usuarioDTO.img.Length > 0)
+                usuarioBanco.Imagem = conversoesParaDTO.converterImg(usuarioDTO.img);
             
             _rep.Atualizar(usuarioBanco);
             return usuarioConversoes.lerUsuarioDTO(usuarioBanco);

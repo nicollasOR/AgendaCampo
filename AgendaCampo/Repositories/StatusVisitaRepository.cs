@@ -6,9 +6,9 @@ namespace AgendaCampo.Repositories;
 
 public class StatusVisitaRepository : IStatusVisitaRepository
 {
-    private readonly AgendaCampoNovoContext _ctx;
+    private readonly AgendaCampoAtualContext _ctx;
 
-    public StatusVisitaRepository(AgendaCampoNovoContext ctx) => _ctx = ctx;
+    public StatusVisitaRepository(AgendaCampoAtualContext ctx) => _ctx = ctx;
 
     public List<StatusVisita> Listar()
     {
