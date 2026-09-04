@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { listarVisitasID, visitaGet } from "@/src/service/visitaService";
 import { ScrollView, Image, Text, View, TouchableOpacity } from "react-native";
 import {
   Box,
@@ -28,41 +26,40 @@ import NumeroIcon from "@/assets/svg/NumeroIcon.svg";
 import DetalheIcon from "@/assets/svg/DetalheIcon.svg";
 import CancelarIcon from "@/assets/svg/CancelarIcon.svg";
 import DescricaoIcon from "@/assets/svg/DescricaoIcon.svg";
+import { useVisitaDetalhes } from "@/src/hooks/useVisitaDetalhe";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function Detalhe() {
-  const [visita, setVisita] = useState<visitaGet>();
-  let visitaID: number = 2;
+  // const [visita2, setVisita] = useState<visitaGet | null>(null);
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { visita, formatarData, remover } = useVisitaDetalhes(id);
+  const router = useRouter();
 
-  async function buscarVisitaID() {
-    try {
-      const response = await listarVisitasID(Number(visitaID));
-      setVisita(response.data);
-    } catch (error: any) {
-      return error.response.data;
-    }
+  function dividirTextoNaMetade(texto2: string | undefined): [string, string] {
+    const texto = String(texto2);
+    const meio: number = Math.floor(texto.length / 2);
+
+    // Encontra o primeiro espaço após o ponto médio
+    let pontoDeCorte: number = texto.indexOf(" ", meio);
+
+    // Se não encontrar espaço depois, usa a metade exata
+    if (pontoDeCorte === -1) pontoDeCorte = meio;
+
+    const parte1: string = texto.slice(0, pontoDeCorte).trim();
+    const parte2: string = texto.slice(pontoDeCorte).trim();
+
+    return [parte1, parte2];
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      buscarVisitaID();
-    }, 1000);
-  }, []);
+  // const partes = visita?.descricao.split(". ");
+  // const primeiraFrase = partes.shift();
 
-  const detalhes = {
-    id: "ID: #VS-2023-084",
-    statusAgenda: "Agendada",
-    titulo: "Manutenção Preventiva - Trator John Deere",
-    data: "24 de Outubro, 2023 • 08:00 - 12:00",
-    descricao:
-      "Trator apresentando falha na injeção eletrônica de combustível. Perda de potência durante operação com carga pesada. ",
-    desc2:
-      "- Equipamento: Trator John Deere 8R - Horímetro: 4.520hrs - Obs: Levar scanner de diagnóstico e filtro de combustível sobressalente. ",
-    endereco: "Rodovia BR-163, Km 45, Zona Rural Sorriso - MT, 78890-000",
-  };
+  // if (primeiraFrase !== undefined) {
+  //   // Aqui dentro o TypeScript sabe que 'primeiraFrase' é estritamente 'string'
+  //   minhaFuncao(primeiraFrase);
+  // }
 
-  const client = {
-    nome: `Fazenda São João`,
-  };
+  //   const [primeiraParte, segundaParte] = dividirTextoNaMetade(visita?.descricao)
 
   // function dividirNome(nome:string) {
   //   if(client)
@@ -80,10 +77,10 @@ export default function Detalhe() {
       <View style={Column}>
         <View style={Row}>
           <View style={Box}>
-            <Text style={P}>{detalhes.id}</Text>
+            <Text style={P}>ID: VS#-{visita?.visitaID}</Text>
           </View>
           <View style={Box}>
-            <Text style={P}>{detalhes.statusAgenda}</Text>
+            <Text style={P}>{visita?.statusVisita}</Text>
           </View>
         </View>
         <ScrollView
@@ -92,11 +89,13 @@ export default function Detalhe() {
         >
           <View style={Column}>
             <Text style={[H1, { color: Colors.darkblue }]}>
-              {detalhes.titulo}
+              {visita?.nomeEvento}
             </Text>
             <View style={Row}>
               <DetalheIcon color={Colors.gray} />
-              <Text style={[P, { color: Colors.gray }]}>{detalhes.data}</Text>
+              <Text style={[P, { color: Colors.gray }]}>
+                {formatarData(visita?.dataInicio)}
+              </Text>
             </View>
           </View>
           <View style={Line} />
@@ -110,12 +109,16 @@ export default function Detalhe() {
             <View style={Row}>
               <Image source={require("@/assets/img/logo.png")} />
               <View>
-                <Text style={H4}>Fazenda São João </Text>
-                <Text style={P}>Contato: Roberto Silva (Gerente)</Text>
-                <View style={Row}>
-                  <NumeroIcon />
-                  <Text style={P}>(11) 98765-4321</Text>
-                </View>
+                {visita?.tecnicos?.map((varAux) => (
+                  <View key={varAux.usuarioID}>
+                    <Text style={H4}>{visita.nomeCliente}</Text>
+                    <Text style={P}>Contato: {varAux.nome}</Text>
+                    <View style={Row}>
+                      <NumeroIcon />
+                      <Text style={P}>Email: {varAux.email}</Text>
+                    </View>
+                  </View>
+                ))}
               </View>
             </View>
 
@@ -124,7 +127,9 @@ export default function Detalhe() {
                 <LocalIcon />
                 <Text style={[H4, { color: Colors.black }]}>Endereço</Text>
               </View>
-              <Text style={P}>{detalhes.endereco}</Text>
+              <Text style={P}>
+                {visita?.logradouro} - {visita?.bairro} - {visita?.cep}
+              </Text>
             </View>
           </View>
           <TouchableOpacity style={Btn}>
@@ -134,7 +139,10 @@ export default function Detalhe() {
           <View style={Line} />
           <View style={[Center, Card, Column]}>
             <Text style={P}>AÇÕES SECUNDÁRIAS</Text>
-            <TouchableOpacity style={Btn}>
+            <TouchableOpacity
+              style={Btn}
+              onPress={() => router.replace("../reagendar/" + id)}
+            >
               <EditarIcon color={Colors.white} />
               <Text style={[BtnText, { color: Colors.white }]}>Reagendar</Text>
             </TouchableOpacity>
@@ -147,6 +155,7 @@ export default function Detalhe() {
                   borderWidth: 2,
                 },
               ]}
+              onPress={remover}
             >
               <CancelarIcon color={Colors.darkgray} width={30} />
               <Text style={[BtnText, { color: Colors.darkgray }]}>
@@ -162,8 +171,12 @@ export default function Detalhe() {
               </Text>
             </View>
             <View style={[Box, Column]}>
-              <Text style={[P, { color: "black" }]}>{detalhes.descricao}</Text>
-              <Text style={[P, { color: "black" }]}>{detalhes.desc2}</Text>
+              <Text style={[P, { color: "black" }]}>
+                {dividirTextoNaMetade(visita?.descricao)}{" "}
+              </Text>
+              <Text style={[P, { color: "black" }]}>
+                {dividirTextoNaMetade(visita?.descricao)}{" "}
+              </Text>
             </View>
           </View>
         </ScrollView>

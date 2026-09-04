@@ -1,3 +1,10 @@
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import { useState } from "react";
+import { useVisita } from "@/src/hooks/useVisita";
+import { CriarVisita } from "@/src/@types/visita";
+import { salvarVisitaNoCalendarioNativo } from "@/src/hooks/useCalendario";
 import {
   ActivityIndicator,
   Alert,
@@ -39,14 +46,6 @@ import PesquisaIcon from "@/assets/svg/PesquisaIcon.svg";
 import ConfirmarIcon from "@/assets/svg/ConfirmarIcon.svg";
 import DescricaoIcon from "@/assets/svg/DescricaoIcon.svg";
 import CalendarioIcon from "@/assets/svg/CalendarioIcon.svg";
-
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
-import { useState } from "react";
-import useVisita from "@/src/hooks/useVisita";
-import { CriarVisita } from "@/src/@types/visita";
-import { salvarVisitaNoCalendarioNativo } from "@/src/hooks/useCalendario";
 
 export default function Agendamento() {
   const { agendarVisita } = useVisita();

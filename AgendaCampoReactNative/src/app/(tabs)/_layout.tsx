@@ -3,8 +3,7 @@ import { Animated } from "react-native";
 import { useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 
-// import { Colors } from "@/src/constants/theme";
-import { Colors } from "../../constants/theme";
+import { Colors } from "@/src/constants/theme";
 
 import HomeIcon from "@/assets/svg/HomeIcon.svg";
 import CriarIcon from "@/assets/svg/CriarIcon.svg";
@@ -105,7 +104,7 @@ export default function TabsLayout() {
         />
 
         <Tabs.Screen
-          name="detalhe/index"
+          name="detalhe/[id]"
           options={{
             href: null,
           }}
