@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 
 // import { visitaGet, visitaGetHome } from "../@types";
-import { visitaGet, visitaGetHome } from "@/src/@types/visitas";
+import { visitaGet, visitaGetHome, visitaPatch } from "@/src/@types/visitas";
 import { visitaService } from "../service/visitaService";
 import { Alert } from "react-native";
 
 export function useVisitaDetalhes(id: number | string) {
 
     const [visita, setVisita] = useState<visitaGet>()
+    const [loading, setLoading] = useState(false);
 
     async function loadVisita() {
         try
@@ -38,6 +39,25 @@ export function useVisitaDetalhes(id: number | string) {
     
     }
 
+    async function reagendar(dataInicial: Date, dataFinal: Date){
+        try
+        {
+            const dadosData: visitaPatch = {
+                dataInicio: dataInicial.toISOString(),
+                dataTermino: dataFinal.toISOString()    
+            }
+
+            const response = await visitaService.reagendar(Number(id), dadosData)
+            Alert.alert("Visita reagendada!")
+        }
+
+        catch(error: any)
+        {
+            const mensagem = error.response.data.mensagem || "Não Foi possível reagendar"
+            Alert.alert("Erro ao reagendar", mensagem)
+        }
+    }
+
     useEffect(() => {
         loadVisita()
         // remover()
@@ -55,6 +75,7 @@ export function useVisitaDetalhes(id: number | string) {
     }
     return {
         visita,
+        reagendar,
         formatarData,
         remover
     }

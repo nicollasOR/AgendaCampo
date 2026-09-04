@@ -32,6 +32,12 @@ export interface visitaGet {
     tecnicos: usuarioGET_Visita[]
 }
 
+export interface visitaPatch {
+    // visitaId: number,
+    dataInicio: Date    | string,
+    dataTermino: Date   | string,
+}
+
 export interface visitaPost{
     visitaID: number,
     nomeSede: string,

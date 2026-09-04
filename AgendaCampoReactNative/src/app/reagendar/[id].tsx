@@ -30,6 +30,7 @@ import {
 import CalendarioIcon from "@/assets/svg/CalendarioIcon.svg";
 import ConfirmarIcon from "@/assets/svg/ConfirmarIcon.svg";
 import {
+  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -39,6 +40,9 @@ import {
 import ReagendaCard from "@/src/components/reagendaCard";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useVisitaDetalhes } from "@/src/hooks/useVisitaDetalhe";
+
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+
 export default function Reagendar() {
   const { id } = useLocalSearchParams<{id: string}>()
   const {visita, formatarData, remover} = useVisitaDetalhes(id)
@@ -61,7 +65,15 @@ export default function Reagendar() {
     setData(data);
   };
 
-  const horaValida = (valor: number): void => {};
+  
+
+
+  
+
+
+
+
+
 
   return (
     // style={[Container, {backgroundColor: Colors.gray}]}

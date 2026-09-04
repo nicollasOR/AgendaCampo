@@ -1,4 +1,4 @@
-import { visitaGet, visitaGetHome } from "@/src/@types/visitas"
+import { visitaGet, visitaGetHome, visitaPatch } from "@/src/@types/visitas"
 import { api } from "./api"
 
 export const visitaService = {
@@ -21,6 +21,12 @@ export const visitaService = {
 
     async remover(id: number): Promise<visitaGet>{
         const response = await api.delete<visitaGet>("Visita/" + id)
+        return response.data
+    },
+
+
+    async reagendar(id: number, dados: visitaPatch) : Promise<visitaPatch>{
+        const response = await api.patch<visitaPatch>("Visita/reagendar" + id, dados)
         return response.data
     }
 }
