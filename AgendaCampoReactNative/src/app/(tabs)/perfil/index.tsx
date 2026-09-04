@@ -22,6 +22,7 @@ import {
   Scroll,
   Profile,
   ProfileText,
+  Center,
 } from "@/src/constants/theme";
 import { useImage } from "@/src/hooks/useImage";
 import { FormatarIconNome } from "@/src/utils/formatarNome";
@@ -39,7 +40,7 @@ export default function Perfil() {
   const router = useRouter();
 
   const { usuario, logout } = useAuth();
-  
+
   const { getImagemUrl } = useImage();
   const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
 
@@ -65,7 +66,7 @@ export default function Perfil() {
         </View>
 
         <View style={{ alignItems: "center" }}>
-          <Text style={H1}>{usuario?.nome}</Text>
+          <Text style={[H1, { textAlign: "center" }]}>{usuario?.nome}</Text>
           <View style={Row}>
             <PerfilIcon color={Colors.darkblue} />
             <Text style={H4}>{usuario?.email}</Text>

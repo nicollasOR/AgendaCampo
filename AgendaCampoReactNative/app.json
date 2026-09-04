@@ -24,6 +24,13 @@
       "expo-router",
       "expo-font",
       "expo-secure-store",
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "O aplicativo precisa de acesso ao calendário para salvar as visitas agendadas.",
+          "remindersPermission": "O aplicativo precisa de acesso aos lembretes para agendar visitas."
+        }
+      ],
       "@react-native-community/datetimepicker",
       [
         "expo-splash-screen",
@@ -33,7 +40,6 @@
           "imageWidth": 200
         }
       ]
-
     ]
   }
 }

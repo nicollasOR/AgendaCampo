@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Platform,
   Pressable,
@@ -27,11 +28,11 @@ import {
   Label,
   Scroll,
   TextArea,
-  theme,
 } from "@/src/constants/theme";
 import RuaIcon from "@/assets/svg/RuaIcon.svg";
 import LocalIcon from "@/assets/svg/LocalIcon.svg";
 import NumeroIcon from "@/assets/svg/NumeroIcon.svg";
+import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
 import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
 import CancelarIcon from "@/assets/svg/CancelarIcon.svg";
 import PesquisaIcon from "@/assets/svg/PesquisaIcon.svg";
@@ -39,155 +40,220 @@ import ConfirmarIcon from "@/assets/svg/ConfirmarIcon.svg";
 import DescricaoIcon from "@/assets/svg/DescricaoIcon.svg";
 import CalendarioIcon from "@/assets/svg/CalendarioIcon.svg";
 
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import { useState } from "react";
 import useVisita from "@/src/hooks/useVisita";
 import { CriarVisita } from "@/src/@types/visita";
+import { salvarVisitaNoCalendarioNativo } from "@/src/hooks/useCalendario";
 
 export default function Agendamento() {
-
   const { agendarVisita } = useVisita();
 
   const [nomeEvento, setNomeEvento] = useState("");
   const [nomeEmpresa, setNomeEmpresa] = useState("");
   const [nomeCliente, setNomeCliente] = useState("");
   const [cep, setCep] = useState("");
-  const [Logradouro, setLogradouro] = useState("");
+  const [logradouro, setLogradouro] = useState("");
   const [bairro, setBairro] = useState("");
   const [numero, setNumero] = useState("");
   const [descricao, setDescricao] = useState("");
 
-  // Controlar a formatação da data incial
+  // Estados de controle da interface
+  const [loadingCep, setLoadingCep] = useState(false);
+  const [salvando, setSalvando] = useState(false);
+
+  // Controlar a formatação da data inicial
   const [dataInicial, setDataInicial] = useState<Date>(new Date());
-  const [mostrarCalendarioInicial, setMostrarCalendarioInicial] = useState<boolean>(false);
-  const [textoCalendarioInicial, setTextoCalendarioInicial] = useState<string>('Selecionar data...'); // Texto inicial que vai estar escrito no botão, muda quando a data for selecionada
+  const [mostrarCalendarioInicial, setMostrarCalendarioInicial] =
+    useState<boolean>(false);
+  const [textoCalendarioInicial, setTextoCalendarioInicial] =
+    useState<string>("Selecionar data...");
 
   // Controlar a formatação da data final
   const [dataFinal, setDataFinal] = useState<Date>(new Date());
-  const [mostrarCalendarioFinal, setMostrarCalendarioFinal] = useState<boolean>(false);
-  const [textoCalendarioFinal, setTextoCalendarioFinal] = useState<string>('Selecionar data...'); // Texto inicial que vai estar escrito no botão, muda quando a data for selecionada
+  const [mostrarCalendarioFinal, setMostrarCalendarioFinal] =
+    useState<boolean>(false);
+  const [textoCalendarioFinal, setTextoCalendarioFinal] =
+    useState<string>("Selecionar data...");
 
-  // Controlar a formatação do horário 
+  // Controlar a formatação do horário
   const [horario, setHorario] = useState<Date>(new Date());
   const [mostrarRelogio, setMostrarRelogio] = useState<boolean>(false);
-  const [textoRelogio, setTextoRelogio] = useState<string>('Selecionar horário...');
+  const [textoRelogio, setTextoRelogio] = useState<string>(
+    "Selecionar horário...",
+  );
 
-  const CalendarioInicial = (event: DateTimePickerEvent, dataSelecionada?: Date) => {
-
-    // Fechar a janela do calendário assim que acontecer alguma ação(confirmar ou cancelar)
-    // Platform.OS -> recurso do react native que detecta qual o sistema operacional que está rodando(ios ou android)
-    if (Platform.OS === 'android') {
+  const CalendarioInicial = (
+    event: DateTimePickerEvent,
+    dataSelecionada?: Date,
+  ) => {
+    if (Platform.OS === "android") {
       setMostrarCalendarioInicial(false);
     }
 
-    // Ao confirmar a data escolhida, clicar no "Ok"
-    if (event.type === 'set' && dataSelecionada) {
+    if (event.type === "set" && dataSelecionada) {
       const currentDate = dataSelecionada;
-      setDataInicial(currentDate); // Atualiza o estado da data com a escolhida
+      setDataInicial(currentDate);
 
-
-      // Formatação para leitura da data
-      const dia = String(currentDate.getDate()).padStart(2, '0'); // .padStart(2, '0') -> garante que se o número for menor que 10, acrescenta um 0 na frente
-      const mes = String(currentDate.getMonth() + 1).padStart(2, '0'); // Soma +1 para que na visualização os meses iniciem em 01 e não em 00(padrão js)
+      const dia = String(currentDate.getDate()).padStart(2, "0");
+      const mes = String(currentDate.getMonth() + 1).padStart(2, "0");
       const ano = currentDate.getFullYear();
 
       setTextoCalendarioInicial(`${dia}/${mes}/${ano}`);
-    } else if (event.type === 'dismissed') { // Caso o usuário cancele a operação
+    } else if (event.type === "dismissed") {
       setMostrarCalendarioInicial(false);
     }
-  }
+  };
 
-  const CalendarioFinal = (event: DateTimePickerEvent, dataSelecionada?: Date) => {
-
-    // Fechar a janela do calendário assim que acontecer alguma ação(confirmar ou cancelar)
-    // Platform.OS -> recurso do react native que detecta qual o sistema operacional que está rodando(ios ou android)
-    if (Platform.OS === 'android') {
+  const CalendarioFinal = (
+    event: DateTimePickerEvent,
+    dataSelecionada?: Date,
+  ) => {
+    if (Platform.OS === "android") {
       setMostrarCalendarioFinal(false);
     }
 
-    // Ao confirmar a data escolhida, clicar no "Ok"
-    if (event.type === 'set' && dataSelecionada) {
+    if (event.type === "set" && dataSelecionada) {
       const currentDate = dataSelecionada;
-      setDataFinal(currentDate); // Atualiza o estado da data com a escolhida
+      setDataFinal(currentDate);
 
-
-      // Formatação para leitura da data
-      const dia = String(currentDate.getDate()).padStart(2, '0'); // .padStart(2, '0') -> garante que se o número for menor que 10, acrescenta um 0 na frente
-      const mes = String(currentDate.getMonth() + 1).padStart(2, '0'); // Soma +1 para que na visualização os meses iniciem em 01 e não em 00(padrão js)
+      const dia = String(currentDate.getDate()).padStart(2, "0");
+      const mes = String(currentDate.getMonth() + 1).padStart(2, "0");
       const ano = currentDate.getFullYear();
 
       setTextoCalendarioFinal(`${dia}/${mes}/${ano}`);
-    } else if (event.type === 'dismissed') { // Caso o usuário cancele a operação
+    } else if (event.type === "dismissed") {
       setMostrarCalendarioFinal(false);
     }
-  }
+  };
 
-
-  // Constante criada para permitir agendamento de visita somente a partir do dia seguinte
   const amanha = new Date();
   amanha.setDate(amanha.getDate() + 1);
 
-
   const Relogio = (event: DateTimePickerEvent, horaSelecionada?: Date) => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       setMostrarRelogio(false);
     }
 
-    if (event.type === 'set' && horaSelecionada) {
+    if (event.type === "set" && horaSelecionada) {
       const currentDate = horaSelecionada;
       setHorario(currentDate);
 
-      const horas = String(horaSelecionada.getHours()).padStart(2, '0');
-      const minutos = String(horaSelecionada.getMinutes()).padStart(2, '0');
+      const horas = String(horaSelecionada.getHours()).padStart(2, "0");
+      const minutos = String(horaSelecionada.getMinutes()).padStart(2, "0");
       setTextoRelogio(`${horas}:${minutos}`);
-
-    } else if (event.type === 'dismissed') {
+    } else if (event.type === "dismissed") {
       setMostrarRelogio(false);
     }
-  }
+  };
+
+  // Função para buscar o endereço no ViaCEP
+  const buscarCep = async (cepBuscado: string) => {
+    const cepLimpo = cepBuscado.replace(/\D/g, "");
+    if (cepLimpo.length !== 8) return;
+
+    setLoadingCep(true);
+    try {
+      const response = await fetch(
+        `https://viacep.com.br/ws/${cepLimpo}/json/`,
+      );
+      const data = await response.json();
+
+      if (data.erro) {
+        Alert.alert("Atenção", "CEP não encontrado!");
+        return;
+      }
+
+      setLogradouro(data.logradouro || "");
+      setBairro(data.bairro || "");
+    } catch (error) {
+      console.error("Erro ao buscar CEP:", error);
+      Alert.alert("Erro", "Não foi possível conectar ao ViaCEP.");
+    } finally {
+      setLoadingCep(false);
+    }
+  };
+
+  // Aplica a máscara XXXXX-XXX e dispara a requisição ao atingir 8 dígitos
+  const handleCepChange = (texto: string) => {
+    const apenasNumeros = texto.replace(/\D/g, "");
+    const cepFormatado = apenasNumeros.replace(/^(\d{5})(\d)/, "$1-$2");
+
+    setCep(cepFormatado);
+
+    if (apenasNumeros.length === 8) {
+      buscarCep(apenasNumeros);
+    }
+  };
 
   async function Salvar() {
-    // Validação básica
-    if (!nomeEvento.trim() || !nomeEmpresa.trim() || !nomeCliente.trim() || !cep.trim() || !Logradouro.trim() || !bairro.trim() || !numero.trim() || !descricao.trim()) {
+    if (
+      !nomeEvento.trim() ||
+      !nomeEmpresa.trim() ||
+      !nomeCliente.trim() ||
+      !cep.trim() ||
+      !logradouro.trim() ||
+      !bairro.trim() ||
+      !numero.trim() ||
+      !descricao.trim()
+    ) {
       Alert.alert("Atenção", "Preencha todos os campos obrigatórios (*).");
       return;
     }
 
     const novaVisita: CriarVisita = {
-      nomeEvento: nomeEvento,
+      nomeEvento,
       nomeSede: nomeEmpresa,
       cliente: nomeCliente,
-      dataInicial: dataInicial,
-      dataFinal: dataFinal,
-      horario: horario,
-      cep: cep,
-      logradouro: Logradouro,
-      bairro: bairro,
-      descricao: descricao,
+      dataInicial,
+      dataFinal,
+      horario,
+      cep,
+      logradouro,
+      bairro,
+      numero,
+      tecnicos: [],
+      descricao,
     };
 
+    setSalvando(true);
     const sucesso = await agendarVisita(novaVisita);
+    setSalvando(false);
 
     if (sucesso) {
+      // Integração com a agenda nativa
+      const enderecoCompleto = `${logradouro}, ${numero} - ${bairro}, CEP: ${cep}`;
+      await salvarVisitaNoCalendarioNativo({
+        titulo: `${nomeEvento} - ${nomeCliente}`,
+        descricao: `Empresa: ${nomeEmpresa}\n\nDescrição: ${descricao}`,
+        localizacao: enderecoCompleto,
+        dataInicial,
+        horario,
+      });
+
+      // Limpar formulário...
       setNomeEvento("");
       setNomeEmpresa("");
       setNomeCliente("");
-      // setDataInicial("");
-      // setDataFinal("");
-      // setHorario("");
       setCep("");
       setLogradouro("");
       setBairro("");
+      setNumero("");
       setDescricao("");
+      setTextoCalendarioInicial("Selecionar data...");
+      setTextoCalendarioFinal("Selecionar data...");
+      setTextoRelogio("Selecionar horário...");
     }
   }
-
 
   return (
     <SafeAreaView style={Container} edges={["left", "right"]}>
       <ScrollView
         contentContainerStyle={Scroll}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
         <View>
           <Text style={H1}>Nova Visita</Text>
@@ -198,10 +264,9 @@ export default function Agendamento() {
 
         <View style={Form}>
           <View style={Column}>
-
             <View style={CampoForm}>
               <Text style={[Label, { color: Colors.darkblue }]}>
-                Nome do Evento
+                Nome do Evento *
               </Text>
               <View style={CampoInput}>
                 <PesquisaIcon style={InputIcon} color={Colors.gray} />
@@ -209,13 +274,14 @@ export default function Agendamento() {
                   style={Input}
                   placeholder="Nome do evento..."
                   onChangeText={setNomeEvento}
-                  value={nomeEvento} />
+                  value={nomeEvento}
+                />
               </View>
             </View>
 
             <View style={CampoForm}>
               <Text style={[Label, { color: Colors.darkblue }]}>
-                Nome da Empresa
+                Nome da Empresa *
               </Text>
               <View style={CampoInput}>
                 <PesquisaIcon style={InputIcon} color={Colors.gray} />
@@ -223,84 +289,114 @@ export default function Agendamento() {
                   style={Input}
                   placeholder="Insira o nome da empresa..."
                   onChangeText={setNomeEmpresa}
-                  value={nomeEmpresa} />
+                  value={nomeEmpresa}
+                />
               </View>
             </View>
 
-
             <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
-                Cliente
-              </Text>
+              <Text style={[Label, { color: Colors.darkblue }]}>Cliente *</Text>
               <View style={CampoInput}>
                 <PesquisaIcon style={InputIcon} color={Colors.gray} />
                 <TextInput
                   style={Input}
                   placeholder="Nome do cliente..."
                   onChangeText={setNomeCliente}
-                  value={nomeCliente} />
+                  value={nomeCliente}
+                />
               </View>
             </View>
 
             <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}> Data Inicial da Visita </Text>
-              <Pressable style={CampoInput} onPress={() => setMostrarCalendarioInicial(true)}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
+                Data Inicial da Visita *
+              </Text>
+              <Pressable
+                style={CampoInput}
+                onPress={() => setMostrarCalendarioInicial(true)}
+              >
                 <CalendarioIcon style={InputIcon} color={Colors.gray} />
-                <Text style={[Input, textoCalendarioInicial === 'Selecionar data...' ? { color: Colors.darkgray } : { color: Colors.black }]}>
+                <Text
+                  style={[
+                    Input,
+                    textoCalendarioInicial === "Selecionar data..."
+                      ? { color: Colors.darkgray }
+                      : { color: Colors.black },
+                  ]}
+                >
                   {textoCalendarioInicial}
                 </Text>
               </Pressable>
 
-              {/* Exibição do Calendário */}
               {mostrarCalendarioInicial && (
                 <DateTimePicker
                   value={dataInicial}
                   mode="date"
-                  display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                  display={Platform.OS === "ios" ? "inline" : "default"}
                   onChange={CalendarioInicial}
                   minimumDate={amanha}
                 />
               )}
-
             </View>
 
             <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}> Data Final da Visita </Text>
-              <Pressable style={CampoInput} onPress={() => setMostrarCalendarioFinal(true)}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
+                Data Final da Visita *
+              </Text>
+              <Pressable
+                style={CampoInput}
+                onPress={() => setMostrarCalendarioFinal(true)}
+              >
                 <CalendarioIcon style={InputIcon} color={Colors.gray} />
-                <Text style={[Input, textoCalendarioFinal === 'Selecionar data...' ? { color: Colors.darkgray } : { color: Colors.black }]}>
+                <Text
+                  style={[
+                    Input,
+                    textoCalendarioFinal === "Selecionar data..."
+                      ? { color: Colors.darkgray }
+                      : { color: Colors.black },
+                  ]}
+                >
                   {textoCalendarioFinal}
                 </Text>
               </Pressable>
 
-              {/* Exibição do Calendário */}
               {mostrarCalendarioFinal && (
                 <DateTimePicker
-                  value={dataFinal} // data inicial selecionada ao abrir o calendário, geralmente é a data mínima
-                  mode="date" // Aceita apenas data (ignora hora)
-                  display={Platform.OS === 'ios' ? 'inline' : 'default'} // Estilo visual
+                  value={dataFinal}
+                  mode="date"
+                  display={Platform.OS === "ios" ? "inline" : "default"}
                   onChange={CalendarioFinal}
-                  minimumDate={amanha} // Bloqueia datas passadas
+                  minimumDate={amanha}
                 />
               )}
-
             </View>
 
             <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}> Horário Previsto </Text>
-              <Pressable style={CampoInput} onPress={() => setMostrarRelogio(true)}>
+              <Text style={[Label, { color: Colors.darkblue }]}>
+                Horário Previsto *
+              </Text>
+              <Pressable
+                style={CampoInput}
+                onPress={() => setMostrarRelogio(true)}
+              >
                 <RelogioIcon style={InputIcon} color={Colors.gray} />
-                <Text style={[Input, textoRelogio === 'Selecionar horário...' ? { color: Colors.darkgray } : { color: Colors.black }]}>
+                <Text
+                  style={[
+                    Input,
+                    textoRelogio === "Selecionar horário..."
+                      ? { color: Colors.darkgray }
+                      : { color: Colors.black },
+                  ]}
+                >
                   {textoRelogio}
                 </Text>
               </Pressable>
 
-              Exibição do Relógio
               {mostrarRelogio && (
                 <DateTimePicker
                   value={horario}
                   mode="time"
-                  is24Hour={true} // Exibe o seletor de horários no formato de 24 horas
+                  is24Hour={true}
                   display="default"
                   onChange={Relogio}
                 />
@@ -310,26 +406,41 @@ export default function Agendamento() {
             <View style={CampoForm}>
               <Text style={[Label, { color: Colors.darkblue }]}>Técnicos</Text>
               <View style={CampoInput}>
-                <LocalIcon style={InputIcon} color={Colors.gray} />
-                <TextInput style={Input} placeholder="Selecione os técnicos que irão na visita" />
+                <PerfilIcon style={InputIcon} color={Colors.gray} />
+                <TextInput
+                  style={Input}
+                  placeholder="Selecione os técnicos que irão na visita"
+                />
               </View>
             </View>
 
             <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>Cep</Text>
+              <Text style={[Label, { color: Colors.darkblue }]}>CEP *</Text>
               <View style={CampoInput}>
-                <LocalIcon style={InputIcon} color={Colors.gray} />
+                {loadingCep ? (
+                  <ActivityIndicator
+                    size="small"
+                    color={Colors.darkblue}
+                    style={InputIcon}
+                  />
+                ) : (
+                  <LocalIcon style={InputIcon} color={Colors.gray} />
+                )}
                 <TextInput
                   style={Input}
                   placeholder="00000-000"
-                  onChangeText={setCep}
-                  value={cep} />
+                  onChangeText={handleCepChange}
+                  value={cep}
+                  keyboardType="numeric"
+                  maxLength={9}
+                  onBlur={() => buscarCep(cep)}
+                />
               </View>
             </View>
 
             <View style={CampoForm}>
               <Text style={[Label, { color: Colors.darkblue }]}>
-                Logradouro / Endereço
+                Logradouro / Endereço *
               </Text>
               <View style={CampoInput}>
                 <RuaIcon style={InputIcon} color={Colors.gray} />
@@ -337,39 +448,40 @@ export default function Agendamento() {
                   style={Input}
                   placeholder="Rua Niterói"
                   onChangeText={setLogradouro}
-                  value={Logradouro} />
+                  value={logradouro}
+                />
               </View>
             </View>
 
             <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
-                Bairro
-              </Text>
+              <Text style={[Label, { color: Colors.darkblue }]}>Bairro *</Text>
               <View style={CampoInput}>
                 <RuaIcon style={InputIcon} color={Colors.gray} />
                 <TextInput
                   style={Input}
                   placeholder="Bairro"
                   onChangeText={setBairro}
-                  value={bairro} />
+                  value={bairro}
+                />
               </View>
             </View>
 
             <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>Número</Text>
+              <Text style={[Label, { color: Colors.darkblue }]}>Número *</Text>
               <View style={CampoInput}>
                 <NumeroIcon style={InputIcon} color={Colors.gray} />
                 <TextInput
                   style={Input}
                   placeholder="1234"
                   onChangeText={setNumero}
-                  value={numero} />
+                  value={numero}
+                />
               </View>
             </View>
 
             <View style={CampoForm}>
               <Text style={[Label, { color: Colors.darkblue }]}>
-                Descrição do Serviço
+                Descrição do Serviço *
               </Text>
               <View style={CampoInput}>
                 <DescricaoIcon
@@ -401,11 +513,22 @@ export default function Agendamento() {
               <CancelarIcon color={Colors.darkred} />
               <Text style={[BtnText, { color: Colors.darkred }]}>Cancelar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={Btn}>
-              <ConfirmarIcon color={Colors.white} />
-              <Text style={[BtnText, { color: Colors.white }]}>
-                Confirmar Agendamento
-              </Text>
+
+            <TouchableOpacity
+              style={[Btn, salvando && { opacity: 0.7 }]}
+              onPress={Salvar}
+              disabled={salvando}
+            >
+              {salvando ? (
+                <ActivityIndicator size="small" color={Colors.white} />
+              ) : (
+                <>
+                  <ConfirmarIcon color={Colors.white} />
+                  <Text style={[BtnText, { color: Colors.white }]}>
+                    Confirmar Agendamento
+                  </Text>
+                </>
+              )}
             </TouchableOpacity>
           </View>
         </View>

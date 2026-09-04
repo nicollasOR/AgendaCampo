@@ -23,7 +23,7 @@ export interface CriarVisita {
     cep: string,
     logradouro: string,
     bairro: string,
-    numero: number,
+    numero: string,
     descricao: string,
     tecnicos: string[]
 }
