@@ -33,7 +33,7 @@ export interface visitaGet {
 }
 
 export interface visitaPatch {
-    // visitaId: number,
+    
     dataInicio: Date    | string,
     dataTermino: Date   | string,
 }

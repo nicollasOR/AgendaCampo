@@ -25,8 +25,12 @@ export const visitaService = {
     },
 
 
-    async reagendar(id: number, dados: visitaPatch) : Promise<visitaPatch>{
-        const response = await api.patch<visitaPatch>("Visita/reagendar" + id, dados)
-        return response.data
+    // async reagendar(id: number, dados: visitaPatch) : Promise<visitaPatch>{
+    //     const response = await api.patch<visitaPatch>("Visita/reagendar" + id, dados)
+    //     return response.data
+    // }
+
+    async reagendar(id: number, dados: visitaPatch) {
+        const response = await api.patch(`Visita/reagendar${id}`, dados)
     }
 }
