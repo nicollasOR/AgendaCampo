@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const TOKEN_KEY =
   process.env.EXPO_PUBLIC_TOKEN_KEY || "@agenda_campo:token";
 
-const BASE_URL = "http://10.0.2.2:5100/api/";
+const BASE_URL = "http://192.168.0.22:5100/api/";
 // const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 // console.log("ENV API_URL:", process.env.EXPO_PUBLIC_API_URL);
 
