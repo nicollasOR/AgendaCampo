@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useImage } from "@/src/hooks/useImage";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useImagePicker } from "@/src/hooks/useImagePicker";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -32,37 +34,36 @@ import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
 import UploadIcon from "@/assets/svg/UploadIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 import ArrowBackIcon from "@/assets/svg/ArrowBackIcon.svg";
+import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
 
 export default function Cadastro() {
   const router = useRouter();
+  const { usuario } = useAuth();
+
   const { imagem, selecionarOpcaoImagem } = useImagePicker();
 
-  const [nome, setNome] = useState<string | undefined>("");
+  const [nome, setNome] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
   const [confirmarSenha, setConfirmarSenha] = useState<string>("");
 
   const telaEditar = true;
 
-  // if (telaEditar) {
-  //   const { usuario } = useAuth();
-  //   setNome(usuario?.nome);
-  // }
+  const { getImagemUrl } = useImage();
+  const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
 
   return (
     <SafeAreaView style={[Container, Column, Center]}>
+      <StatusBar style="dark" />
       <View style={Center}>
-        {telaEditar ? (
-          <View style={Row}>
-            <Logo width={60} height={60} color={Colors.btn} />
-            <Text style={[H1, { color: Colors.btn }]}>AgendaCampo</Text>
-          </View>
-        ) : (
-          <>
-            <Logo color={Colors.btn} />
-            <Text style={[H1, { color: Colors.btn }]}>AgendaCampo</Text>
-          </>
-        )}
+        <View style={telaEditar ? Row : Center}>
+          <Logo
+            width={telaEditar ? 60 : 120}
+            height={telaEditar ? 60 : 120}
+            color={Colors.btn}
+          />
+          <Text style={[H1, { color: Colors.btn }]}>Agenda Campo</Text>
+        </View>
         <Text style={[H3, { color: Colors.gray }]}>
           {telaEditar
             ? "Edite as informações do seu perfil"
@@ -75,16 +76,27 @@ export default function Cadastro() {
           <View style={Center}>
             <Text style={Label}>Foto de Perfil</Text>
             <TouchableOpacity
-              style={CampoInputImg}
+              style={[
+                CampoInputImg,
+                fotoPerfilUri ? "" : { borderStyle: "dashed" },
+              ]}
               onPress={selecionarOpcaoImagem}
               activeOpacity={0.7}
             >
-              {imagem ? (
-                <Image
-                  source={{ uri: imagem.uri }}
-                  style={InputImg}
-                  resizeMode="cover"
-                />
+              {fotoPerfilUri ? (
+                <>
+                  <Image
+                    source={{ uri: fotoPerfilUri }}
+                    style={InputImg}
+                    resizeMode="cover"
+                  />
+                  <EditarPerfilIcon
+                    color={Colors.white}
+                    width={32}
+                    height={32}
+                    style={{ position: "absolute" }}
+                  />
+                </>
               ) : (
                 <>
                   <UploadIcon color={Colors.blue} />
@@ -94,26 +106,25 @@ export default function Cadastro() {
                 </>
               )}
             </TouchableOpacity>
-            {imagem && (
-              <Text style={[P, { color: Colors.btn }]}>{imagem.name}</Text>
-            )}
           </View>
         )}
 
-        <Text style={Label}>Nome</Text>
-        <View style={CampoInput}>
-          <PerfilIcon color={Colors.blue} style={InputIcon} />
-          <TextInput
-            style={Input}
-            placeholder="Nome"
-            placeholderTextColor={Colors.inactive}
-            value={nome}
-            onChangeText={setNome}
-          />
+        <View>
+          <Text style={Label}>Nome</Text>
+          <View style={CampoInput}>
+            <PerfilIcon color={Colors.blue} style={InputIcon} />
+            <TextInput
+              style={Input}
+              placeholder="Nome"
+              placeholderTextColor={Colors.inactive}
+              value={usuario?.nome ? usuario.nome : nome}
+              onChangeText={setNome}
+            />
+          </View>
         </View>
 
         {!telaEditar && (
-          <>
+          <View>
             <Text style={Label}>E-mail</Text>
             <View style={CampoInput}>
               <EmailIcon color={Colors.blue} style={InputIcon} />
@@ -127,24 +138,26 @@ export default function Cadastro() {
                 autoCapitalize="none"
               />
             </View>
-          </>
+          </View>
         )}
 
-        <Text style={Label}>Senha</Text>
-        <View style={CampoInput}>
-          <CadeadoIcon color={Colors.blue} style={InputIcon} />
-          <TextInput
-            style={Input}
-            placeholder="*******"
-            placeholderTextColor={Colors.inactive}
-            secureTextEntry
-            value={senha}
-            onChangeText={setSenha}
-          />
+        <View>
+          <Text style={Label}>Senha</Text>
+          <View style={CampoInput}>
+            <CadeadoIcon color={Colors.blue} style={InputIcon} />
+            <TextInput
+              style={Input}
+              placeholder="*******"
+              placeholderTextColor={Colors.inactive}
+              secureTextEntry
+              value={senha}
+              onChangeText={setSenha}
+            />
+          </View>
         </View>
 
         {!telaEditar && (
-          <>
+          <View>
             <Text style={Label}>Confirmar Senha</Text>
             <View style={CampoInput}>
               <CadeadoIcon color={Colors.blue} style={InputIcon} />
@@ -157,7 +170,7 @@ export default function Cadastro() {
                 onChangeText={setConfirmarSenha}
               />
             </View>
-          </>
+          </View>
         )}
       </View>
 
@@ -176,7 +189,11 @@ export default function Cadastro() {
             borderColor: Colors.blue,
           },
         ]}
-        onPress={() => router.replace("/login")}
+        onPress={
+          telaEditar
+            ? () => router.replace("/(tabs)/perfil")
+            : () => router.replace("/login")
+        }
       >
         <ArrowBackIcon color={Colors.blue} />
         <Text style={[BtnText, { color: Colors.blue }]}>Voltar</Text>

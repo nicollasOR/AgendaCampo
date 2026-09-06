@@ -5,11 +5,12 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
+
 import { Keyboard } from "react-native";
 import { useRouter } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { authService } from "@/src/service/authService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContextData, Usuario, UsuarioPayload } from "@/src/@types/auth";
 
 const USER_KEY = "@agenda_campo:usuario";
@@ -30,7 +31,7 @@ export function decodificarToken(token: string): Usuario | null {
     return {
       nome,
       email,
-      img: "",
+      imgURL: null,
     };
   } catch (err) {
     console.log("Erro ao decodificar token JWT:", err);
@@ -88,26 +89,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
 
-      // 1. Chamada HTTP para autenticação
+      // 1. Faz a autenticação e obtém o token JWT
       const response = await authService.login({
         email: emailFormatado,
         senha: senhaFormatada,
       });
 
-      // 2. Extração do nome vindo das Claims do JWT
-      const usuarioDecodificado = decodificarToken(response.token);
+      setToken(response.token);
+
+      // 2. Busca o DTO do Usuário completo na API C# (contendo o imgURL retornado do banco)
+      const dadosUsuarioApi = await authService.usuario(emailFormatado);
 
       const dadosUsuario: Usuario = {
-        email: emailFormatado,
-        nome: usuarioDecodificado?.nome || "Usuário",
-        img: "",
+        nome: dadosUsuarioApi.nome,
+        email: dadosUsuarioApi.email,
+        imgURL: dadosUsuarioApi.imgURL,
       };
 
-      setToken(response.token);
       setUsuario(dadosUsuario);
 
-      // 3. Gravação local no AsyncStorage
-      await AsyncStorage.setItem(USER_KEY, JSON.stringify(dadosUsuario));
+      // 3. Salva os dados completos no AsyncStorage
+      await authService.saveUser(dadosUsuario);
 
       setEmail("");
       setSenha("");
@@ -147,6 +149,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.replace("/login");
   }
 
+  async function handleMockLogin() {
+    Keyboard.dismiss();
+    setErro(null);
+    setLoading(true);
+
+    try {
+      const usuarioMock: Usuario = {
+        nome: "Usuário de Teste",
+        email: "",
+        imgURL: "",
+      };
+
+      const tokenMock = "mock-jwt-token-para-testes-locais";
+
+      setToken(tokenMock);
+      setUsuario(usuarioMock);
+
+      // Salva nos storages locais
+      await AsyncStorage.setItem(USER_KEY, JSON.stringify(usuarioMock));
+      // Se o seu authService salvar o token no SecureStore/AsyncStorage, chame-o aqui se necessário:
+      // await authService.saveToken(tokenMock);
+
+      router.replace("/(tabs)/home");
+    } catch (err) {
+      setErro("Erro ao efetuar login de teste.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return React.createElement(
     AuthContext.Provider,
     {
@@ -160,6 +192,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         erro,
         handleLogin,
+        handleMockLogin,
         logout,
       },
     },

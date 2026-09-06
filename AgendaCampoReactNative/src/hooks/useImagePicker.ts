@@ -71,40 +71,11 @@ export function useImagePicker() {
     ]);
   };
 
-  // Função utilitária aceita tanto objeto local (ImgUpload) quanto string do banco
-  const getImagemUrl = (img?: ImgUpload | string | null) => {
-    if (!img) return null;
-
-    // Se for objeto ImgUpload, pega .uri; se for string, usa diretamente
-    const path = typeof img === "object" ? img.uri : img;
-
-    if (!path) return null;
-
-    // Se já for local (file:, content:), base64/blob ou URL remota HTTP(S), retorna direto
-    if (
-      path.startsWith("file:") ||
-      path.startsWith("http") ||
-      path.startsWith("data:") ||
-      path.startsWith("content:")
-    ) {
-      return path;
-    }
-
-    // Se for caminho relativo retornado pela API
-    const apiBase = (
-      process.env.EXPO_PUBLIC_API_URL || "http://localhost:5100/api/"
-    ).replace(/\/api\/?$/, "");
-
-    return `${apiBase}/${path.replace(/^\//, "")}`;
-  };
-
   return {
     imagem,
     setImagem,
     tirarFoto,
     escolherDaGaleria,
     selecionarOpcaoImagem,
-    getImagemUrl, // Exporta a função para formatar qualquer imagem/URL
-    imagemUrl: getImagemUrl(imagem), // Formata automaticamente o estado local 'imagem'
   };
 }

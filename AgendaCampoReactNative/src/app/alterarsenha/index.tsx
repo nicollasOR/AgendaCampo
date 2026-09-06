@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import {
@@ -28,6 +29,7 @@ export default function AlterarSenha() {
 
   return (
     <SafeAreaView style={[Container, Column, Center]}>
+      <StatusBar style="dark" />
       <View style={Center}>
         <Logo color={Colors.btn} />
         <Text style={[H1, { color: Colors.btn }]}>AgendaCampo</Text>

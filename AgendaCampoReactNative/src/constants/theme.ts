@@ -210,7 +210,7 @@ export const theme = StyleSheet.create({
     gap: 30,
   },
   campoForm: {
-    gap: 4,
+    gap: 12,
   },
   campoInput: {
     flexDirection: "row",
@@ -226,7 +226,6 @@ export const theme = StyleSheet.create({
     overflow: "hidden",
     alignItems: "center",
     flexDirection: "row",
-    borderStyle: "dashed",
     justifyContent: "center",
     borderColor: Colors.btn,
   },

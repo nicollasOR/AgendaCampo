@@ -10,7 +10,7 @@ export interface LoginResponse {
 export interface Usuario {
   nome: string;
   email: string;
-  img: ImgUpload | null;
+  imgURL: string | null;
 }
 
 export interface UsuarioPayload {
@@ -32,6 +32,7 @@ export interface AuthContextData {
   loading: boolean;
   erro: string | null;
   handleLogin: () => Promise<void>;
+  handleMockLogin: () => Promise<void>;
   logout: () => Promise<void>;
 }
 

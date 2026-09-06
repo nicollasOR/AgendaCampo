@@ -15,6 +15,11 @@ export const authService = {
     return data;
   },
 
+  async usuario(email: string): Promise<Usuario> {
+    const { data } = await api.get<Usuario>(`Usuario/email/${email}`);
+    return data;
+  },
+
   async logout(): Promise<void> {
     await AsyncStorage.multiRemove([TOKEN_KEY, USER_KEY]);
   },
