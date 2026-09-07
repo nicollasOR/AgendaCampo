@@ -2,6 +2,7 @@ import * as Calendar from "expo-calendar";
 import { Alert, Platform } from "react-native";
 
 async function obterIdCalendarioPadrao(): Promise<string | null> {
+  
   // Solicita permissão para o calendário
   const { status } = await Calendar.requestCalendarPermissionsAsync();
 
@@ -23,6 +24,7 @@ async function obterIdCalendarioPadrao(): Promise<string | null> {
 
     // 1. Tenta achar o calendário primário (geralmente a conta Google no dispositivo)
     // 2. Se não achar, busca um calendário que permita modificação (comum em emuladores)
+    // 3. Se não achar pega o primeiro calendário disponível
     const primaryCalendar =
       calendars.find((cal) => cal.isPrimary) ||
       calendars.find((cal) => cal.allowsModifications) ||
@@ -46,10 +48,11 @@ export async function salvarVisitaNoCalendarioNativo(dados: {
   descricao: string;
   localizacao: string;
   dataInicial: Date;
+  dataFinal: Date,
   horario: Date;
 }) {
   try {
-    const calendarId = await obterIdCalendarioPadrao();
+    const calendarId = await obterIdCalendarioPadrao(); // vai guardar o id do calendário do celular para criar o evento
     if (!calendarId) return;
 
     // Combinar a Data Inicial com o Horário selecionado
@@ -60,14 +63,17 @@ export async function salvarVisitaNoCalendarioNativo(dados: {
       0,
     );
 
-    // Duração padrão de 1 hora para o evento
-    const dataFimComHorario = new Date(dataInicioComHorario);
-    dataFimComHorario.setHours(dataFimComHorario.getHours() + 1);
+    const dataFinalComHorario = new Date(dados.dataFinal);
+    dataFinalComHorario.setHours(
+      dados.horario.getHours() + 1,
+      dados.horario.getMinutes(),
+      0,
+    );
 
     await Calendar.createEventAsync(calendarId, {
       title: dados.titulo,
       startDate: dataInicioComHorario,
-      endDate: dataFimComHorario,
+      endDate: dataFinalComHorario,
       location: dados.localizacao,
       notes: dados.descricao,
       timeZone: "GMT-3", // Ou ajuste conforme o fuso horário da aplicação

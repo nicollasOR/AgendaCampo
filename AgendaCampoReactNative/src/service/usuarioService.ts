@@ -1,9 +1,17 @@
+import { Usuario } from "../@types/auth";
 import { api } from "./api";
 
 export interface usuarioPOST {
   nome?: string;
   email?: string;
   senha?: string;
+}
+
+export const UsuarioService = {
+    async listarUsuario(): Promise<Usuario[]> {
+        const resposta = await api.get<Usuario[]>("Usuario");
+        return resposta.data;
+    }
 }
 
 export async function listarUsuario() {
