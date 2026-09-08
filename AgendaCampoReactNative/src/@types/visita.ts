@@ -52,7 +52,7 @@ export interface usuarioGET_Visita {
 
 export interface visitaPatch {
   dataInicio: Date | string;
-  dataTermino: Date | string;
+  dataFinal: Date | string;
 }
 
 export interface visitaPost {

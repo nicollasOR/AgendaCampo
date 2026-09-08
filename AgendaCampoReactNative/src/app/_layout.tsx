@@ -16,7 +16,8 @@ import {
   Outfit_700Bold,
 } from "@expo-google-fonts/outfit";
 
-import { AuthProvider } from "@/src/contexts/AuthContext";
+// import { AuthProvider } from "@/src/contexts/AuthContext";
+import { AuthProviderTeste } from "../contexts/AuthContextTESTE";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { Center, Colors, H2, Row, SpaceBetween } from "@/src/constants/theme";
@@ -199,12 +200,12 @@ export default function RootLayout() {
   const isAppReady = fontsLoaded || !!fontError;
 
   return (
-    <AuthProvider>
+    <AuthProviderTeste>
       <SafeAreaProvider>
         <AnimatedSplashScreen isAppReady={isAppReady}>
           <AppContent />
         </AnimatedSplashScreen>
       </SafeAreaProvider>
-    </AuthProvider>
+    </AuthProviderTeste>
   );
 }
