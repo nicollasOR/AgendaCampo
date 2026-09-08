@@ -18,6 +18,13 @@ export interface usuarioPUT{
   Img?: Image,
 }
 
+export const UsuarioService = {
+    async listarUsuario(): Promise<Usuario[]> {
+        const resposta = await api.get<Usuario[]>("Usuario");
+        return resposta.data;
+    }
+}
+
 export async function listarUsuario() {
   try {
     const response = await api.get("Usuario");
