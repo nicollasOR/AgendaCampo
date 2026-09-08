@@ -66,6 +66,11 @@ export const visitaService = {
   // }
 
   async reagendar(id: number, dados: visitaPatch) {
-    const response = await api.patch(`Visita/reagendar${id}`, dados);
+    const response = await api.patch(`Visita/reagendar/${id}`, dados, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data
   },
 };

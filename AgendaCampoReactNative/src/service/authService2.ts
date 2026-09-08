@@ -1,6 +1,7 @@
 import { api, TOKEN_KEY } from "./api";
 import { LoginRequest, LoginResponse, Usuario } from "@/src/@types/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Usuario2 } from "../@types/authTeste";
 
 export const USER_KEY = "@agenda_campo:usuario";
 
@@ -15,11 +16,9 @@ export const authService = {
     return data;
   },
 
-  async usuario(email: string): Promise<Usuario> {
-    const { data } = await api.get<Usuario>(`Usuario/email/${email}`);
-    
+  async usuario(email: string): Promise<Usuario2> {
+    const { data } = await api.get<Usuario2>(`Usuario/email/${email}`);
     console.log(">>> RESPOSTA COMPLETA DA API USUARIO:", JSON.stringify(data, null, 2));
-    
     return data;
   },
 
@@ -31,11 +30,11 @@ export const authService = {
     return await AsyncStorage.getItem(TOKEN_KEY);
   },
 
-  async saveUser(usuario: Usuario): Promise<void> {
+  async saveUser(usuario: Usuario2): Promise<void> {
     await AsyncStorage.setItem(USER_KEY, JSON.stringify(usuario));
   },
 
-  async getUser(): Promise<Usuario | null> {
+  async getUser(): Promise<Usuario2 | null> {
     const usuarioJson = await AsyncStorage.getItem(USER_KEY);
     return usuarioJson ? JSON.parse(usuarioJson) : null;
   },

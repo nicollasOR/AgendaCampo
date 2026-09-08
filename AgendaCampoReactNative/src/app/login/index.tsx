@@ -1,6 +1,8 @@
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useAuth } from "@/src/contexts/AuthContext";
+import { useAuthTESTE } from "@/src/contexts/AuthContextTESTE";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   ActivityIndicator,
@@ -36,7 +38,7 @@ import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 
 export default function Login() {
   const { email, setEmail, senha, setSenha, loading, erro, handleLogin } =
-    useAuth();
+    useAuthTESTE();
 
   return (
     <SafeAreaView style={[Container, Column, Center]}>

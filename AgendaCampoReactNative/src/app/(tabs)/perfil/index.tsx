@@ -35,11 +35,92 @@ import DetalheIcon from "@/assets/svg/DetalheIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
 import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
+import { useAuthTESTE } from "@/src/contexts/AuthContextTESTE";
+import { useMemo } from "react";
+import { useVisita } from "@/src/hooks/useVisita";
 
 export default function Perfil() {
   const router = useRouter();
+ const { visita, visitaGet, listarFuturasVisitas } = useVisita();
 
-  const { usuario, logout } = useAuth();
+  // function visitasHoje()
+  // {
+  //   const hoje = new Date().toLocaleDateString('pt-BR')
+  //   const visitasdeHoje = visitaGet.filter((varAux) => {
+  //     const visitaBanco = varAux.dataInicio.toLocaleDateString('pt-BR')
+  //     return visitaBanco === hoje
+  //     }
+  //   )
+
+  //   return visitasdeHoje.length
+
+
+
+
+
+    
+  // }
+                      //armazenamento de memoria para usar essa const uma única vez
+const visitasHoje = useMemo(() => {
+  // Pega o dia, mês e ano LOCAIS (dê ênfase nisso, pois não funciona por conta disso..) do celular/emulador
+  const hoje = new Date();
+  const diaHj = String(hoje.getDate()).padStart(2, "0");
+  const mesHj = String(hoje.getMonth() + 1).padStart(2, "0"); //obrigado por mostrar o caminho das pedras mayara 
+  const anoHj = hoje.getFullYear();
+  
+  const hojeFormatado = `${diaHj}/${mesHj}/${anoHj}`; // seria:  "07/09/2026" ou "08/09/2026"  
+
+  const vstBancoHoje = visitaGet.filter((varAux) => {
+    if (!varAux.dataInicio) 
+      return false;
+    // retirando o 08T06:31:09.145Z da visita
+    const partesData = String(varAux.dataInicio).split("T")[0].split("-");
+    
+    if (partesData.length < 3) 
+      return false;
+
+    const anoBanco = partesData[0];
+    const mesBanco = partesData[1];
+    const diaBanco = partesData[2];
+
+    const dataBancoFormatada = `${diaBanco}/${mesBanco}/${anoBanco}`;
+
+    return dataBancoFormatada === hojeFormatado;
+  });
+
+  return vstBancoHoje.length; // aqui seria para ele retornar apenas o numero de visitas no dia como um number,
+                              //  mas não retornar por conta da localização do dispositivo
+}, [visitaGet]);
+
+
+const visitasMês = useMemo(() => {
+  const mesAtual = new Date()
+  const mesHj = String(mesAtual.getDate()).padStart(2, '0')
+  const anoHj = mesAtual.getFullYear()
+
+  const mesFormatado = `${mesHj}/${anoHj}` // para debug btw
+
+  const vstBancoHoje = visitaGet.filter((varAux) => {
+    if(!varAux.dataInicio)
+      return false
+    
+    const ptsData = String(varAux.dataInicio).split("T")[0].split("-")
+
+    if(ptsData.length < 3)
+      return false
+
+    const anoBanco = ptsData[0]
+    const mesBanco = ptsData[1]
+
+    const dataBancoFormat = `${mesBanco}/${anoBanco}`
+    return dataBancoFormat === mesFormatado
+  })
+  return vstBancoHoje.length
+},[visitaGet])
+
+
+  const { usuario, logout } = useAuthTESTE();
+  // const { usuario, logout } = useAuth();
 
   const { getImagemUrl } = useImage();
   const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
@@ -94,7 +175,7 @@ export default function Perfil() {
             </View>
             <View>
               <Text style={P}>Visitas esse mês</Text>
-              <Text style={H2}>42</Text>
+              <Text style={H2}>{visitasMês}</Text>
             </View>
           </View>
 
@@ -104,7 +185,7 @@ export default function Perfil() {
             </View>
             <View>
               <Text style={P}>Visitas hoje</Text>
-              <Text style={H2}>3</Text>
+              <Text style={H2}>{visitasHoje}</Text>
             </View>
           </View>
 
