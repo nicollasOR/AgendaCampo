@@ -14,13 +14,13 @@ import {
   Usuario2,
   UsuarioPayload2,
   AuthContextDataTESTE,
-} from "../@types/authTeste";
+} from "@/src/@types/authTeste";
 import { authService } from "../service/authService2";
 
 const USER_KEY = "@agenda_campo:usuario";
 
 const AuthContext = createContext<AuthContextDataTESTE>(
-  {} as AuthContextDataTESTE
+  {} as AuthContextDataTESTE,
 );
 
 export function decodificarToken(token: string): Usuario2 | null {
@@ -30,7 +30,9 @@ export function decodificarToken(token: string): Usuario2 | null {
 
     // Mapeia todas as variações conhecidas de ID em tokens JWT do ASP.NET Core
     const usuarioID =
-      decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] ||
+      decoded[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+      ] ||
       decoded["nameidentifier"] ||
       decoded["sub"] ||
       decoded["id"] ||
@@ -43,7 +45,9 @@ export function decodificarToken(token: string): Usuario2 | null {
       "Usuário";
 
     const email =
-      decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] ||
+      decoded[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+      ] ||
       decoded["email"] ||
       "";
 
@@ -89,7 +93,8 @@ export function AuthProviderTeste({ children }: { children: ReactNode }) {
           // A partir da busca do usuario pelo email, busca todos seus dados..
           if (emailBusca) {
             try {
-              const dadosUsuarioApi: any = await authService.usuario(emailBusca);
+              const dadosUsuarioApi: any =
+                await authService.usuario(emailBusca);
 
               // Trata qualquer variação de nome de chave vindo do backend (C# PascalCase ou JSON camelCase)
               const idEncontrado =
@@ -101,7 +106,10 @@ export function AuthProviderTeste({ children }: { children: ReactNode }) {
 
               const usuarioAtualizado: Usuario2 = {
                 usuarioID: idEncontrado,
-                nome: dadosUsuarioApi.nome || usuarioDecodificado?.nome || "Usuário",
+                nome:
+                  dadosUsuarioApi.nome ||
+                  usuarioDecodificado?.nome ||
+                  "Usuário",
                 email: dadosUsuarioApi.email || emailBusca,
                 imgURL: dadosUsuarioApi.imgURL || null,
               };
@@ -109,7 +117,9 @@ export function AuthProviderTeste({ children }: { children: ReactNode }) {
               setUsuario(usuarioAtualizado);
               await authService.saveUser(usuarioAtualizado);
             } catch (apiError) {
-              console.log("Aviso: Falha ao buscar dados na API. Mantendo cache local.");
+              console.log(
+                "Aviso: Falha ao buscar dados na API. Mantendo cache local.",
+              );
               // Fallback se nao tiver cache nem API, usa o JWT decodificado
               if (!usuarioSalvo && usuarioDecodificado) {
                 setUsuario(usuarioDecodificado);
@@ -191,7 +201,7 @@ export function AuthProviderTeste({ children }: { children: ReactNode }) {
         setErro(mensagemCustomizada || "E-mail ou senha inválidos.");
       } else if (!error.response) {
         setErro(
-          "Não foi possível conectar ao servidor.\nVerifique sua conexão."
+          "Não foi possível conectar ao servidor.\nVerifique sua conexão.",
         );
       } else {
         setErro("Ocorreu um erro no servidor. Tente novamente mais tarde.");
@@ -256,7 +266,7 @@ export function AuthProviderTeste({ children }: { children: ReactNode }) {
         logout,
       },
     },
-    children
+    children,
   );
 }
 
@@ -265,15 +275,8 @@ export function useAuthTESTE() {
 
   if (!context) {
     throw new Error(
-      "useAuthTESTE deve ser usado dentro de um AuthProviderTeste"
+      "useAuthTESTE deve ser usado dentro de um AuthProviderTeste",
     );
-  }
-
-  // Ver se usuario tá logado(parte de enlouquecer)
-  if (context.usuario?.usuarioID) {
-    console.log(" UsuarioID", context.usuario.usuarioID);
-  } else if (!context.loading) {
-    console.log("usuario não está autenticado (socorro) ()");
   }
 
   return context;

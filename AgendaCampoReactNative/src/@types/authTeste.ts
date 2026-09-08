@@ -7,9 +7,8 @@ export interface LoginResponse {
   token: string;
 }
 
-
 export interface Usuario2 {
-  usuarioID: string; // 👈 Adicione o ID aqui
+  usuarioID: string;
   nome: string;
   email: string;
   imgURL: string | null;
@@ -19,7 +18,7 @@ export interface UsuarioPayload2 {
   "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
   "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": string;
   "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
-  sub?: string; // Algumas APIs .NET mandam 'sub' em vez de nameidentifier
+  sub?: string;
   id?: string;
   exp: number;
   iss: string;

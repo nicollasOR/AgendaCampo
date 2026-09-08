@@ -19,25 +19,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  Btn,
-  Btn2,
-  BtnText,
-  CampoForm,
-  CampoInput,
-  Center,
-  Colors,
-  Column,
-  Container,
-  Form,
-  H1,
-  H4,
-  Input,
-  InputIcon,
-  Label,
-  Scroll,
-  TextArea,
-} from "@/src/constants/theme";
+import { Colors, theme } from "@/src/constants/theme";
 import RuaIcon from "@/assets/svg/RuaIcon.svg";
 import LocalIcon from "@/assets/svg/LocalIcon.svg";
 import NumeroIcon from "@/assets/svg/NumeroIcon.svg";
@@ -62,7 +44,9 @@ export default function Agendamento() {
   const [bairro, setBairro] = useState("");
   const [numero, setNumero] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [tecnicosSelecionados, setTecnicosSelecionados] = useState<string[]>([]);
+  const [tecnicosSelecionados, setTecnicosSelecionados] = useState<string[]>(
+    [],
+  );
 
   const [modalTecnicosVisible, setModalTecnicosVisible] = useState(false);
 
@@ -70,15 +54,22 @@ export default function Agendamento() {
   const [loadingCep, setLoadingCep] = useState(false);
   const [salvando, setSalvando] = useState(false);
 
+  // Data mínima para o agendamento (Amanhã)
+  const getAmanha = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d;
+  };
+
   // Controlar a formatação da data inicial
-  const [dataInicial, setDataInicial] = useState<Date>(new Date());
+  const [dataInicial, setDataInicial] = useState<Date>(getAmanha());
   const [mostrarCalendarioInicial, setMostrarCalendarioInicial] =
     useState<boolean>(false);
   const [textoCalendarioInicial, setTextoCalendarioInicial] =
     useState<string>("Selecionar data...");
 
   // Controlar a formatação da data final
-  const [dataFinal, setDataFinal] = useState<Date>(new Date());
+  const [dataFinal, setDataFinal] = useState<Date>(getAmanha());
   const [mostrarCalendarioFinal, setMostrarCalendarioFinal] =
     useState<boolean>(false);
   const [textoCalendarioFinal, setTextoCalendarioFinal] =
@@ -93,9 +84,9 @@ export default function Agendamento() {
 
   const selecionarTecnicos = (nome: string) => {
     setTecnicosSelecionados((valorAnterior) =>
-      valorAnterior.includes(nome) // vai verificar se o técnico já está selecionado
-        ? valorAnterior.filter((item) => item !== nome) // se já estiver, ele vai remover
-        : [...valorAnterior, nome] // senão, ele adiciona
+      valorAnterior.includes(nome)
+        ? valorAnterior.filter((item) => item !== nome)
+        : [...valorAnterior, nome],
     );
   };
 
@@ -108,14 +99,19 @@ export default function Agendamento() {
     }
 
     if (event.type === "set" && dataSelecionada) {
-      const currentDate = dataSelecionada;
-      setDataInicial(currentDate);
+      setDataInicial(dataSelecionada);
 
-      const dia = String(currentDate.getDate()).padStart(2, "0");
-      const mes = String(currentDate.getMonth() + 1).padStart(2, "0");
-      const ano = currentDate.getFullYear();
+      const dia = String(dataSelecionada.getDate()).padStart(2, "0");
+      const mes = String(dataSelecionada.getMonth() + 1).padStart(2, "0");
+      const ano = dataSelecionada.getFullYear();
 
       setTextoCalendarioInicial(`${dia}/${mes}/${ano}`);
+
+      // Se a data final for menor que a nova data inicial selecionada, reseta a data final
+      if (dataFinal < dataSelecionada) {
+        setDataFinal(dataSelecionada);
+        setTextoCalendarioFinal("Selecionar data...");
+      }
     } else if (event.type === "dismissed") {
       setMostrarCalendarioInicial(false);
     }
@@ -130,20 +126,31 @@ export default function Agendamento() {
     }
 
     if (event.type === "set" && dataSelecionada) {
+      // Normaliza as datas zerando as horas para comparação correta apenas do dia
+      const dInicial = new Date(
+        dataInicial.getFullYear(),
+        dataInicial.getMonth(),
+        dataInicial.getDate(),
+      );
+      const dSelecionada = new Date(
+        dataSelecionada.getFullYear(),
+        dataSelecionada.getMonth(),
+        dataSelecionada.getDate(),
+      );
 
-      if (dataSelecionada < dataInicial) {
+      if (dSelecionada < dInicial) {
         Alert.alert(
           "Data inválida",
-          "A data final não pode ser anterior à data inicial."
+          "A data final não pode ser anterior à data inicial.",
         );
         return;
       }
-      const currentDate = dataSelecionada;
-      setDataFinal(currentDate);
 
-      const dia = String(currentDate.getDate()).padStart(2, "0");
-      const mes = String(currentDate.getMonth() + 1).padStart(2, "0");
-      const ano = currentDate.getFullYear();
+      setDataFinal(dataSelecionada);
+
+      const dia = String(dataSelecionada.getDate()).padStart(2, "0");
+      const mes = String(dataSelecionada.getMonth() + 1).padStart(2, "0");
+      const ano = dataSelecionada.getFullYear();
 
       setTextoCalendarioFinal(`${dia}/${mes}/${ano}`);
     } else if (event.type === "dismissed") {
@@ -151,17 +158,13 @@ export default function Agendamento() {
     }
   };
 
-  const amanha = new Date();
-  amanha.setDate(amanha.getDate() + 1);
-
   const Relogio = (event: DateTimePickerEvent, horaSelecionada?: Date) => {
     if (Platform.OS === "android") {
       setMostrarRelogio(false);
     }
 
     if (event.type === "set" && horaSelecionada) {
-      const currentDate = horaSelecionada;
-      setHorario(currentDate);
+      setHorario(horaSelecionada);
 
       const horas = String(horaSelecionada.getHours()).padStart(2, "0");
       const minutos = String(horaSelecionada.getMinutes()).padStart(2, "0");
@@ -171,7 +174,6 @@ export default function Agendamento() {
     }
   };
 
-  // Função para buscar o endereço no ViaCEP
   const buscarCep = async (cepBuscado: string) => {
     const cepLimpo = cepBuscado.replace(/\D/g, "");
     if (cepLimpo.length !== 8) return;
@@ -198,7 +200,6 @@ export default function Agendamento() {
     }
   };
 
-  // Aplica a máscara XXXXX-XXX e dispara a requisição ao atingir 8 dígitos
   const handleCepChange = (texto: string) => {
     const apenasNumeros = texto.replace(/\D/g, "");
     const cepFormatado = apenasNumeros.replace(/^(\d{5})(\d)/, "$1-$2");
@@ -210,7 +211,23 @@ export default function Agendamento() {
     }
   };
 
+  const limparFormulario = () => {
+    setNomeEvento("");
+    setNomeEmpresa("");
+    setNomeCliente("");
+    setCep("");
+    setLogradouro("");
+    setBairro("");
+    setNumero("");
+    setDescricao("");
+    setTecnicosSelecionados([]);
+    setTextoCalendarioInicial("Selecionar data...");
+    setTextoCalendarioFinal("Selecionar data...");
+    setTextoRelogio("Selecionar horário...");
+  };
+
   async function Salvar() {
+    // Validação de todos os campos obrigatórios
     if (
       !nomeEvento.trim() ||
       !nomeEmpresa.trim() ||
@@ -218,7 +235,11 @@ export default function Agendamento() {
       !cep.trim() ||
       !logradouro.trim() ||
       !bairro.trim() ||
-      !descricao.trim()
+      !descricao.trim() ||
+      textoCalendarioInicial === "Selecionar data..." ||
+      textoCalendarioFinal === "Selecionar data..." ||
+      textoRelogio === "Selecionar horário..." ||
+      tecnicosSelecionados.length === 0
     ) {
       Alert.alert("Atenção", "Preencha todos os campos obrigatórios (*).");
       return;
@@ -244,8 +265,7 @@ export default function Agendamento() {
     setSalvando(false);
 
     if (sucesso) {
-      // Integração com a agenda nativa
-      const enderecoCompleto = `${logradouro}, ${numero}, ${bairro} - CEP: ${cep}`;
+      const enderecoCompleto = `${logradouro}, ${numero || "S/N"}, ${bairro} - CEP: ${cep}`;
       await salvarVisitaNoCalendarioNativo({
         titulo: `${nomeEvento} - ${nomeCliente}`,
         descricao: `Empresa: ${nomeEmpresa}\n\nDescrição: ${descricao}`,
@@ -255,46 +275,36 @@ export default function Agendamento() {
         horario,
       });
 
-      // Limpar formulário...
-      setNomeEvento("");
-      setNomeEmpresa("");
-      setNomeCliente("");
-      setCep("");
-      setLogradouro("");
-      setBairro("");
-      setNumero("");
-      setDescricao("");
-      setTextoCalendarioInicial("Selecionar data...");
-      setTextoCalendarioFinal("Selecionar data...");
-      setTextoRelogio("Selecionar horário...");
-      setTecnicosSelecionados([]);
+      limparFormulario();
+      Alert.alert("Sucesso", "Visita agendada com sucesso!");
     }
   }
 
   return (
-    <SafeAreaView style={Container} edges={["left", "right"]}>
+    <SafeAreaView style={theme.container} edges={["left", "right"]}>
       <ScrollView
-        contentContainerStyle={Scroll}
+        contentContainerStyle={theme.scroll}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
         <View>
-          <Text style={H1}>Nova Visita</Text>
-          <Text style={[H4, { color: Colors.darkgray }]}>
+          <Text style={theme.h1}>Nova Visita</Text>
+          <Text style={[theme.h4, { color: Colors.darkgray }]}>
             Preencha os detalhes para agendar uma nova visita técnica.
           </Text>
         </View>
 
-        <View style={Form}>
-          <View style={Column}>
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
+        <View style={theme.form}>
+          <View style={theme.column}>
+            {/* Nome da Empresa */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
                 Nome da Empresa *
               </Text>
-              <View style={CampoInput}>
-                <PesquisaIcon style={InputIcon} color={Colors.gray} />
+              <View style={theme.campoInput}>
+                <PesquisaIcon style={theme.inputIcon} color={Colors.gray} />
                 <TextInput
-                  style={Input}
+                  style={theme.input}
                   placeholder="Insira o nome da empresa..."
                   onChangeText={setNomeEmpresa}
                   value={nomeEmpresa}
@@ -302,14 +312,15 @@ export default function Agendamento() {
               </View>
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
+            {/* Objetivo da Visita */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
                 Objetivo da Visita *
               </Text>
-              <View style={CampoInput}>
-                <PesquisaIcon style={InputIcon} color={Colors.gray} />
+              <View style={theme.campoInput}>
+                <PesquisaIcon style={theme.inputIcon} color={Colors.gray} />
                 <TextInput
-                  style={Input}
+                  style={theme.input}
                   placeholder="Insira o objetivo da visita..."
                   onChangeText={setNomeEvento}
                   value={nomeEvento}
@@ -317,12 +328,15 @@ export default function Agendamento() {
               </View>
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>Cliente *</Text>
-              <View style={CampoInput}>
-                <PesquisaIcon style={InputIcon} color={Colors.gray} />
+            {/* Cliente */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
+                Cliente *
+              </Text>
+              <View style={theme.campoInput}>
+                <PesquisaIcon style={theme.inputIcon} color={Colors.gray} />
                 <TextInput
-                  style={Input}
+                  style={theme.input}
                   placeholder="Nome do cliente..."
                   onChangeText={setNomeCliente}
                   value={nomeCliente}
@@ -330,18 +344,19 @@ export default function Agendamento() {
               </View>
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
+            {/* Data Inicial */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
                 Data Inicial da Visita *
               </Text>
               <Pressable
-                style={CampoInput}
+                style={theme.campoInput}
                 onPress={() => setMostrarCalendarioInicial(true)}
               >
-                <CalendarioIcon style={InputIcon} color={Colors.gray} />
+                <CalendarioIcon style={theme.inputIcon} color={Colors.gray} />
                 <Text
                   style={[
-                    Input,
+                    theme.input,
                     textoCalendarioInicial === "Selecionar data..."
                       ? { color: Colors.darkgray }
                       : { color: Colors.black },
@@ -357,33 +372,33 @@ export default function Agendamento() {
                   mode="date"
                   display={Platform.OS === "ios" ? "inline" : "default"}
                   onChange={CalendarioInicial}
-                  minimumDate={amanha}
+                  minimumDate={getAmanha()}
                 />
               )}
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
+            {/* Data Final */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
                 Data Final da Visita *
               </Text>
               <Pressable
-                style={CampoInput}
+                style={theme.campoInput}
                 onPress={() => {
                   if (textoCalendarioInicial === "Selecionar data...") {
                     Alert.alert(
                       "Data inicial",
-                      "Selecione a data inicial primeiro."
+                      "Selecione a data inicial primeiro.",
                     );
                     return;
                   }
-
                   setMostrarCalendarioFinal(true);
                 }}
               >
-                <CalendarioIcon style={InputIcon} color={Colors.gray} />
+                <CalendarioIcon style={theme.inputIcon} color={Colors.gray} />
                 <Text
                   style={[
-                    Input,
+                    theme.input,
                     textoCalendarioFinal === "Selecionar data..."
                       ? { color: Colors.darkgray }
                       : { color: Colors.black },
@@ -404,18 +419,19 @@ export default function Agendamento() {
               )}
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
+            {/* Horário Inicial Previsto */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
                 Horário Inicial Previsto *
               </Text>
               <Pressable
-                style={CampoInput}
+                style={theme.campoInput}
                 onPress={() => setMostrarRelogio(true)}
               >
-                <RelogioIcon style={InputIcon} color={Colors.gray} />
+                <RelogioIcon style={theme.inputIcon} color={Colors.gray} />
                 <Text
                   style={[
-                    Input,
+                    theme.input,
                     textoRelogio === "Selecionar horário..."
                       ? { color: Colors.darkgray }
                       : { color: Colors.black },
@@ -436,31 +452,34 @@ export default function Agendamento() {
               )}
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>Técnicos *</Text>
+            {/* Técnicos */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
+                Técnicos *
+              </Text>
               <Pressable
-                style={CampoInput}
+                style={theme.campoInput}
                 onPress={() => setModalTecnicosVisible(true)}
               >
-                <PerfilIcon style={InputIcon} color={Colors.gray} />
+                <PerfilIcon style={theme.inputIcon} color={Colors.gray} />
                 <Text
                   style={[
-                    Input,
-                    tecnicosSelecionados.length === 0 // Se não tiver técnicos selecionados
-                      ? { color: Colors.darkgray } // o texto fica cinza
-                      : { color: Colors.black }, // se tiver técnicos selecionados, fica preto
+                    theme.input,
+                    tecnicosSelecionados.length === 0
+                      ? { color: Colors.darkgray }
+                      : { color: Colors.black },
                   ]}
-                  numberOfLines={1} // texto ocupa apenas uma linha no input
+                  numberOfLines={1}
                 >
                   {tecnicosSelecionados.length === 0
                     ? "Selecione os técnicos"
-                    : tecnicosSelecionados.join(", ")}  {/* se tiver técnicos selecionados, vai transformar o array em string(join) e exibir */}
+                    : tecnicosSelecionados.join(", ")}
                 </Text>
               </Pressable>
 
               <Modal
-                visible={modalTecnicosVisible} // modal abre se aqui no estado estiver true
-                animationType="slide" // animationType -> animação de entrada; slide -> modal aparece deslizando
+                visible={modalTecnicosVisible}
+                animationType="slide"
                 transparent
                 onRequestClose={() => setModalTecnicosVisible(false)}
               >
@@ -468,7 +487,7 @@ export default function Agendamento() {
                   style={{
                     flex: 1,
                     backgroundColor: "rgba(0,0,0,0.5)",
-                    justifyContent: "flex-end" // coloca modal na parte de baixo da tela
+                    justifyContent: "flex-end",
                   }}
                 >
                   <View
@@ -477,46 +496,67 @@ export default function Agendamento() {
                       borderTopLeftRadius: 16,
                       borderTopRightRadius: 16,
                       padding: 16,
-                      maxHeight: "70%", // Tamanho máximo que o modal vai ocupar na tela
+                      maxHeight: "70%",
                     }}
                   >
-                    <Text style={[H4, { color: Colors.darkblue, marginBottom: 12 }]}>
+                    <Text
+                      style={[
+                        theme.h4,
+                        { color: Colors.darkblue, marginBottom: 12 },
+                      ]}
+                    >
                       Selecione os técnicos
                     </Text>
 
                     <FlatList
-                      data={usuarios} // pega os dados do array de usuarios e mostra
-                      keyExtractor={(item) => item.nome}
+                      data={usuarios}
+                      keyExtractor={(item, index) =>
+                        item.usuarioID?.toString() ||
+                        item.nome ||
+                        index.toString()
+                      }
                       renderItem={({ item }) => {
-                        const selecionado = tecnicosSelecionados.includes(item.nome); // Vai verificar se aquele nome está selecionado (true ou false)
+                        const selecionado = tecnicosSelecionados.includes(
+                          item.nome,
+                        );
                         return (
                           <TouchableOpacity
                             onPress={() => selecionarTecnicos(item.nome)}
                             style={{
                               flexDirection: "row",
-                              justifyContent: "space-between", // vai jogar o nome para a esquerda e o ✓ para a direita
+                              justifyContent: "space-between",
                               alignItems: "center",
                               paddingVertical: 12,
                               borderBottomWidth: 1,
                               borderBottomColor: "#f0f0f0",
                             }}
                           >
-                            <Text style={{ paddingRight: 10, color: Colors.black }}>{item.nome}</Text>
-                            {selecionado && ( // Se o selecionado for true, vai mostrar ✓
-                              <Text style={{ color: Colors.darkblue }}>✓</Text>
+                            <Text
+                              style={{ paddingRight: 10, color: Colors.black }}
+                            >
+                              {item.nome}
+                            </Text>
+                            {selecionado && (
+                              <Text
+                                style={{
+                                  color: Colors.darkblue,
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                ✓
+                              </Text>
                             )}
                           </TouchableOpacity>
                         );
                       }}
                     />
 
-                    {/* Botão de Confirmar */}
                     <TouchableOpacity
-                      style={[Btn, { marginTop: 12 }]}
+                      style={[theme.btn, { marginTop: 12 }]}
                       onPress={() => setModalTecnicosVisible(false)}
                     >
-                      <Text style={[BtnText, { color: Colors.white }]}>
-                        Confirmar ({tecnicosSelecionados.length})  {/* mostra quantos técnicos foram selecionados */}
+                      <Text style={[theme.btnText, { color: Colors.white }]}>
+                        Confirmar ({tecnicosSelecionados.length})
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -524,20 +564,23 @@ export default function Agendamento() {
               </Modal>
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>CEP *</Text>
-              <View style={CampoInput}>
+            {/* CEP */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
+                CEP *
+              </Text>
+              <View style={theme.campoInput}>
                 {loadingCep ? (
                   <ActivityIndicator
                     size="small"
                     color={Colors.darkblue}
-                    style={InputIcon}
+                    style={theme.inputIcon}
                   />
                 ) : (
-                  <LocalIcon style={InputIcon} color={Colors.gray} />
+                  <LocalIcon style={theme.inputIcon} color={Colors.gray} />
                 )}
                 <TextInput
-                  style={Input}
+                  style={theme.input}
                   placeholder="00000-000"
                   onChangeText={handleCepChange}
                   value={cep}
@@ -548,14 +591,15 @@ export default function Agendamento() {
               </View>
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
+            {/* Logradouro */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
                 Logradouro / Endereço *
               </Text>
-              <View style={CampoInput}>
-                <RuaIcon style={InputIcon} color={Colors.gray} />
+              <View style={theme.campoInput}>
+                <RuaIcon style={theme.inputIcon} color={Colors.gray} />
                 <TextInput
-                  style={Input}
+                  style={theme.input}
                   placeholder="Rua Niterói"
                   onChangeText={setLogradouro}
                   value={logradouro}
@@ -563,12 +607,15 @@ export default function Agendamento() {
               </View>
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>Bairro *</Text>
-              <View style={CampoInput}>
-                <RuaIcon style={InputIcon} color={Colors.gray} />
+            {/* Bairro */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
+                Bairro *
+              </Text>
+              <View style={theme.campoInput}>
+                <RuaIcon style={theme.inputIcon} color={Colors.gray} />
                 <TextInput
-                  style={Input}
+                  style={theme.input}
                   placeholder="Bairro"
                   onChangeText={setBairro}
                   value={bairro}
@@ -576,33 +623,37 @@ export default function Agendamento() {
               </View>
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>Número</Text>
-              <View style={CampoInput}>
-                <NumeroIcon style={InputIcon} color={Colors.gray} />
+            {/* Número */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
+                Número
+              </Text>
+              <View style={theme.campoInput}>
+                <NumeroIcon style={theme.inputIcon} color={Colors.gray} />
                 <TextInput
-                  style={Input}
+                  style={theme.input}
                   placeholder="1234"
-                  onChangeText={(texto) => {
-                    setNumero(texto.replace(/[^0-9]/g, "")); // Vai remover tudo o que não for número
-                  }}
+                  onChangeText={(texto) =>
+                    setNumero(texto.replace(/[^0-9]/g, ""))
+                  }
                   keyboardType="numeric"
                   value={numero}
                 />
               </View>
             </View>
 
-            <View style={CampoForm}>
-              <Text style={[Label, { color: Colors.darkblue }]}>
+            {/* Descrição */}
+            <View style={theme.campoForm}>
+              <Text style={[theme.label, { color: Colors.darkblue }]}>
                 Descrição do Serviço *
               </Text>
-              <View style={CampoInput}>
+              <View style={theme.campoInput}>
                 <DescricaoIcon
-                  style={[InputIcon, { top: 15 }]}
+                  style={[theme.inputIcon, { top: 15 }]}
                   color={Colors.gray}
                 />
                 <TextInput
-                  style={TextArea}
+                  style={theme.textArea}
                   placeholder="Instruções específicas para o técnico..."
                   multiline={true}
                   onChangeText={setDescricao}
@@ -612,23 +663,31 @@ export default function Agendamento() {
             </View>
           </View>
 
-          <View style={[Column, Center]}>
+          {/* Botões de Ação */}
+          <View style={[theme.column, theme.center]}>
             <TouchableOpacity
               style={[
-                Btn2,
+                theme.btn2,
                 {
                   backgroundColor: Colors.lightred,
                   borderWidth: 2,
                   borderColor: Colors.red,
                 },
               ]}
+              onPress={limparFormulario}
             >
               <CancelarIcon color={Colors.darkred} />
-              <Text style={[BtnText, { color: Colors.darkred }]}>Cancelar</Text>
+              <Text style={[theme.btnText, { color: Colors.darkred }]}>
+                Cancelar
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[Btn, salvando && { opacity: 0.7 }]}
+              style={[
+                theme.btn2,
+                { backgroundColor: Colors.btn },
+                salvando && { opacity: 0.7 },
+              ]}
               onPress={Salvar}
               disabled={salvando}
             >
@@ -637,7 +696,7 @@ export default function Agendamento() {
               ) : (
                 <>
                   <ConfirmarIcon color={Colors.white} />
-                  <Text style={[BtnText, { color: Colors.white }]}>
+                  <Text style={[theme.btnText, { color: Colors.white }]}>
                     Confirmar Agendamento
                   </Text>
                 </>

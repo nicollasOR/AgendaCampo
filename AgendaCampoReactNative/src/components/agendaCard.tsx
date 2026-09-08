@@ -1,19 +1,7 @@
 import { useRouter } from "expo-router";
 import { VisitaGet } from "@/src/@types/visita";
 import { View, Text, TouchableOpacity } from "react-native";
-import {
-  Box2,
-  Box3,
-  CardFooter,
-  CardInfo,
-  Colors,
-  H2,
-  List,
-  P,
-  Row,
-  SpaceBetween,
-  Status,
-} from "@/src/constants/theme";
+import { Colors, theme } from "@/src/constants/theme";
 import LocalIcon from "@/assets/svg/LocalIcon.svg";
 import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
 import CalendarioIcon from "@/assets/svg/CalendarioIcon.svg";
@@ -71,53 +59,50 @@ export default function AgendaCard({
   }
 
   return (
-    <View style={CardInfo}>
+    <View style={theme.cardInfo}>
       <View style={{ padding: 16 }}>
-        <View style={[Row, SpaceBetween]}>
-          <View style={Status}>
-            <Text style={[P, { color: Colors.btn }]}>{statusVisita}</Text>
+        <View style={[theme.row, theme.spaceBetween]}>
+          <View style={theme.status}>
+            <Text style={[theme.p, { color: Colors.btn }]}>{statusVisita}</Text>
           </View>
           <VisitaCheckIcon color={Colors.darkblue} />
         </View>
 
-        <Text style={[H2, { color: Colors.black }]}>{nomeEvento}</Text>
-        <Text style={[P, { color: Colors.darkgray }]}>Ref: RN{visitaID}</Text>
+        <Text style={[theme.h2, { color: Colors.black }]}>{nomeEvento}</Text>
+        <Text style={[theme.p, { color: Colors.darkgray }]}>
+          Ref: RN{visitaID}
+        </Text>
 
-        <View style={List}>
-          <View style={Row}>
+        <View style={theme.list}>
+          <View style={theme.row}>
             <CalendarioIcon color={Colors.darkblue} />
-            <Text style={[P, { color: Colors.gray }]}>
+            <Text style={[theme.p, { color: Colors.gray }]}>
               {formatarDataSemHoras(String(dataInicio))}
             </Text>
           </View>
-          <View style={Row}>
+          <View style={theme.row}>
             <RelogioIcon color={Colors.darkblue} />
-            <Text style={[P, { color: Colors.gray }]}>
+            <Text style={[theme.p, { color: Colors.gray }]}>
               {formatarHora(String(dataInicio))} -{" "}
               {formatarHora(String(dataTermino))}
             </Text>
           </View>
-          <View style={Row}>
+          <View style={theme.row}>
             <LocalIcon color={Colors.darkblue} />
-            <Text style={[P, { color: Colors.gray }]} numberOfLines={2}>
+            <Text style={[theme.p, { color: Colors.gray }]} numberOfLines={2}>
               {logradouro}, {numero}, {bairro}
             </Text>
           </View>
         </View>
       </View>
 
-      <View style={CardFooter}>
+      <View style={theme.cardFooter}>
         <TouchableOpacity
-          style={Box3}
+          style={theme.box}
           onPress={() => router.push("/detalhe/" + visitaID)}
         >
-          <Text style={[P, { color: Colors.btn }]}>Detalhes</Text>
+          <Text style={[theme.p, { color: Colors.btn }]}>Detalhes</Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity style={[Row, Box2]}>
-          <ArrowMapIcon color={Colors.white} />
-          <Text style={[P, { color: Colors.white }]}>Iniciar Rota</Text>
-        </TouchableOpacity> */}
       </View>
     </View>
   );

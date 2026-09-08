@@ -8,6 +8,7 @@ export interface LoginResponse {
 }
 
 export interface Usuario {
+  usuarioID: string;
   nome: string;
   email: string;
   imgURL: string | null;

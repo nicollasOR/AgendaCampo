@@ -1,116 +1,80 @@
-import { useCallback, useMemo } from "react";
-import { useFocusEffect } from "expo-router";
-import { useVisita } from "@/src/hooks/useVisita";
-import { Text, View, FlatList } from "react-native";
-import { useAuth } from "@/src/contexts/AuthContext";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { FormatarPrimeiroEUltimoNome } from "@/src/utils/formatarNome";
+import React, { useCallback, useMemo } from "react";
+import { FlatList, Text, View } from "react-native";
+
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFocusEffect } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import {
-  Box2,
-  Colors,
-  Column,
-  Container,
-  H2,
-  P,
-  Row,
-  Scroll,
-  SpaceBetween,
-} from "@/src/constants/theme";
 import AgendaCard from "@/src/components/agendaCard";
-import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
+import { Colors, theme } from "@/src/constants/theme";
 import { useAuthTESTE } from "@/src/contexts/AuthContextTESTE";
+import { useVisita } from "@/src/hooks/useVisita";
+import { FormatarPrimeiroEUltimoNome } from "@/src/utils/formatarNome";
+
+import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
 
 export default function Home() {
   const { usuario } = useAuthTESTE();
-  const { visita, visitaGet, listarFuturasVisitas } = useVisita();
+  const { visitaGet, listarFuturasVisitas } = useVisita();
 
-  // function visitasHoje()
-  // {
-  //   const hoje = new Date().toLocaleDateString('pt-BR')
-  //   const visitasdeHoje = visitaGet.filter((varAux) => {
-  //     const visitaBanco = varAux.dataInicio.toLocaleDateString('pt-BR')
-  //     return visitaBanco === hoje
-  //     }
-  //   )
+  const visitasHoje = useMemo(() => {
+    const hoje = new Date();
+    const diaHj = String(hoje.getDate()).padStart(2, "0");
+    const mesHj = String(hoje.getMonth() + 1).padStart(2, "0");
+    const anoHj = hoje.getFullYear();
 
-  //   return visitasdeHoje.length
+    const hojeFormatado = `${diaHj}/${mesHj}/${anoHj}`;
 
+    const vstBancoHoje = visitaGet.filter((varAux) => {
+      if (!varAux.dataInicio) return false;
 
+      const partesData = String(varAux.dataInicio).split("T")[0].split("-");
+      if (partesData.length < 3) return false;
 
+      const anoBanco = partesData[0];
+      const mesBanco = partesData[1];
+      const diaBanco = partesData[2];
 
+      const dataBancoFormatada = `${diaBanco}/${mesBanco}/${anoBanco}`;
+      return dataBancoFormatada === hojeFormatado;
+    });
 
-    
-  // }
-                       //armazenamento de memoria para usar essa const uma única vez
-const visitasHoje = useMemo(() => {
-  // Pega o dia, mês e ano LOCAIS (dê ênfase nisso, pois não funciona por conta disso..) do celular/emulador
-  const hoje = new Date();
-  const diaHj = String(hoje.getDate()).padStart(2, "0");
-  const mesHj = String(hoje.getMonth() + 1).padStart(2, "0"); //obrigado por mostrar o caminho das pedras mayara 
-  const anoHj = hoje.getFullYear();
-  
-  const hojeFormatado = `${diaHj}/${mesHj}/${anoHj}`; // seria:  "07/09/2026" ou "08/09/2026"  
-
-  const vstBancoHoje = visitaGet.filter((varAux) => {
-    if (!varAux.dataInicio) 
-      return false;
-    // retirando o 08T06:31:09.145Z da visita
-    const partesData = String(varAux.dataInicio).split("T")[0].split("-");
-    
-    if (partesData.length < 3) 
-      return false;
-
-    const anoBanco = partesData[0];
-    const mesBanco = partesData[1];
-    const diaBanco = partesData[2];
-
-    const dataBancoFormatada = `${diaBanco}/${mesBanco}/${anoBanco}`;
-
-    return dataBancoFormatada === hojeFormatado;
-  });
-
-  return vstBancoHoje.length; // aqui seria para ele retornar apenas o numero de visitas no dia como um number,
-                              //  mas não retornar por conta da localização do dispositivo
-}, [visitaGet]);
+    return vstBancoHoje.length;
+  }, [visitaGet]);
 
   useFocusEffect(
     useCallback(() => {
-      console.log(`Teste das visitas: \n${visitasHoje} \n\n\n`)
-      // console.log(`Teste:: \n \n ${visitaGet.map((varAux) => (
-      //   varAux.visitaID
-      // ))} \n acima visitaID`)
       listarFuturasVisitas();
     }, []),
   );
 
   return (
-    <SafeAreaView style={[Container]} edges={["top", "left", "right"]}>
-      <View style={[Column, { alignSelf: "flex-start", width: "100%" }]}>
+    <SafeAreaView style={theme.container} edges={["top", "left", "right"]}>
+      <View style={[theme.column, { alignSelf: "flex-start", width: "100%" }]}>
         <View>
-          <Text style={[H2, { color: Colors.darkblue }]}>
+          <Text style={[theme.h2, { color: Colors.darkblue }]}>
             Olá,{" "}
             {usuario?.nome
               ? FormatarPrimeiroEUltimoNome(usuario.nome)
               : "Visitante"}
           </Text>
-          <Text style={[P, { color: Colors.gray }]}>
+          <Text style={[theme.p, { color: Colors.gray }]}>
             Aqui estão suas visitas programadas.
           </Text>
         </View>
-        <View style={[Row, SpaceBetween]}>
-          <View style={Row}>
+
+        <View style={[theme.row, theme.spaceBetween]}>
+          <View style={theme.row}>
             <VisitaIcon color={Colors.darkblue} />
-            <Text style={[H2, { color: Colors.darkblue }]}>
+            <Text style={[theme.h2, { color: Colors.darkblue }]}>
               Visitas Futuras
             </Text>
           </View>
 
-          <View style={Box2}>
-            <Text style={[P, { color: Colors.white }]}>
-              {visitasHoje} Hoje 
+          <View style={theme.box}>
+            <Text style={[theme.p, { color: Colors.blue }]}>
+              {visitasHoje} Hoje
             </Text>
           </View>
         </View>
@@ -130,9 +94,9 @@ const visitasHoje = useMemo(() => {
           data={visitaGet}
           keyExtractor={(item) => String(item.visitaID)}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={Scroll}
+          contentContainerStyle={theme.scroll}
           style={{ width: "100%" }}
-          ListHeaderComponent={<View style={Column}></View>}
+          ListHeaderComponent={<View style={theme.column} />}
           renderItem={({ item }) => (
             <AgendaCard
               visitaID={item.visitaID}

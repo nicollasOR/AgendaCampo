@@ -16,13 +16,13 @@ import {
   Outfit_700Bold,
 } from "@expo-google-fonts/outfit";
 
-// import { AuthProvider } from "@/src/contexts/AuthContext";
-import { AuthProviderTeste } from "../contexts/AuthContextTESTE";
+import { AuthProviderTeste } from "@/src/contexts/AuthContextTESTE";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { Center, Colors, H2, Row, SpaceBetween } from "@/src/constants/theme";
+import { Colors, theme } from "@/src/constants/theme";
 import Logo from "@/assets/svg/Logo.svg";
 
+// Impede que a Splash Screen nativa esconda automaticamente
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function AnimatedSplashScreen({
@@ -42,7 +42,8 @@ function AnimatedSplashScreen({
 
   useEffect(() => {
     if (isAppReady) {
-      SplashScreen.hideAsync();
+      // Esconde a Splash Nativa para exibir a Splash Animada personalizada
+      SplashScreen.hideAsync().catch(() => {});
 
       Animated.parallel([
         Animated.timing(scaleAnim, {
@@ -92,7 +93,7 @@ function AnimatedSplashScreen({
           pointerEvents="none"
           style={[
             StyleSheet.absoluteFillObject,
-            Center,
+            theme.center,
             {
               backgroundColor: Colors.blue,
               zIndex: 9999,
@@ -100,7 +101,7 @@ function AnimatedSplashScreen({
             },
           ]}
         >
-          <View style={Center}>
+          <View style={theme.center}>
             <Animated.View
               style={{
                 opacity: logoOpacityAnim,
@@ -116,7 +117,7 @@ function AnimatedSplashScreen({
                 transform: [{ translateY: translateYAnim }],
               }}
             >
-              <Text style={[H2, Center, { color: Colors.white }]}>
+              <Text style={[theme.h2, theme.center, { color: Colors.white }]}>
                 Agenda Campo
               </Text>
             </Animated.View>
@@ -149,8 +150,14 @@ function CustomHeaderTitle() {
   };
 
   return (
-    <View style={[Row, SpaceBetween]}>
-      <Text style={[H2, { color: Colors.white }]}>Agenda Campo</Text>
+    <View
+      style={[
+        theme.row,
+        theme.spaceBetween,
+        { width: "100%", paddingRight: 16 },
+      ]}
+    >
+      <Text style={[theme.h2, { color: Colors.white }]}>Agenda Campo</Text>
 
       <TouchableWithoutFeedback
         onPressIn={handlePressIn}
@@ -197,12 +204,15 @@ export default function RootLayout() {
     Outfit_700Bold,
   });
 
-  const isAppReady = fontsLoaded || !!fontError;
+  // Previne a renderização até que a verificação de fontes termine
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   return (
     <AuthProviderTeste>
       <SafeAreaProvider>
-        <AnimatedSplashScreen isAppReady={isAppReady}>
+        <AnimatedSplashScreen isAppReady={fontsLoaded || !!fontError}>
           <AppContent />
         </AnimatedSplashScreen>
       </SafeAreaProvider>

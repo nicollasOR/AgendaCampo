@@ -8,7 +8,7 @@ export const Colors = {
   // Cores Principais
   blue: "hsl(225, 55%, 50%)",
   darkblue: "hsl(225, 85%, 15%)",
-  lightblue: "hsl(225, 100%, 90%)",
+  lightblue: "hsl(225, 100%, 97%)",
   btn: "hsl(220, 100%, 40%)",
 
   // Status & Alertas
@@ -183,7 +183,7 @@ export const theme = StyleSheet.create({
     justifyContent: "flex-end",
     gap: 10,
     alignItems: "center",
-    backgroundColor: Colors.status,
+    backgroundColor: Colors.lightblue,
     borderTopWidth: 0.5,
     borderColor: Colors.gray,
     width: "100%",
@@ -207,10 +207,10 @@ export const theme = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 18,
     paddingVertical: 20,
-    gap: 30,
+    gap: 32,
   },
   campoForm: {
-    gap: 12,
+    gap: 4,
   },
   campoInput: {
     flexDirection: "row",
@@ -253,17 +253,17 @@ export const theme = StyleSheet.create({
 
   // --- Boxes / Containers Destacados ---
   box: {
-    ...baseShadow,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderWidth: 2,
-    borderColor: Colors.lightblue,
+    borderWidth: 1,
+    borderColor: Colors.btn,
     borderRadius: 20,
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: Colors.smoothBgc,
+    backgroundColor: Colors.white,
   },
+
   box2: {
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -271,30 +271,14 @@ export const theme = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: Colors.btn,
-  },
-  box3: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: Colors.btn,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: Colors.bgc,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 3,
+    backgroundColor: Colors.lightblue,
   },
 
   // --- Botões ---
   btn: {
     gap: 10,
-    paddingVertical: 16,
     height: 60,
+    paddingVertical: 16,
     paddingHorizontal: 24,
     width: "90%",
     borderRadius: 999,
@@ -305,17 +289,16 @@ export const theme = StyleSheet.create({
   },
   btn2: {
     gap: 10,
-    padding: 16,
     height: 60,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     width: "90%",
     borderRadius: 999,
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
   },
-
   btnText: {
-    ...baseText,
     color: Colors.white,
     fontSize: 18,
     fontFamily: Font.semibold,
@@ -357,57 +340,3 @@ export const theme = StyleSheet.create({
     fontFamily: Font.semibold,
   },
 });
-
-// ════════════════ //
-// 4. EXPORTAÇÕES   //
-// ════════════════ //
-
-export const {
-  // Layout
-  container: Container,
-  scroll: Scroll,
-  center: Center,
-  row: Row,
-  column: Column,
-  list: List,
-  spaceBetween: SpaceBetween,
-  line: Line,
-
-  // Componentes
-  info: Info,
-  round: Round,
-  icon: Icon,
-  card: Card,
-  cardInfo: CardInfo,
-  cardFooter: CardFooter,
-  status: Status,
-
-  // Boxes & Botões
-  box: Box,
-  box2: Box2,
-  box3: Box3,
-  btn: Btn,
-  btn2: Btn2,
-  btnText: BtnText,
-
-  // Form
-  form: Form,
-  campoForm: CampoForm,
-  campoInput: CampoInput,
-  campoInputImg: CampoInputImg,
-  input: Input,
-  inputIcon: InputIcon,
-  inputImg: InputImg,
-  textArea: TextArea,
-
-  // Tipografia
-  h1: H1,
-  h2: H2,
-  h3: H3,
-  h4: H4,
-  p: P,
-  label: Label,
-  profile: Profile,
-  profileText: ProfileText,
-  textImg: TextImg,
-} = theme;

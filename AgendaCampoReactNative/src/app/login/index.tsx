@@ -1,9 +1,4 @@
-import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { useAuth } from "@/src/contexts/AuthContext";
-import { useAuthTESTE } from "@/src/contexts/AuthContextTESTE";
-
-import { SafeAreaView } from "react-native-safe-area-context";
+import React from "react";
 import {
   ActivityIndicator,
   Text,
@@ -11,55 +6,43 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  Btn,
-  Btn2,
-  BtnText,
-  CampoForm,
-  CampoInput,
-  Center,
-  Colors,
-  Column,
-  Container,
-  H1,
-  H3,
-  H4,
-  Input,
-  InputIcon,
-  Label,
-  P,
-  Row,
-} from "@/src/constants/theme";
 
-import Logo from "@/assets/svg/Logo.svg";
-import EmailIcon from "@/assets/svg/EmailIcon.svg";
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { useAuthTESTE } from "@/src/contexts/AuthContextTESTE";
+import { Colors, theme } from "@/src/constants/theme";
+
 import ArrowIcon from "@/assets/svg/ArrowIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
+import EmailIcon from "@/assets/svg/EmailIcon.svg";
+import Logo from "@/assets/svg/Logo.svg";
 
 export default function Login() {
   const { email, setEmail, senha, setSenha, loading, erro, handleLogin } =
     useAuthTESTE();
 
   return (
-    <SafeAreaView style={[Container, Column, Center]}>
+    <SafeAreaView style={[theme.container, theme.column, theme.center]}>
       <StatusBar style="dark" />
-      <View style={Center}>
+      <View style={theme.center}>
         <Logo width={120} height={120} color={Colors.btn} />
-        <Text style={[H1, { color: Colors.btn }]}>Agenda Campo</Text>
-        <Text style={[H3, { color: Colors.gray }]}>
+        <Text style={[theme.h1, { color: Colors.btn }]}>Agenda Campo</Text>
+        <Text style={[theme.h3, { color: Colors.gray }]}>
           Acesse sua conta para continuar.
         </Text>
       </View>
 
-      <View style={CampoForm}>
-        {erro && <Text style={[P, { color: Colors.red }]}>{erro}</Text>}
+      <View style={theme.campoForm}>
+        {erro && <Text style={[theme.p, { color: Colors.red }]}>{erro}</Text>}
 
         <View>
-          <Text style={Label}>E-mail</Text>
-          <View style={CampoInput}>
-            <EmailIcon color={Colors.blue} style={InputIcon} />
+          <Text style={theme.label}>E-mail</Text>
+          <View style={theme.campoInput}>
+            <EmailIcon color={Colors.blue} style={theme.inputIcon} />
             <TextInput
-              style={Input}
+              style={theme.input}
               placeholder="seu@email.com"
               placeholderTextColor={Colors.inactive}
               value={email}
@@ -69,12 +52,13 @@ export default function Login() {
             />
           </View>
         </View>
+
         <View>
-          <Text style={Label}>Senha</Text>
-          <View style={CampoInput}>
-            <CadeadoIcon color={Colors.blue} style={InputIcon} />
+          <Text style={theme.label}>Senha</Text>
+          <View style={theme.campoInput}>
+            <CadeadoIcon color={Colors.blue} style={theme.inputIcon} />
             <TextInput
-              style={Input}
+              style={theme.input}
               placeholder="********"
               placeholderTextColor={Colors.inactive}
               secureTextEntry
@@ -83,29 +67,33 @@ export default function Login() {
             />
           </View>
           <TouchableOpacity style={{ alignSelf: "flex-end" }}>
-            <Text style={[H4, { color: Colors.blue }]}>
+            <Text style={[theme.h4, { color: Colors.blue }]}>
               Esqueci minha senha
             </Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <TouchableOpacity style={Btn} onPress={handleLogin} disabled={loading}>
+      <TouchableOpacity
+        style={theme.btn}
+        onPress={handleLogin}
+        disabled={loading}
+      >
         {loading ? (
           <ActivityIndicator color={Colors.white} />
         ) : (
-          <View style={Row}>
-            <Text style={BtnText}>Acessar</Text>
+          <View style={theme.row}>
+            <Text style={theme.btnText}>Acessar</Text>
             <ArrowIcon color={Colors.white} />
           </View>
         )}
       </TouchableOpacity>
 
-      <Text style={[H4, { color: Colors.darkblue }]}>Ou...</Text>
+      <Text style={[theme.h4, { color: Colors.darkblue }]}>Ou...</Text>
 
       <TouchableOpacity
         style={[
-          Btn2,
+          theme.btn2,
           {
             borderWidth: 2,
             borderColor: Colors.blue,
@@ -113,11 +101,11 @@ export default function Login() {
         ]}
         onPress={() => router.replace("/cadastro")}
       >
-        <Text style={[BtnText, { color: Colors.blue }]}>Cadastre-se</Text>
+        <Text style={[theme.btnText, { color: Colors.blue }]}>Cadastre-se</Text>
         <ArrowIcon color={Colors.blue} />
       </TouchableOpacity>
 
-      <Text style={[P, { position: "absolute", bottom: 40 }]}>
+      <Text style={[theme.p, { position: "absolute", bottom: 20 }]}>
         Uso exclusivo para técnicos e operacionais
       </Text>
     </SafeAreaView>

@@ -17,9 +17,6 @@ export const authService = {
 
   async usuario(email: string): Promise<Usuario> {
     const { data } = await api.get<Usuario>(`Usuario/email/${email}`);
-    
-    console.log(">>> RESPOSTA COMPLETA DA API USUARIO:", JSON.stringify(data, null, 2));
-    
     return data;
   },
 

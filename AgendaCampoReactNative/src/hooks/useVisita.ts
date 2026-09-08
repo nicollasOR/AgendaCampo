@@ -37,18 +37,12 @@ export function useVisita() {
 
   async function listarFuturasVisitas() {
     try {
-      console.log("entrou");
       const dados = await visitaService.listarFuturasVisitas();
-      console.log(dados);
       setVisitaGet(dados);
     } catch (error) {
       Alert.alert("Erro ao listar!");
     }
   }
-
-  useEffect(() => {
-    listarFuturasVisitas();
-  }, []);
 
   return {
     visita,

@@ -40,16 +40,12 @@ export function useVisitaDetalhes(id: number | string) {
         dataFinal:  formatacoes.formatacaoPATCH(dataFinal)
       };
 
-      console.log("Payload na api:", JSON.stringify(dadosData))
-
       // const response = await visitaService.reagendar(Number(id), dadosData);
       await visitaService.reagendar(Number(id), dadosData);
       Alert.alert("Visita reagendada!");
       // return response
       return true
     } catch (error: any) {
-
-      console.log("ERRO DA API", error?.response.data)
       const mensagem =
         error.response.data.mensagem || "Não Foi possível reagendar";
       Alert.alert("Erro ao reagendar", mensagem);

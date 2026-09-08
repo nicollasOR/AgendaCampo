@@ -51,7 +51,6 @@ export const visitaService = {
 
   async listarFuturasVisitas(): Promise<VisitaGet[]> {
     const response = await api.get<VisitaGet[]>("Visita/futurasVisitas");
-    console.log(response);
     return response.data;
   },
 

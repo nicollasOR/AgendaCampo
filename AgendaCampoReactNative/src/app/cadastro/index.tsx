@@ -1,10 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { useImage } from "@/src/hooks/useImage";
-import { useAuth } from "@/src/contexts/AuthContext";
-import { useImagePicker } from "@/src/hooks/useImagePicker";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Alert,
   Image,
@@ -13,48 +7,54 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  Btn,
-  Btn2,
-  BtnText,
-  CampoForm,
-  CampoInput,
-  CampoInputImg,
-  Center,
-  Colors,
-  Column,
-  Container,
-  H1,
-  H3,
-  Input,
-  InputIcon,
-  InputImg,
-  Label,
-  P,
-  Row,
-  TextImg,
-} from "@/src/constants/theme";
-import Logo from "@/assets/svg/Logo.svg";
+
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { useAuthTESTE } from "@/src/contexts/AuthContextTESTE";
+import { useImage } from "@/src/hooks/useImage";
+import { useImagePicker } from "@/src/hooks/useImagePicker";
+import { atualizarUsuarioHooks } from "@/src/hooks/useUsuario";
+import { criarUsuario } from "@/src/service/usuarioService";
+import { Colors, theme } from "@/src/constants/theme";
+
+import ArrowBackIcon from "@/assets/svg/ArrowBackIcon.svg";
+import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 import CriarIcon from "@/assets/svg/CriarIcon.svg";
+import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
 import EmailIcon from "@/assets/svg/EmailIcon.svg";
+import Logo from "@/assets/svg/Logo.svg";
 import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
 import UploadIcon from "@/assets/svg/UploadIcon.svg";
-import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
-import ArrowBackIcon from "@/assets/svg/ArrowBackIcon.svg";
-import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
-import { atualizarUsuarioHooks } from "@/src/hooks/useUsuario";
-import { useAuthTESTE } from "@/src/contexts/AuthContextTESTE";
-import { criarUsuario } from "@/src/service/usuarioService";
 
 export default function Cadastro() {
   const router = useRouter();
   const { usuario } = useAuthTESTE();
-  const {id: idParams} = useLocalSearchParams<{ id: string }>();
 
-  const usuarioId = usuario?.usuarioID || idParams || "75a1fb7f-8280-4ead-a74d-5fd5328bbd4f";
-  // const usuarioId = usuario?.usuarioID || id || (usuario as any)?.usuarioId ||
-  //   (usuario as any)?.id || usuarioId2//|| (usuario as any)?.id
-  
+  // Recebe modo ('criar' | 'editar') e id via URL/parâmetros
+  const params = useLocalSearchParams<{
+    id?: string;
+    mode?: "criar" | "editar";
+  }>();
+
+  // Definição do estado de modo (Cadastrar x Editar)
+  const [modo, setModo] = useState<"criar" | "editar">("criar");
+
+  const usuarioId = usuario?.usuarioID || params.id;
+
+  // Define modo inicial com base nos parâmetros da rota ou usuário logado
+  useEffect(() => {
+    if (params.mode) {
+      setModo(params.mode);
+    } else if (usuarioId) {
+      setModo("editar");
+    } else {
+      setModo("criar");
+    }
+  }, [params.mode, usuarioId]);
+
+  const telaEditar = modo === "editar";
 
   const { imagem, selecionarOpcaoImagem } = useImagePicker();
 
@@ -63,21 +63,13 @@ export default function Cadastro() {
   const [senha, setSenha] = useState<string>("");
   const [confirmarSenha, setConfirmarSenha] = useState<string>("");
 
-  let telaEditar = true;
-  if (usuarioId != null || usuarioId != undefined) telaEditar = true;
-  // console.log(`${usuarioId} + ${id} + ${usuario?.usuarioID}`)
-  
-  
-  // useEffect(() => {
-  //   // usuario?.nome ?? setNome(usuario?.nome)
-  //   if (usuario?.nome) setNome(usuario.nome);
-  // }, [usuario]);
   useEffect(() => {
-    if(usuario?.nome){
-      setNome(usuario.nome)
+    if (telaEditar && usuario?.nome) {
+      setNome(usuario.nome);
     }
-  })
-  const criarUser =  async () => {
+  }, [telaEditar, usuario]);
+
+  const criarUser = async () => {
     if (!nome.trim() || !email.trim() || !senha.trim()) {
       Alert.alert("Atenção", "Preencha todos os campos obrigatórios!");
       return;
@@ -87,70 +79,53 @@ export default function Cadastro() {
       Alert.alert("Atenção", "As senhas não coincidem!");
       return;
     }
-    try
-    {
-      await criarUsuario({
-        nome,
-        email,
-        senha
-      })
 
-      Alert.alert("Sucesso", "usuário cadastrado com sucesso")
-      router.replace("/login")
+    try {
+      await criarUsuario({ nome, email, senha });
+      Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
+      router.replace("/login");
+    } catch (error: any) {
+      const resposta = error?.response?.data;
+      const mensagem =
+        typeof resposta === "string"
+          ? resposta
+          : resposta?.message || "Erro ao cadastrar";
+
+      Alert.alert("Erro", mensagem);
     }
+  };
 
-    catch(error: any)
-    {
-const resposta = error?.response?.data;
-  const mensagem = typeof resposta === "string" 
-    ? resposta 
-    : resposta?.message || "Erro ao cadastrar";
-
-  Alert.alert("Erro", mensagem);
-    }
-  }
   const atualizarUsuario = async () => {
-if (usuarioId == null) {
-      console.log(usuarioId)
-      console.log(`teste ${usuario?.usuarioID}`)
-      Alert.alert("Usuário não encontrado!");
+    if (!usuarioId) {
+      Alert.alert("Erro", "Usuário não encontrado para edição!");
       return;
     }
-    
-      try {
-        const dados = {
-          nome,
-          senha,
-          img: imagem as any,
-        };
-        console.log(dados);
-        console.log("eita id", usuarioId);
-        await atualizarUsuarioHooks(usuarioId, dados);
-        Alert.alert(
-          "Sucesso..",
-          `Usuário ${dados.nome}, atualizado com sucesso!`,
-        );
-      } catch (error: any) {
-        const mensagemErro =
-          error.response?.data?.message ||
-          error.response?.data ||
-          error.message ||
-          "Erro ao atualizar!";
 
-          console.log(mensagemErro)
+    try {
+      const dados = {
+        nome,
+        senha,
+        img: imagem as any,
+      };
 
-        Alert.alert(mensagemErro);
-        console.log(mensagemErro)
-      }
-  }
+      await atualizarUsuarioHooks(usuarioId, dados);
+      Alert.alert("Sucesso", `Usuário ${dados.nome}, atualizado com sucesso!`);
+    } catch (error: any) {
+      const mensagemErro =
+        error.response?.data?.message ||
+        error.response?.data ||
+        error.message ||
+        "Erro ao atualizar!";
+
+      Alert.alert("Erro", mensagemErro);
+    }
+  };
 
   async function salvarUsuario() {
- 
     if (telaEditar) {
-      await atualizarUsuario()
-    }
-    else {
-      await criarUser()
+      await atualizarUsuario();
+    } else {
+      await criarUser();
     }
   }
 
@@ -158,32 +133,65 @@ if (usuarioId == null) {
   const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
 
   return (
-    <SafeAreaView style={[Container, Column, Center]}>
+    <SafeAreaView style={[theme.container, theme.column, theme.center]}>
       <StatusBar style="dark" />
-      <View style={Center}>
-        <View style={telaEditar ? Row : Center}>
+
+      {usuario && (
+        <View style={theme.row}>
+          <TouchableOpacity
+            style={{
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              borderRadius: 20,
+              backgroundColor: !telaEditar ? Colors.btn : Colors.inactive,
+            }}
+            onPress={() => setModo("criar")}
+          >
+            <Text style={{ color: Colors.white, fontWeight: "bold" }}>
+              Criar Conta
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              borderRadius: 20,
+              backgroundColor: telaEditar ? Colors.btn : Colors.inactive,
+            }}
+            onPress={() => setModo("editar")}
+          >
+            <Text style={{ color: Colors.white, fontWeight: "bold" }}>
+              Editar Perfil
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <View style={theme.center}>
+        <View style={telaEditar ? theme.row : theme.center}>
           <Logo
             width={telaEditar ? 60 : 120}
             height={telaEditar ? 60 : 120}
             color={Colors.btn}
           />
-          <Text style={[H1, { color: Colors.btn }]}>Agenda Campo</Text>
+          <Text style={[theme.h1, { color: Colors.btn }]}>Agenda Campo</Text>
         </View>
-        <Text style={[H3, { color: Colors.gray }]}>
+        <Text style={[theme.h3, { color: Colors.gray }]}>
           {telaEditar
             ? "Edite as informações do seu perfil"
             : "Crie uma conta para continuar"}
         </Text>
       </View>
 
-      <View style={CampoForm}>
+      <View style={theme.column}>
         {telaEditar && (
-          <View style={Center}>
-            <Text style={Label}>Foto de Perfil</Text>
+          <View style={theme.center}>
+            <Text style={theme.label}>Foto de Perfil</Text>
             <TouchableOpacity
               style={[
-                CampoInputImg,
-                fotoPerfilUri ? "" : { borderStyle: "dashed" },
+                theme.campoInputImg,
+                fotoPerfilUri ? undefined : { borderStyle: "dashed" },
               ]}
               onPress={selecionarOpcaoImagem}
               activeOpacity={0.7}
@@ -192,7 +200,7 @@ if (usuarioId == null) {
                 <>
                   <Image
                     source={{ uri: fotoPerfilUri }}
-                    style={InputImg}
+                    style={theme.inputImg}
                     resizeMode="cover"
                   />
                   <EditarPerfilIcon
@@ -205,7 +213,7 @@ if (usuarioId == null) {
               ) : (
                 <>
                   <UploadIcon color={Colors.blue} />
-                  <Text style={[TextImg, { color: Colors.btn }]}>
+                  <Text style={[theme.textImg, { color: Colors.btn }]}>
                     Subir Imagem
                   </Text>
                 </>
@@ -214,15 +222,14 @@ if (usuarioId == null) {
           </View>
         )}
 
-        <View>
-          <Text style={Label}>Nome</Text>
-          <View style={CampoInput}>
-            <PerfilIcon color={Colors.blue} style={InputIcon} />
+        <View style={theme.campoForm}>
+          <Text style={theme.label}>Nome</Text>
+          <View style={theme.campoInput}>
+            <PerfilIcon color={Colors.blue} style={theme.inputIcon} />
             <TextInput
-              style={Input}
+              style={theme.input}
               placeholder="Nome"
               placeholderTextColor={Colors.inactive}
-              // value={usuario?.nome ? usuario.nome : nome}
               value={nome}
               onChangeText={setNome}
             />
@@ -230,12 +237,12 @@ if (usuarioId == null) {
         </View>
 
         {!telaEditar && (
-          <View>
-            <Text style={Label}>E-mail</Text>
-            <View style={CampoInput}>
-              <EmailIcon color={Colors.blue} style={InputIcon} />
+          <View style={theme.campoForm}>
+            <Text style={theme.label}>E-mail</Text>
+            <View style={theme.campoInput}>
+              <EmailIcon color={Colors.blue} style={theme.inputIcon} />
               <TextInput
-                style={Input}
+                style={theme.input}
                 placeholder="Nome@email.com"
                 placeholderTextColor={Colors.inactive}
                 value={email}
@@ -247,12 +254,12 @@ if (usuarioId == null) {
           </View>
         )}
 
-        <View>
-          <Text style={Label}>Senha</Text>
-          <View style={CampoInput}>
-            <CadeadoIcon color={Colors.blue} style={InputIcon} />
+        <View style={theme.campoForm}>
+          <Text style={theme.label}>Senha</Text>
+          <View style={theme.campoInput}>
+            <CadeadoIcon color={Colors.blue} style={theme.inputIcon} />
             <TextInput
-              style={Input}
+              style={theme.input}
               placeholder="*******"
               placeholderTextColor={Colors.inactive}
               secureTextEntry
@@ -263,12 +270,12 @@ if (usuarioId == null) {
         </View>
 
         {!telaEditar && (
-          <View>
-            <Text style={Label}>Confirmar Senha</Text>
-            <View style={CampoInput}>
-              <CadeadoIcon color={Colors.blue} style={InputIcon} />
+          <View style={theme.campoForm}>
+            <Text style={theme.label}>Confirmar Senha</Text>
+            <View style={theme.campoInput}>
+              <CadeadoIcon color={Colors.blue} style={theme.inputIcon} />
               <TextInput
-                style={Input}
+                style={theme.input}
                 placeholder="*******"
                 placeholderTextColor={Colors.inactive}
                 secureTextEntry
@@ -280,16 +287,16 @@ if (usuarioId == null) {
         )}
       </View>
 
-      <TouchableOpacity style={Btn} onPress={salvarUsuario}>
+      <TouchableOpacity style={theme.btn} onPress={salvarUsuario}>
         <CriarIcon color={Colors.white} />
-        <Text style={BtnText}>
+        <Text style={theme.btnText}>
           {telaEditar ? "Salvar Alterações" : "Criar Conta"}
         </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[
-          Btn2,
+          theme.btn2,
           {
             borderWidth: 2,
             borderColor: Colors.blue,
@@ -298,14 +305,14 @@ if (usuarioId == null) {
         onPress={
           telaEditar
             ? () => router.replace("/(tabs)/perfil")
-            : () => router.replace("/login")
+            : () => router.replace(usuario ? "/(tabs)/perfil" : "/login")
         }
       >
         <ArrowBackIcon color={Colors.blue} />
-        <Text style={[BtnText, { color: Colors.blue }]}>Voltar</Text>
+        <Text style={[theme.btnText, { color: Colors.blue }]}>Voltar</Text>
       </TouchableOpacity>
 
-      <Text style={[P, { position: "absolute", bottom: 40 }]}>
+      <Text style={[theme.p, { position: "absolute", bottom: 20 }]}>
         Uso exclusivo para técnicos e operacionais
       </Text>
     </SafeAreaView>

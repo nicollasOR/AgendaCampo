@@ -1,21 +1,21 @@
-import { Tabs } from "expo-router";
+import React, { useEffect, useRef } from "react";
 import { Animated } from "react-native";
-import { useEffect, useRef } from "react";
+
+import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { Colors } from "@/src/constants/theme";
 
-import HomeIcon from "@/assets/svg/HomeIcon.svg";
 import CriarIcon from "@/assets/svg/CriarIcon.svg";
+import HomeIcon from "@/assets/svg/HomeIcon.svg";
 import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
 
-function TabIconWrapper({
-  children,
-  focused,
-}: {
+interface TabIconWrapperProps {
   children: React.ReactNode;
   focused: boolean;
-}) {
+}
+
+function TabIconWrapper({ children, focused }: TabIconWrapperProps) {
   const scaleAnim = useRef(new Animated.Value(focused ? 1 : 0.8)).current;
 
   useEffect(() => {
@@ -24,7 +24,7 @@ function TabIconWrapper({
       friction: 4,
       useNativeDriver: true,
     }).start();
-  }, [focused]);
+  }, [focused, scaleAnim]);
 
   return (
     <Animated.View
@@ -52,8 +52,8 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarStyle: {
             backgroundColor: Colors.bgc,
-            borderColor: Colors.lightblue,
-            borderTopWidth: 1,
+            borderColor: Colors.smoothBgc2,
+            borderTopWidth: 2,
             paddingBottom: 8,
             paddingTop: 8,
             height: 80,
@@ -105,6 +105,13 @@ export default function TabsLayout() {
 
         <Tabs.Screen
           name="detalhe/[id]"
+          options={{
+            href: null,
+          }}
+        />
+
+        <Tabs.Screen
+          name="reagendar/[id]"
           options={{
             href: null,
           }}
