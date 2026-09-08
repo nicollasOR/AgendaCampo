@@ -269,11 +269,11 @@ export function useAuthTESTE() {
     );
   }
 
-  // Log limpo indicando se o ID já está carregado ou se ainda aguarda o estado
+  // Ver se usuario tá logado(parte de enlouquecer)
   if (context.usuario?.usuarioID) {
-    console.log("✅ [AuthContext] Usuario ID disponível:", context.usuario.usuarioID);
+    console.log(" UsuarioID", context.usuario.usuarioID);
   } else if (!context.loading) {
-    console.log("⚠️ [AuthContext] Usuário não autenticado.");
+    console.log("usuario não está autenticado (socorro) ()");
   }
 
   return context;
