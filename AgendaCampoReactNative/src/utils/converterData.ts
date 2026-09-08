@@ -9,6 +9,18 @@ export const formatacoes = {
     }
   },
 
+  formatacaoPATCH(data: Date): string {
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    const dia = String(data.getDate()).padStart(2, "0");
+    const horas = String(data.getHours()).padStart(2, "0");
+    const minutos = String(data.getMinutes()).padStart(2, "0");
+    const segundos = String(data.getSeconds()).padStart(2, "0");
+
+    // Formato retornado: "YYYY-MM-DDTHH:mm:ss"
+    return `${ano}-${mes}-${dia}T${horas}:${minutos}:${segundos}`;
+  },
+
   formatarHora(dt: string) {
     if (!dt) return "";
 

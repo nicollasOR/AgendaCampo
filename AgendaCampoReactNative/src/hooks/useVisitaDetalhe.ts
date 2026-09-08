@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { VisitaGet, visitaPatch } from "@/src/@types/visita";
 import { visitaService } from "../service/visitaService";
 import { Alert } from "react-native";
+import {formatacoes} from "@/src/utils/converterData"
 
 export function useVisitaDetalhes(id: number | string) {
   const [visita, setVisita] = useState<VisitaGet | undefined>();
@@ -29,19 +30,29 @@ export function useVisitaDetalhes(id: number | string) {
     }
   }
 
-  async function reagendar(dataInicial: Date, dataFinal: Date) {
+  async function reagendarHooks(dataInicial: Date, dataFinal: Date) {
     try {
       const dadosData: visitaPatch = {
-        dataInicio: dataInicial.toISOString(),
-        dataTermino: dataFinal.toISOString(),
+        // dataInicio: dataInicial.toISOString(),
+        // dataTermino: dataFinal.toISOString(),
+        dataInicio:   formatacoes.formatacaoPATCH(dataInicial),
+        dataFinal:  formatacoes.formatacaoPATCH(dataFinal)
       };
 
-      const response = await visitaService.reagendar(Number(id), dadosData);
+      console.log("Payload na api:", JSON.stringify(dadosData))
+
+      // const response = await visitaService.reagendar(Number(id), dadosData);
+      await visitaService.reagendar(Number(id), dadosData);
       Alert.alert("Visita reagendada!");
+      // return response
+      return true
     } catch (error: any) {
+
+      console.log("ERRO DA API", error?.response.data)
       const mensagem =
         error.response.data.mensagem || "Não Foi possível reagendar";
       Alert.alert("Erro ao reagendar", mensagem);
+      return false
     }
   }
 
@@ -62,7 +73,7 @@ export function useVisitaDetalhes(id: number | string) {
   };
   return {
     visita,
-    reagendar,
+    reagendarHooks,
     formatarData,
     remover,
   };

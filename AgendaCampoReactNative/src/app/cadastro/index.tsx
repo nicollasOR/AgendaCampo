@@ -1,11 +1,18 @@
-import { useState } from "react";
-import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useImage } from "@/src/hooks/useImage";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useImagePicker } from "@/src/hooks/useImagePicker";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import {
   Btn,
   Btn2,
@@ -35,10 +42,19 @@ import UploadIcon from "@/assets/svg/UploadIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 import ArrowBackIcon from "@/assets/svg/ArrowBackIcon.svg";
 import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
+import { atualizarUsuarioHooks } from "@/src/hooks/useUsuario";
+import { useAuthTESTE } from "@/src/contexts/AuthContextTESTE";
+import { criarUsuario } from "@/src/service/usuarioService";
 
 export default function Cadastro() {
   const router = useRouter();
-  const { usuario } = useAuth();
+  const { usuario } = useAuthTESTE();
+  const {id: idParams} = useLocalSearchParams<{ id: string }>();
+
+  const usuarioId = usuario?.usuarioID || idParams || "75a1fb7f-8280-4ead-a74d-5fd5328bbd4f";
+  // const usuarioId = usuario?.usuarioID || id || (usuario as any)?.usuarioId ||
+  //   (usuario as any)?.id || usuarioId2//|| (usuario as any)?.id
+  
 
   const { imagem, selecionarOpcaoImagem } = useImagePicker();
 
@@ -47,7 +63,96 @@ export default function Cadastro() {
   const [senha, setSenha] = useState<string>("");
   const [confirmarSenha, setConfirmarSenha] = useState<string>("");
 
-  const telaEditar = true;
+  let telaEditar = true;
+  if (usuarioId != null || usuarioId != undefined) telaEditar = true;
+  // console.log(`${usuarioId} + ${id} + ${usuario?.usuarioID}`)
+  
+  
+  // useEffect(() => {
+  //   // usuario?.nome ?? setNome(usuario?.nome)
+  //   if (usuario?.nome) setNome(usuario.nome);
+  // }, [usuario]);
+  useEffect(() => {
+    if(usuario?.nome){
+      setNome(usuario.nome)
+    }
+  })
+  const criarUser =  async () => {
+    if (!nome.trim() || !email.trim() || !senha.trim()) {
+      Alert.alert("Atenção", "Preencha todos os campos obrigatórios!");
+      return;
+    }
+
+    if (senha !== confirmarSenha) {
+      Alert.alert("Atenção", "As senhas não coincidem!");
+      return;
+    }
+    try
+    {
+      await criarUsuario({
+        nome,
+        email,
+        senha
+      })
+
+      Alert.alert("Sucesso", "usuário cadastrado com sucesso")
+      router.replace("/login")
+    }
+
+    catch(error: any)
+    {
+const resposta = error?.response?.data;
+  const mensagem = typeof resposta === "string" 
+    ? resposta 
+    : resposta?.message || "Erro ao cadastrar";
+
+  Alert.alert("Erro", mensagem);
+    }
+  }
+  const atualizarUsuario = async () => {
+if (usuarioId == null) {
+      console.log(usuarioId)
+      console.log(`teste ${usuario?.usuarioID}`)
+      Alert.alert("Usuário não encontrado!");
+      return;
+    }
+    
+      try {
+        const dados = {
+          nome,
+          senha,
+          img: imagem as any,
+        };
+        console.log(dados);
+        console.log("eita id", usuarioId);
+        await atualizarUsuarioHooks(usuarioId, dados);
+        Alert.alert(
+          "Sucesso..",
+          `Usuário ${dados.nome}, atualizado com sucesso!`,
+        );
+      } catch (error: any) {
+        const mensagemErro =
+          error.response?.data?.message ||
+          error.response?.data ||
+          error.message ||
+          "Erro ao atualizar!";
+
+          console.log(mensagemErro)
+
+        Alert.alert(mensagemErro);
+        console.log(mensagemErro)
+      }
+  }
+
+  async function salvarUsuario() {
+ 
+    if (telaEditar) {
+      await atualizarUsuario()
+    }
+    else {
+      await criarUser()
+    }
+  }
 
   const { getImagemUrl } = useImage();
   const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
@@ -117,7 +222,8 @@ export default function Cadastro() {
               style={Input}
               placeholder="Nome"
               placeholderTextColor={Colors.inactive}
-              value={usuario?.nome ? usuario.nome : nome}
+              // value={usuario?.nome ? usuario.nome : nome}
+              value={nome}
               onChangeText={setNome}
             />
           </View>
@@ -174,7 +280,7 @@ export default function Cadastro() {
         )}
       </View>
 
-      <TouchableOpacity style={Btn}>
+      <TouchableOpacity style={Btn} onPress={salvarUsuario}>
         <CriarIcon color={Colors.white} />
         <Text style={BtnText}>
           {telaEditar ? "Salvar Alterações" : "Criar Conta"}

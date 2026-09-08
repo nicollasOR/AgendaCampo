@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useFocusEffect } from "expo-router";
 import { useVisita } from "@/src/hooks/useVisita";
 import { Text, View, FlatList } from "react-native";
@@ -21,13 +21,67 @@ import {
 } from "@/src/constants/theme";
 import AgendaCard from "@/src/components/agendaCard";
 import VisitaIcon from "@/assets/svg/VisitaIcon.svg";
+import { useAuthTESTE } from "@/src/contexts/AuthContextTESTE";
 
 export default function Home() {
-  const { usuario } = useAuth();
+  const { usuario } = useAuthTESTE();
   const { visita, visitaGet, listarFuturasVisitas } = useVisita();
+
+  // function visitasHoje()
+  // {
+  //   const hoje = new Date().toLocaleDateString('pt-BR')
+  //   const visitasdeHoje = visitaGet.filter((varAux) => {
+  //     const visitaBanco = varAux.dataInicio.toLocaleDateString('pt-BR')
+  //     return visitaBanco === hoje
+  //     }
+  //   )
+
+  //   return visitasdeHoje.length
+
+
+
+
+
+    
+  // }
+                       //armazenamento de memoria para usar essa const uma única vez
+const visitasHoje = useMemo(() => {
+  // Pega o dia, mês e ano LOCAIS (dê ênfase nisso, pois não funciona por conta disso..) do celular/emulador
+  const hoje = new Date();
+  const diaHj = String(hoje.getDate()).padStart(2, "0");
+  const mesHj = String(hoje.getMonth() + 1).padStart(2, "0"); //obrigado por mostrar o caminho das pedras mayara 
+  const anoHj = hoje.getFullYear();
+  
+  const hojeFormatado = `${diaHj}/${mesHj}/${anoHj}`; // seria:  "07/09/2026" ou "08/09/2026"  
+
+  const vstBancoHoje = visitaGet.filter((varAux) => {
+    if (!varAux.dataInicio) 
+      return false;
+    // retirando o 08T06:31:09.145Z da visita
+    const partesData = String(varAux.dataInicio).split("T")[0].split("-");
+    
+    if (partesData.length < 3) 
+      return false;
+
+    const anoBanco = partesData[0];
+    const mesBanco = partesData[1];
+    const diaBanco = partesData[2];
+
+    const dataBancoFormatada = `${diaBanco}/${mesBanco}/${anoBanco}`;
+
+    return dataBancoFormatada === hojeFormatado;
+  });
+
+  return vstBancoHoje.length; // aqui seria para ele retornar apenas o numero de visitas no dia como um number,
+                              //  mas não retornar por conta da localização do dispositivo
+}, [visitaGet]);
 
   useFocusEffect(
     useCallback(() => {
+      console.log(`Teste das visitas: \n${visitasHoje} \n\n\n`)
+      // console.log(`Teste:: \n \n ${visitaGet.map((varAux) => (
+      //   varAux.visitaID
+      // ))} \n acima visitaID`)
       listarFuturasVisitas();
     }, []),
   );
@@ -56,7 +110,7 @@ export default function Home() {
 
           <View style={Box2}>
             <Text style={[P, { color: Colors.white }]}>
-              {visita?.length || 0} Hoje
+              {visitasHoje} Hoje 
             </Text>
           </View>
         </View>
