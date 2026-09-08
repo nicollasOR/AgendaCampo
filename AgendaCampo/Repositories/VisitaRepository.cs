@@ -87,17 +87,17 @@ public class VisitaRepository : IVisitaRepository
  
       }
 //
-     public bool conflitoDeHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null)
-     {
-         return _context.Visita.Any(visitaAux => 
-         #warning Filtragem para relacionar usuarios
-             visitaAux.usuario.Any(usrAux => usrAux.usuarioID == usuarioId) &&
-             
-         #warning Se estiver reagendando (visitaId != null), ignora a própria visita
-             (visitaId == null || visitaAux.visitaID != visitaId) &&
-             (dataComeco < visitaAux.dataTermino && dataFinal > visitaAux.dataInicio)
-         );
-     }
+     // public bool conflitoDeHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null)
+     // {
+     //     return _context.Visita.Any(visitaAux => 
+     //     #warning Filtragem para relacionar usuarios
+     //         visitaAux.usuario.Any(usrAux => usrAux.usuarioID == usuarioId) &&
+     //         
+     //     #warning Se estiver reagendando (visitaId != null), ignora a própria visita
+     //         (visitaId == null || visitaAux.visitaID != visitaId) &&
+     //         (dataComeco < visitaAux.dataTermino && dataFinal > visitaAux.dataInicio)
+     //     );
+     // }
 //
      public List<Visita> listagemFuturosEventoPorUsuario(Guid usuarioId)
      {
@@ -139,15 +139,12 @@ public class VisitaRepository : IVisitaRepository
 
      public bool conflitoHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null)
      {
-         return _context.Visita.Any(v => 
-             v.usuario.Any(u => u.usuarioID == usuarioId) &&
-             
-             #warning Se for uma edição/reagendamento, ignora a própria visita que está sendo alterada
-             (visitaId == null || v.visitaID != visitaId) &&
+          return _context.Visita
+             .Where(varAux => varAux.visitaID == null || varAux.visitaID != visitaId)
+             .Where(varAux => dataComeco < varAux.dataTermino && dataFinal > varAux.dataInicio)
+             .Where(varAux => varAux.statusVisita.nomeStatus != "Cancelada" && varAux.statusVisita.nomeStatus != "Concluída")
+             .Any(varAux => varAux.usuario.Any(usrAux => usrAux.usuarioID == usuarioId));
 
-             // regra de conflito
-             (dataComeco < v.dataTermino && dataFinal > v.dataInicio)
-         );
      }
  
 

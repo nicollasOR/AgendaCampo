@@ -105,21 +105,19 @@ namespace RoyalGamess.Aplications.Services
             if (usuarioBanco == null)
                 throw new DomainException("Usuario não encontrado");
             
-            Validacoes.validarEmail(usuarioDTO.email);
+            // Validacoes.validarEmail(usuarioDTO.email);
             Validacoes.validarNome(usuarioDTO.nome);
 
             if (usuarioDTO != null && usuarioBanco.usuarioID != id)
                 throw new DomainException("Usuario inexistente");
         
             
-            Usuario usuarioExistenteEmail = _rep.ObterPorEmail(usuarioDTO.email);
-            if (usuarioExistenteEmail != null && usuarioExistenteEmail.usuarioID != id)
-                throw new DomainException("Já existe outro usuário com esse e-mail");
-            
-            usuarioBanco.email = usuarioDTO.email;
+            // Usuario usuarioExistenteEmail = _rep.ObterPorEmail(usuarioDTO.email);
+            // if (usuarioExistenteEmail != null && usuarioExistenteEmail.usuarioID != id)
+            //     throw new DomainException("Já existe outro usuário com esse e-mail");
+            usuarioBanco.senha = HashSenha_(usuarioDTO.senha);
+            // usuarioBanco.email = usuarioDTO.email;
             usuarioBanco.nome = usuarioDTO.nome;
-            if (!string.IsNullOrEmpty(usuarioDTO.senha))
-                usuarioBanco.senha = HashSenha_(usuarioDTO.senha);
 
             if (usuarioDTO.img != null && usuarioDTO.img.Length > 0)
                 usuarioBanco.Imagem = conversoesParaDTO.converterImg(usuarioDTO.img);

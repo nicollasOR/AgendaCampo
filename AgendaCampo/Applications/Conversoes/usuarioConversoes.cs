@@ -23,9 +23,9 @@ public class usuarioConversoes
         return new atualizarUsuarioDTO
         {
             nome = usuario.nome,
-            email = usuario.email,
+            // email = usuario.email,
             img = conversoesParaDTO.converterParaIFormFile(usuario.Imagem),
-            telefone = usuario.telefone
+            // telefone = usuario.telefone
             
         };
     }

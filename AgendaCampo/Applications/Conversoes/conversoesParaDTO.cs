@@ -9,7 +9,7 @@ public class conversoesParaDTO
 {
     public static byte[] converterImg(IFormFile img)
     {
-        if (img == null | img.Length == 0)
+        if (img == null || img.Length == 0)
             return Array.Empty<byte>();
         using var ms = new MemoryStream();
         img.CopyTo(ms);

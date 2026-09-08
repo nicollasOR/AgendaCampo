@@ -110,14 +110,17 @@ public class VisitaService
         StatusVisita? stsVisitaPendente = _stsRep.buscarNomeStatus("Pendente");
         if (stsVisitaPendente == null)
             throw new DomainException("Status Visita não encontrado");
+        
+        
         if (criarVisitaDtos.dataTermino <= criarVisitaDtos.dataInicio)
             throw new DomainException("A data termino tem que ser depois da inicial");
-
+        if (criarVisitaDtos.dataInicio < DateTime.Now)
+            throw new DomainException("Não é possível agendar uma visita para um horário que já passou.");
         Usuario? usuarioBanco = _usrRep.ObterPorId(usuarioId);
         if (usuarioBanco == null)
             throw new DomainException("Usuario cliente não encontrado!");
-
-        bool temConflito = _rep.conflitoDeHorario(usuarioId, criarVisitaDtos.dataInicio, criarVisitaDtos.dataTermino);
+        
+        bool temConflito = _rep.conflitoHorario(usuarioId, criarVisitaDtos.dataInicio, criarVisitaDtos.dataTermino);
         if (temConflito)
             throw new DomainException("Já existe uma visita agendada para este técnico no horário selecionado");
         List<Usuario> listaTecnicos = new List<Usuario> { usuarioBanco };
@@ -131,7 +134,7 @@ public class VisitaService
                 Usuario? outrosTecnicos = _usrRep.ObterPorId(idTecnicos);
                 if (outrosTecnicos != null)
                 {
-                    bool conflitoOutro = _rep.conflitoDeHorario(outrosTecnicos.usuarioID, criarVisitaDtos.dataInicio, criarVisitaDtos.dataTermino);
+                    bool conflitoOutro = _rep.conflitoHorario(outrosTecnicos.usuarioID, criarVisitaDtos.dataInicio, criarVisitaDtos.dataTermino);
                     if (conflitoOutro)
                         throw new DomainException($"O técnico {outrosTecnicos.nome} já possui um compromisso nesse horário.");
 
@@ -147,7 +150,7 @@ public class VisitaService
           descricao = criarVisitaDtos.descricao,
           titulo = criarVisitaDtos.nomeEvento,
           sedeVisitada = criarVisitaDtos.nomeSede,
-          cliente = string.IsNullOrEmpty(usuarioBanco.nome) ? usuarioBanco.nome : criarVisitaDtos.clienteNome,
+          cliente = !string.IsNullOrEmpty(usuarioBanco.nome) ? usuarioBanco.nome : criarVisitaDtos.clienteNome,
           statusVisitaID = stsVisitaPendente.statusVisitaID,
           bairro = criarVisitaDtos.Bairro,
           cep = criarVisitaDtos.Cep,
@@ -174,11 +177,13 @@ public class VisitaService
         Visita? visitaBanco = _rep.BuscarPorId(id);
         if (visitaBanco == null)
             throw new DomainException("Visita não encontrada");
+        if (visitaBanco.statusVisita.nomeStatus == "Cancelada")
+            throw new DomainException("Essa visita foi cancelada...");
 
          if (atualizarDTO.dataTermino <= atualizarDTO.dataInicio)
             throw new DomainException("A data de término deve ser posterior à data de início");
 
-         bool temConflito = _rep.conflitoDeHorario(usuarioId, atualizarDTO.dataInicio, atualizarDTO.dataTermino, id);
+         bool temConflito = _rep.conflitoHorario(usuarioId, atualizarDTO.dataInicio, atualizarDTO.dataTermino, id);
         if (temConflito)
             throw new DomainException("O técnico já possui outro compromisso no horário selecionado");
 
@@ -229,7 +234,7 @@ public class VisitaService
 
         if (dataFinal <= dataInicio)
             throw new DomainException("Data inserida de forma incorreta");
-        bool temConflito = _rep.conflitoDeHorario(usuarioId, dataInicio, dataFinal, id);
+        bool temConflito = _rep.conflitoHorario(usuarioId, dataInicio, dataFinal, id);
         if (temConflito)
             throw new DomainException("O técnico já possui um compromisso agendado para este horário.");
         visitaBanco.dataInicio = dataInicio;

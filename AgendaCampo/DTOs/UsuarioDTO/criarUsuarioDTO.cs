@@ -19,7 +19,7 @@ namespace AgendaCampo.DTOs.UsuarioDTO
         [Required(ErrorMessage = "A senha é obrigatório")]
         public string senha { get; set; } = null!;
         
-        public IFormFile img { get; set; }
+        public IFormFile? img { get; set; }
 
 
     }

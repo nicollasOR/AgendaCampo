@@ -25,7 +25,8 @@ public interface IVisitaRepository
 
     // ver com o grupo btw
     public bool eventoExiste(int id);
-    public bool conflitoDeHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null);
+    // public bool conflitoDeHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null);
+    public bool conflitoHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null);
 
     
     // public bool visita_dataExistir(DateTime data);
