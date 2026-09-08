@@ -42,6 +42,8 @@ import { useVisita } from "@/src/hooks/useVisita";
 export default function Perfil() {
   const router = useRouter();
  const { visita, visitaGet, listarFuturasVisitas } = useVisita();
+  // const {logout} = useAuthTESTE()
+ 
 
   // function visitasHoje()
   // {
@@ -122,7 +124,6 @@ const visitasMês = useMemo(() => {
 
 
   const { usuario, logout } = useAuthTESTE();
-  // const { usuario, logout } = useAuth();
 
   const { getImagemUrl } = useImage();
   const fotoPerfilUri = getImagemUrl(usuario?.imgURL);

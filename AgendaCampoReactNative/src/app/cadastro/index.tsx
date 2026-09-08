@@ -51,7 +51,7 @@ export default function Cadastro() {
   const { usuario } = useAuthTESTE();
   const {id: idParams} = useLocalSearchParams<{ id: string }>();
 
-  const usuarioId = usuario?.usuarioID || idParams || "75a1fb7f-8280-4ead-a74d-5fd5328bbd4f";
+  const usuarioId = usuario?.usuarioID || idParams ;
   // const usuarioId = usuario?.usuarioID || id || (usuario as any)?.usuarioId ||
   //   (usuario as any)?.id || usuarioId2//|| (usuario as any)?.id
   
@@ -63,7 +63,7 @@ export default function Cadastro() {
   const [senha, setSenha] = useState<string>("");
   const [confirmarSenha, setConfirmarSenha] = useState<string>("");
 
-  let telaEditar = true;
+  let telaEditar = false;
   if (usuarioId != null || usuarioId != undefined) telaEditar = true;
   // console.log(`${usuarioId} + ${id} + ${usuario?.usuarioID}`)
   

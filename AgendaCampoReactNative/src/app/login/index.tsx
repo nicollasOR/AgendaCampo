@@ -37,7 +37,7 @@ import ArrowIcon from "@/assets/svg/ArrowIcon.svg";
 import CadeadoIcon from "@/assets/svg/CadeadoIcon.svg";
 
 export default function Login() {
-  const { email, setEmail, senha, setSenha, loading, erro, handleLogin } =
+  const { email, setEmail, senha, setSenha, loading, erro, handleLogin, usuario } =
     useAuthTESTE();
 
   return (
@@ -111,7 +111,12 @@ export default function Login() {
             borderColor: Colors.blue,
           },
         ]}
-        onPress={() => router.replace("/cadastro")}
+        onPress={() => {
+          if(usuario?.usuarioID == undefined)
+          router.replace("/cadastro")
+          
+            
+        }}
       >
         <Text style={[BtnText, { color: Colors.blue }]}>Cadastre-se</Text>
         <ArrowIcon color={Colors.blue} />

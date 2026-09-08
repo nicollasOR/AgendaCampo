@@ -23,13 +23,15 @@ export function useVisita() {
       Alert.alert("Sucesso!", "Visita agendada com sucesso.");
       return true;
     } catch (error: any) {
-      console.error(
-        "Erro ao agendar visita:",
-        error?.response?.data || error.message,
-      );
+      const mensagemErro =
+        error?.response?.data?.mensagem ||
+        error?.response?.data?.message || //ele tenta duas vezes???
+        (typeof error?.response?.data === 'string' ? error.response.data : null) ||
+        error?.message ||
+        "Não foi possível agendar a visita.";
       Alert.alert(
         "Erro!",
-        error?.response?.data?.message || "Não foi possível agendar a visita.",
+        mensagemErro
       );
       return false;
     }
@@ -46,9 +48,9 @@ export function useVisita() {
     }
   }
 
-  useEffect(() => {
-    listarFuturasVisitas();
-  }, []);
+  // useEffect(() => {
+  //   listarFuturasVisitas();
+  // }, []);
 
   return {
     visita,
