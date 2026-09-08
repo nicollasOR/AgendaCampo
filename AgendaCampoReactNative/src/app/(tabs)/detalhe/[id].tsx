@@ -155,7 +155,10 @@ export default function Detalhe() {
                   borderWidth: 2,
                 },
               ]}
-              onPress={remover}
+              onPress={() => {
+                remover
+                router.replace("/(tabs)/home")
+              }}
             >
               <CancelarIcon color={Colors.darkgray} width={30} />
               <Text style={[BtnText, { color: Colors.darkgray }]}>
@@ -172,10 +175,10 @@ export default function Detalhe() {
             </View>
             <View style={[Box, Column]}>
               <Text style={[P, { color: "black" }]}>
-                {dividirTextoNaMetade(visita?.descricao)}{" "}
+                {dividirTextoNaMetade(visita?.descricao)}
               </Text>
               <Text style={[P, { color: "black" }]}>
-                {dividirTextoNaMetade(visita?.descricao)}{" "}
+                {dividirTextoNaMetade(visita?.descricao)}
               </Text>
             </View>
           </View>

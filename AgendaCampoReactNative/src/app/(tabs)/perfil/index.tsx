@@ -113,7 +113,9 @@ const visitasMês = useMemo(() => {
     const mesBanco = ptsData[1]
 
     const dataBancoFormat = `${mesBanco}/${anoBanco}`
+    console.log(`${dataBancoFormat} - ${mesFormatado}`)
     return dataBancoFormat === mesFormatado
+    
   })
   return vstBancoHoje.length
 },[visitaGet])
@@ -189,16 +191,6 @@ const visitasMês = useMemo(() => {
             </View>
           </View>
 
-          <View style={[Column, Card]}>
-            <View style={[Icon, { backgroundColor: Colors.smoothBgc2 }]}>
-              <RelogioIcon color={Colors.blue} />
-            </View>
-            <View>
-              <Text style={P}>Pontualidade</Text>
-              <Text style={H2}>98%</Text>
-            </View>
-          </View>
-
           <TouchableOpacity
             style={[Box, { width: "100%" }]}
             activeOpacity={0.75}
@@ -212,8 +204,8 @@ const visitasMês = useMemo(() => {
             </View>
             <ArrowIcon color={Colors.darkblue} />
           </TouchableOpacity>
-
-          <TouchableOpacity
+          {/* FAQ */}
+          {/* <TouchableOpacity
             style={[Box, { width: "100%" }]}
             activeOpacity={0.75}
           >
@@ -224,7 +216,7 @@ const visitasMês = useMemo(() => {
               <Text style={H4}>Ajuda e Suporte</Text>
             </View>
             <ArrowIcon color={Colors.darkblue} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={[Box, { width: "100%" }]}

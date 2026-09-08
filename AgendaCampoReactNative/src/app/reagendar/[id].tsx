@@ -329,7 +329,7 @@ export default function Reagendar() {
             onPress={() => {
               //transforma em booleano se pode voltar para a tela anterior (algo bem interessante eu diria)
               if (router.canGoBack()) {
-                router.back();
+                router.replace("/(tabs)/home");
               } else {
                 router.replace("/detalhe");
               }

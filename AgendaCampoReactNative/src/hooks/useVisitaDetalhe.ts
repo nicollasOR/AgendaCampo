@@ -24,6 +24,7 @@ export function useVisitaDetalhes(id: number | string) {
     try {
       const dados = await visitaService.remover(Number(id));
       setVisita(dados);
+      
     } catch (error: any) {
       const mensagem = error.response.data.mensagem || "Erro ao cancelar..";
       Alert.alert("Erro!", mensagem);
