@@ -74,7 +74,7 @@ export default function Home() {
 
           <View style={theme.box}>
             <Text style={[theme.p, { color: Colors.blue }]}>
-              {visitasHoje} Hoje
+              {visitasHoje == 0 ? "Nada hoje" : `${visitasHoje} Hoje`}
             </Text>
           </View>
         </View>
