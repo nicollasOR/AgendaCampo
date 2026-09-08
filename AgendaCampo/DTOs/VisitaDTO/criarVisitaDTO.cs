@@ -26,13 +26,17 @@ public class criarVisitaDTO
     public string Logradouro { get; set; } = null!;
     [Required(ErrorMessage = "Um bairro é obrigatório")]
     public string Bairro { get; set; } = null!;
-    [Required(ErrorMessage = "um número obrigatório")]
-    public int Numero { get; set; }
+    //[Required(ErrorMessage = "um número obrigatório")]
+    public int? Numero { get; set; }
     [RegularExpression(
     @"^\d{5}-\d{3}$",
     ErrorMessage = "O CEP deve estar no formato 00000-000."
 )]
-    public string Cep { get; set; } = null!;
+    public string? Cep { get; set; } 
+
+    public string? complemento { get; set; }
+
+
 
     public string clienteNome { get; set; } = string.Empty;
     [Required(ErrorMessage = "uma data inicial é obrigatória")]

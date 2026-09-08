@@ -36,11 +36,12 @@ public class atualizarVisitaDTO
     public string Logradouro { get; set; } = null!;
     [Required(ErrorMessage = "Um bairro é obrigatório")]
     public string Bairro { get; set; } = null!;
-    [Required(ErrorMessage = "um número obrigatório")]
-    public int Numero { get; set; }
-    [Required(ErrorMessage = "um cep obrigatório")]
-    public string Cep { get; set; } = null!;
+    //[Required(ErrorMessage = "um número obrigatório")]
+    public int? Numero { get; set; }
+    //[Required(ErrorMessage = "um cep obrigatório")]
+    public string? Cep { get; set; }
 
+    public string? complemento { get; set; }
 
 
 }
@@ -76,10 +77,11 @@ public class lerVisitaDTO
     public string Logradouro { get; set; } = null!;
     [Required(ErrorMessage = "Um bairro é obrigatório")]
     public string Bairro { get; set; } = null!;
-    [Required(ErrorMessage = "um número obrigatório")]
-    public int Numero { get; set; }
+    //[Required(ErrorMessage = "um número é obrigatório")]
+    public int? Numero { get; set; }
     [Required(ErrorMessage = "um cep obrigatório")]
-    public string Cep { get; set; } = null!;
+    public string? Cep { get; set; }
+    public string? complemento { get; set; }
 
     //public string clienteNome { get; set; } = string.Empty;
     [Required(ErrorMessage = "uma data inicial é obrigatória")]

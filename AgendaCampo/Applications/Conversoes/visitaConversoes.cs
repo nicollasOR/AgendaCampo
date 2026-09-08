@@ -20,6 +20,7 @@ public class visitaConversoes
         Numero = visita.numero,
         Bairro = visita.bairro,
         Logradouro = visita.logradouro,
+        complemento = visita.complemento,
         
         Tecnicos = visita.usuario.Select(varAux => new usuariosGET
         {
@@ -49,6 +50,7 @@ public class visitaConversoes
             Numero = visita.numero,
             Bairro = visita.bairro,
             Logradouro = visita.logradouro,
+            complemento = visita.complemento,
 
             Tecnicos = visita.usuario.Select(varAux => new usuariosGET
             {

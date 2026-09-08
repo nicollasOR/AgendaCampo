@@ -25,9 +25,11 @@ public partial class Visita
 
     public string bairro { get; set; } = null!;
 
-    public int numero { get; set; }
+    public int? numero { get; set; }
 
-    public string cep { get; set; } = null!;
+    public string? cep { get; set; }
+
+    public string? complemento { get; set; }
 
     public virtual StatusVisita statusVisita { get; set; } = null!;
 

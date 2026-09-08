@@ -156,6 +156,7 @@ public class VisitaService
           cep = criarVisitaDtos.Cep,
           logradouro = criarVisitaDtos.Logradouro,
           numero = criarVisitaDtos.Numero,
+          complemento = criarVisitaDtos.complemento,
           
           usuario = listaTecnicos
       };
@@ -194,14 +195,14 @@ public class VisitaService
         visitaBanco.dataTermino = atualizarDTO.dataTermino;
         // visitaBanco.cliente = usuarioBanco ? usuarioBanco.nome : atualizarDTO.nomeCliente;
         visitaBanco.cliente = !string.IsNullOrEmpty(usuarioBanco.nome) ? usuarioBanco.nome : atualizarDTO.nomeCliente;
-        visitaBanco.sedeVisitada = atualizarDTO.nomeSede;
-        //visitaBanco.statusVisitaID = atualizarDTO.statusVisitaId;
+        visitaBanco.sedeVisitada = atualizarDTO.nomeSede; 
         visitaBanco.statusVisitaID = stsVisitaPendente.statusVisitaID;
         //
         visitaBanco.cep = atualizarDTO.Cep;
         visitaBanco.numero = atualizarDTO.Numero;
         visitaBanco.logradouro = atualizarDTO.Logradouro;
         visitaBanco.bairro = atualizarDTO.Bairro;
+        visitaBanco.complemento = atualizarDTO.complemento;
 
         _rep.Atualizar(visitaBanco);
 
@@ -220,7 +221,7 @@ public class VisitaService
         visitaBanco.numero = atlDTO.Numero;
         visitaBanco.descricao = atlDTO.descricao;
         visitaBanco.bairro = atlDTO.Bairro;
-
+        visitaBanco.complemento = atlDTO.complemento;
         _rep.Atualizar(visitaBanco);
         return visitaConversoes.lerVisitaDto(visitaBanco);
     }
