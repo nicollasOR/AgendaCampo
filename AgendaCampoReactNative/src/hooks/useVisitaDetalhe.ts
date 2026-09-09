@@ -9,6 +9,34 @@ export function useVisitaDetalhes(id: number | string) {
   const [visita, setVisita] = useState<VisitaGet | undefined>();
   const [loading, setLoading] = useState(false);
 
+
+  async function concluirVisita()
+  {
+    setLoading(false)
+    try
+    {
+      const dados = await visitaService.concluirVisita(Number(id))
+      setVisita(dados)
+      Alert.alert("Sucesso", "Visita concluída!")
+      return true
+    }
+
+    catch(error: any)
+    {
+      const message = 
+      error.response?.data?.mensagem || 
+        error.response?.data?.message || 
+        "Não foi possível concluir a visita.";
+
+        Alert.alert("Erro", message)
+        return false
+    }
+
+    finally
+    {
+      setLoading(true)
+    }
+  }
   async function loadVisita() {
     try {
       const dados = await visitaService.buscarPorId(Number(id));
@@ -70,6 +98,7 @@ export function useVisitaDetalhes(id: number | string) {
   };
   return {
     visita,
+    concluirVisita,
     reagendarHooks,
     formatarData,
     remover,

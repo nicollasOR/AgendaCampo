@@ -20,7 +20,7 @@ import EmailIcon from "@/assets/svg/EmailIcon.svg";
 import Logo from "@/assets/svg/Logo.svg";
 
 export default function Login() {
-  const { email, setEmail, senha, setSenha, loading, erro, handleLogin } =
+  const { email, setEmail, senha, setSenha, loading, erro, handleLogin, usuario } =
     useAuthTESTE();
 
   return (
@@ -88,7 +88,8 @@ export default function Login() {
           </View>
         )}
       </TouchableOpacity>
-
+        {!usuario?.usuarioID &&  (
+          <>
       <Text style={[theme.h4, { color: Colors.darkblue }]}>Ou...</Text>
 
       <TouchableOpacity
@@ -99,11 +100,20 @@ export default function Login() {
             borderColor: Colors.blue,
           },
         ]}
-        onPress={() => router.replace("/cadastro")}
+        onPress={() => 
+        {
+          if(usuario?.usuarioID == undefined)
+          router.replace("/cadastro")
+        }
+        }
       >
         <Text style={[theme.btnText, { color: Colors.blue }]}>Cadastre-se</Text>
         <ArrowIcon color={Colors.blue} />
       </TouchableOpacity>
+          
+          
+          </>
+        )}
 
       <Text style={[theme.p, { position: "absolute", bottom: 20 }]}>
         Uso exclusivo para técnicos e operacionais

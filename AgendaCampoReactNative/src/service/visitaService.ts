@@ -72,4 +72,11 @@ export const visitaService = {
     });
     return response.data
   },
+  
+
+  async concluirVisita(visitaID: number):Promise<VisitaGet>
+  {
+    const respose = await api.patch<VisitaGet>(`Visita/${visitaID}/concluir`)
+    return respose.data
+  }
 };

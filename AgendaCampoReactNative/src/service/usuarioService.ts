@@ -49,17 +49,19 @@ export async function criarUsuario(dados: usuarioPOST) {
     formData.append("email", dados.email);
     formData.append("senha", dados.senha);
 
-    const response = await api.post("/Usuario", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
 
+    const response = await api.post("Usuario", formData);
+    // nao precisa passar o header ("Descobrindo da pior forma como sempre")
+    console.log("testando retorno..", response.data);
     return response.data;
   } catch (error: any) {
-    throw new Error(
-      error.response?.data?.message || "Erro ao criar usuário...",
-    );
+      const message = 
+      error.response?.data?.mensagem || 
+        error.response?.data?.message || 
+        "Não foi possível cadastrar o usuário " + dados.nome;
+ 
+
+    throw new Error(message);
   }
 }
 

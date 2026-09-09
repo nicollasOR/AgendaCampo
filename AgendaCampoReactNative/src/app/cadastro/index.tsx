@@ -82,22 +82,17 @@ export default function Cadastro() {
 
     try {
       await criarUsuario({ nome, email, senha });
-      Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
+      Alert.alert("Sucesso", `Usuário ${nome}, cadastrado com sucesso!`);
       router.replace("/login");
     } catch (error: any) {
-      const resposta = error?.response?.data;
-      const mensagem =
-        typeof resposta === "string"
-          ? resposta
-          : resposta?.message || "Erro ao cadastrar";
-
-      Alert.alert("Erro", mensagem);
+ 
+      Alert.alert("Erro", error.message);
     }
   };
 
   const atualizarUsuario = async () => {
     if (!usuarioId) {
-      Alert.alert("Erro", "Usuário não encontrado para edição!");
+      Alert.alert("Erro", `Usuário ${nome} não encontrado para edição!`);
       return;
     }
 
@@ -124,6 +119,7 @@ export default function Cadastro() {
   async function salvarUsuario() {
     if (telaEditar) {
       await atualizarUsuario();
+      router.replace("/(tabs)/perfil")
     } else {
       await criarUser();
     }
