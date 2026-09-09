@@ -52,7 +52,6 @@ export async function criarUsuario(dados: usuarioPOST) {
     formData.append("senha", dados.senha);
 
     const response = await api.post("Usuario", formData);
-    // nao precisa passar o header ("Descobrindo da pior forma como sempre")
     console.log("testando retorno..", response.data);
     return response.data;
   } catch (error: any) {
@@ -77,14 +76,18 @@ export async function atualizarUsuario(
     } else {
       payload = new FormData();
       payload.append("nome", dados.nome);
-      payload.append("senha", dados.senha);
 
-      // Pega o objeto da imagem enviado
+      // Envia senha somente se informada
+      if (dados.senha && dados.senha.trim() !== "") {
+        payload.append("senha", dados.senha);
+      }
+
+      // Verifica de forma estrita se o objeto da imagem é novo e possui .uri
       const foto: any = (dados as any).img || (dados as any).Img;
       if (foto && typeof foto === "object" && foto.uri) {
         payload.append("img", {
           uri: foto.uri,
-          name: foto.name || `foto_${Date.now()}.jpg`,
+          name: foto.fileName || foto.name || `foto_${Date.now()}.jpg`,
           type: foto.mimeType || foto.type || "image/jpeg",
         } as any);
       }

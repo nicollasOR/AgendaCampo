@@ -18,7 +18,7 @@ import {
   Outfit_700Bold,
 } from "@expo-google-fonts/outfit";
 
-import { AuthProviderTeste } from "@/src/contexts/AuthContext";
+import { AuthProvider } from "@/src/contexts/AuthContext";
 
 import { Colors, theme } from "@/src/constants/theme";
 
@@ -212,12 +212,12 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProviderTeste>
+    <AuthProvider>
       <SafeAreaProvider>
         <AnimatedSplashScreen isAppReady={fontsLoaded || !!fontError}>
           <AppContent />
         </AnimatedSplashScreen>
       </SafeAreaProvider>
-    </AuthProviderTeste>
+    </AuthProvider>
   );
 }

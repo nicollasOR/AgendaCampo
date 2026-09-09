@@ -58,7 +58,7 @@ export function decodificarToken(token: string): Usuario | null {
   }
 }
 
-export function AuthProviderTeste({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [email, setEmail] = useState("");
@@ -244,6 +244,15 @@ export function AuthProviderTeste({ children }: { children: ReactNode }) {
     }
   }
 
+  function atualizarEstadoUsuario(novosDados: Partial<Usuario>) {
+    setUsuario((prev) => {
+      if (!prev) return null;
+      const usuarioAtualizado = { ...prev, ...novosDados };
+      authService.saveUser(usuarioAtualizado);
+      return usuarioAtualizado;
+    });
+  }
+
   return React.createElement(
     AuthContext.Provider,
     {
@@ -259,6 +268,7 @@ export function AuthProviderTeste({ children }: { children: ReactNode }) {
         handleLogin,
         handleMockLogin,
         logout,
+        atualizarEstadoUsuario,
       },
     },
     children,

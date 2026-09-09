@@ -37,4 +37,5 @@ export interface AuthContextData {
   handleLogin: () => Promise<void>;
   handleMockLogin: () => Promise<void>;
   logout: () => Promise<void>;
+  atualizarEstadoUsuario: (novosDados: Partial<Usuario>) => void;
 }

@@ -1,11 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaskedView from "@react-native-masked-view/masked-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { TOKEN_KEY } from "@/src/service/api";
 import { useImage } from "@/src/hooks/useImage";
 import { useVisita } from "@/src/hooks/useVisita";
 import { useAuth } from "@/src/contexts/AuthContext";
@@ -27,7 +29,31 @@ export default function Perfil() {
   const { usuario, logout } = useAuth();
   const { getImagemUrl } = useImage();
 
-  const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
+  const [token, setToken] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
+
+  // Busca o token do AsyncStorage para anexar nos headers da Image nativa
+  useEffect(() => {
+    async function carregarToken() {
+      const storedToken = await AsyncStorage.getItem(TOKEN_KEY);
+      setToken(storedToken);
+    }
+    carregarToken();
+  }, []);
+
+  // Trata a string literal "{usuario.usuarioID}" caso ela venha crua do estado global/API
+  const imgUrlTratada = useMemo(() => {
+    if (typeof usuario?.imgURL === "string" && usuario?.usuarioID) {
+      return usuario.imgURL.replace(
+        "{usuario.usuarioID}",
+        String(usuario.usuarioID),
+      );
+    }
+    return usuario?.imgURL;
+  }, [usuario?.imgURL, usuario?.usuarioID]);
+
+  // Obtém a URI final da imagem tratada
+  const fotoPerfilUri = getImagemUrl(imgUrlTratada, usuario?.usuarioID);
 
   const visitasHoje = useMemo(() => {
     const hoje = new Date();
@@ -86,10 +112,16 @@ export default function Perfil() {
         end={{ x: 0, y: 1 }}
       >
         <View style={[theme.profile, { overflow: "hidden" }]}>
-          {fotoPerfilUri ? (
+          {fotoPerfilUri && !imageError ? (
             <Image
-              source={{ uri: fotoPerfilUri }}
+              source={{
+                uri: fotoPerfilUri,
+                headers: token
+                  ? { Authorization: `Bearer ${token}` }
+                  : undefined,
+              }}
               style={{ width: 120, height: 120 }}
+              onError={() => setImageError(true)}
             />
           ) : (
             <Text style={theme.profileText}>

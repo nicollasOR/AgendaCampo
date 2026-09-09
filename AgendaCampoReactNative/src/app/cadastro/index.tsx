@@ -31,20 +31,16 @@ import EditarPerfilIcon from "@/assets/svg/EditarPerfilIcon.svg";
 
 export default function Cadastro() {
   const router = useRouter();
-  const { usuario } = useAuth();
+  const { usuario, atualizarEstadoUsuario } = useAuth();
 
-  // Recebe modo ('criar' | 'editar') e id via URL/parâmetros
   const params = useLocalSearchParams<{
     id?: string;
     mode?: "criar" | "editar";
   }>();
 
-  // Definição do estado de modo (Cadastrar x Editar)
   const [modo, setModo] = useState<"criar" | "editar">("criar");
-
   const usuarioId = usuario?.usuarioID || params.id;
 
-  // Define modo inicial com base nos parâmetros da rota ou usuário logado
   useEffect(() => {
     if (params.mode) {
       setModo(params.mode);
@@ -92,7 +88,7 @@ export default function Cadastro() {
 
   const atualizarUsuario = async () => {
     if (!usuarioId) {
-      Alert.alert("Erro", `Usuário ${nome} não encontrado para edição!`);
+      Alert.alert("Erro", "Usuário não encontrado para edição!");
       return;
     }
 
@@ -100,11 +96,23 @@ export default function Cadastro() {
       const dados = {
         nome,
         senha,
-        img: imagem as any,
+        img: imagem, // Se imagem for null, o service ignora e anexa apenas o nome/senha
       };
 
       await atualizarUsuarioHooks(usuarioId, dados);
-      Alert.alert("Sucesso", `Usuário ${dados.nome}, atualizado com sucesso!`);
+
+      if (atualizarEstadoUsuario) {
+        const novaImgUrl = imagem
+          ? `/api/Usuario/img/${usuarioId}?t=${Date.now()}`
+          : usuario?.imgURL || null;
+
+        atualizarEstadoUsuario({
+          nome,
+          imgURL: novaImgUrl,
+        });
+      }
+
+      Alert.alert("Sucesso", `Usuário ${nome}, atualizado com sucesso!`);
     } catch (error: any) {
       const mensagemErro =
         error.response?.data?.message ||
@@ -126,7 +134,19 @@ export default function Cadastro() {
   }
 
   const { getImagemUrl } = useImage();
-  const fotoPerfilUri = getImagemUrl(usuario?.imgURL);
+
+  // Tratamento da URI da imagem resolvendo a template string e atribuindo o ID real do usuário
+  const obterUriLimpa = (): any => {
+    if (imagem) return imagem;
+
+    if (typeof usuario?.imgURL === "string" && usuarioId) {
+      return usuario.imgURL.replace("{usuario.usuarioID}", String(usuarioId));
+    }
+
+    return usuario?.imgURL;
+  };
+
+  const fotoPerfilUri = getImagemUrl(obterUriLimpa(), usuarioId);
 
   return (
     <SafeAreaView style={[theme.container, theme.column, theme.center]}>
@@ -308,7 +328,12 @@ export default function Cadastro() {
         <Text style={[theme.btnText, { color: Colors.blue }]}>Voltar</Text>
       </TouchableOpacity>
 
-      <Text style={[theme.p, { position: "absolute", bottom: 20 }]}>
+      <Text
+        style={[
+          theme.p,
+          { color: Colors.lightgray, position: "absolute", bottom: 40 },
+        ]}
+      >
         Uso exclusivo para técnicos e operacionais
       </Text>
     </SafeAreaView>

@@ -115,7 +115,12 @@ export default function Login() {
         <ArrowIcon color={Colors.blue} />
       </TouchableOpacity>
 
-      <Text style={[theme.p, { position: "absolute", bottom: 20 }]}>
+      <Text
+        style={[
+          theme.p,
+          { color: Colors.lightgray, position: "absolute", bottom: 40 },
+        ]}
+      >
         Uso exclusivo para técnicos e operacionais
       </Text>
     </SafeAreaView>

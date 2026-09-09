@@ -8,6 +8,7 @@ export async function atualizarUsuarioHooks(
   usuarioId: string,
   usuarioDTO: usuarioPUT,
 ) {
+  
   return await atualizarUsuario(usuarioId, usuarioDTO);
 }
 

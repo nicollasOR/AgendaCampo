@@ -9,11 +9,9 @@ export const USER_KEY = "@agenda_campo:usuario";
 export const authService = {
   async login(dados: LoginRequest): Promise<LoginResponse> {
     const { data } = await api.post<LoginResponse>("Autenticacao/login", dados);
-
     if (data.token) {
       await AsyncStorage.setItem(TOKEN_KEY, data.token);
     }
-
     return data;
   },
 

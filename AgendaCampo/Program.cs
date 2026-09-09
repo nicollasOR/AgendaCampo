@@ -99,8 +99,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsPolicy", policy =>
     {
         policy.AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
@@ -113,9 +113,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-if (!app.Environment.IsDevelopment())
-    app.UseHttpsRedirection();
+//if (!app.Environment.IsDevelopment())
+//    app.UseHttpsRedirection();
 
+// Mapeia a pasta 'wwwroot' ou 'uploads' para o caminho web '/uploads'
+string caminhoUploads = Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "uploads");
+
+if (!Directory.Exists(caminhoUploads))
+{
+    Directory.CreateDirectory(caminhoUploads);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(caminhoUploads),
+    RequestPath = "/uploads"
+});
+
+// Mantém o suporte a arquivos estáticos padrão de wwwroot
 app.UseStaticFiles();
 
 app.UseCors("CorsPolicy");

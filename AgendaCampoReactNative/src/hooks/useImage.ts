@@ -1,37 +1,42 @@
-import { useState } from "react";
-
-import { ImgUpload } from "./useImagePicker";
+import { ip } from "@/src/service/api";
 
 export function useImage() {
-  const [imagem, setImagem] = useState<ImgUpload | null>(null);
-
   const getImagemUrl = (
-    img?: ImgUpload | string | null,
+    img?: any,
+    usuarioId?: string | number,
   ): string | undefined => {
-    if (!img) return undefined;
-
-    const path = typeof img === "object" ? img.uri : img;
-    if (!path) return undefined;
-
-    if (
-      path.startsWith("file:") ||
-      path.startsWith("http") ||
-      path.startsWith("data:") ||
-      path.startsWith("content:")
-    ) {
-      return path;
+    // 1. Se veio um objeto de imagem selecionada (ex: useImagePicker / Expo ImagePicker)
+    if (img && typeof img === "object") {
+      const uri = img.uri || (img.assets && img.assets[0]?.uri);
+      if (uri) return uri;
     }
 
-    const baseUrl =
-      process.env.EXPO_PUBLIC_API_URL ||
-      "http://10.0.2.2:5100".replace(/\/$/, "").replace(/\/api\/?$/, "");
+    // 2. Se veio uma string (URI local de dispositivo ou URL da Web)
+    if (typeof img === "string" && img.trim() !== "") {
+      const cleanImg = img.trim();
 
-    const pathTratado = path.startsWith("/") ? path : `/${path}`;
-    return `${baseUrl}${pathTratado}`;
+      // URIs locais do dispositivo ou URLs completas
+      if (
+        cleanImg.startsWith("file:") ||
+        cleanImg.startsWith("content:") ||
+        cleanImg.startsWith("data:") ||
+        cleanImg.startsWith("http")
+      ) {
+        return cleanImg;
+      }
+
+      // Se veio um caminho relativo ex: "/api/Usuario/img/123"
+      const pathTratado = cleanImg.startsWith("/") ? cleanImg : `/${cleanImg}`;
+      return `http://${ip}:5100${pathTratado}`;
+    }
+
+    // 3. Fallback: Buscar pelo ID do usuário na API
+    if (usuarioId) {
+      return `http://${ip}:5100/api/Usuario/img/${usuarioId}`;
+    }
+
+    return undefined;
   };
 
-  return {
-    getImagemUrl,
-    imagemUrl: getImagemUrl(imagem),
-  };
+  return { getImagemUrl };
 }

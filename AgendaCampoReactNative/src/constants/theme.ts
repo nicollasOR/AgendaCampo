@@ -24,7 +24,7 @@ export const Colors = {
   gray: "hsl(230, 25%, 40%)",
   darkgray: "hsl(220, 25%, 20%)",
   lightgray: "hsl(235, 15%, 80%)",
-  inactive: "hsl(215, 50%, 75%)",
+  inactive: "hsl(215, 78%, 74%)",
 
   // Backgrounds Suaves
   smoothBgc: "hsl(215, 100%, 98%)",
