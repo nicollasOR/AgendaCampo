@@ -28,13 +28,13 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
-.env
-
 # typescript
 *.tsbuildinfo
 
 # generated native folders
 /ios
 /android
+
+# arquivos de ambiente - não subir o .env
+.env
+.env*.local

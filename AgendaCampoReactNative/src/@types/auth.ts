@@ -8,18 +8,21 @@ export interface LoginResponse {
 }
 
 export interface Usuario {
-  nome?: string;
+  usuarioID: string;
+  nome: string;
   email: string;
-  img?: string;
+  imgURL: string | null;
 }
 
 export interface UsuarioPayload {
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"?: string;
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"?: string;
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"?: string;
-  exp?: number;
-  iss?: string;
-  aud?: string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
+  sub?: string;
+  id?: string;
+  exp: number;
+  iss: string;
+  aud: string;
 }
 
 export interface AuthContextData {
@@ -32,11 +35,6 @@ export interface AuthContextData {
   loading: boolean;
   erro: string | null;
   handleLogin: () => Promise<void>;
+  handleMockLogin: () => Promise<void>;
   logout: () => Promise<void>;
-}
-
-export interface ImgUpload {
-  uri: string;
-  name?: string;
-  mimeType?: string;
 }

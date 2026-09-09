@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Alert } from "react-native";
+
 import * as ImagePicker from "expo-image-picker";
 
 export type ImgUpload = {
@@ -13,7 +14,6 @@ export function useImagePicker() {
 
   // CÂMERA
   const tirarFoto = async () => {
-    // Solicita permissão de forma assíncrona
     const { granted } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (!granted) {
@@ -41,7 +41,6 @@ export function useImagePicker() {
 
   // GALERIA
   const escolherDaGaleria = async () => {
-    // Solicita permissão de forma assíncrona
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!granted) {
@@ -50,7 +49,7 @@ export function useImagePicker() {
     }
 
     const resultado = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"], // Sintaxe atualizada para SDKs recentes
+      mediaTypes: ["images"],
       allowsEditing: true,
       quality: 0.7,
     });
@@ -67,9 +66,9 @@ export function useImagePicker() {
 
   const selecionarOpcaoImagem = () => {
     Alert.alert("Selecionar Foto", "De onde você quer obter a foto?", [
-      { text: "Câmera", onPress: tirarFoto },
-      { text: "Galeria", onPress: escolherDaGaleria },
-      { text: "Cancelar", style: "cancel" },
+      { text: "CÂMERA", onPress: tirarFoto },
+      { text: "GALERIA", onPress: escolherDaGaleria },
+      { text: "CANCELAR", style: "cancel" },
     ]);
   };
 

@@ -83,7 +83,7 @@ GO
 
 -- 3. Carga Inicial de Dados
 INSERT INTO Usuario (nome, email, senha, imagem, telefone)
-VALUES ('admConfia', 'adm@adm.com', HASHBYTES('SHA2_256', 'adm'), NULL, '4002892211');
+VALUES ('Adm Confia', 'adm@adm.com', HASHBYTES('SHA2_256', 'adm'), NULL, '4002892211');
 
 INSERT INTO StatusVisita (nomeStatus)
 VALUES 
