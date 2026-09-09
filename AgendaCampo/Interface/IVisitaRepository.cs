@@ -27,6 +27,7 @@ public interface IVisitaRepository
     public bool eventoExiste(int id);
     // public bool conflitoDeHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null);
     public bool conflitoHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null);
+    // public Visita? concluirVisita(int visitaId, Guid usuarioId);
 
     
     // public bool visita_dataExistir(DateTime data);
@@ -34,6 +35,7 @@ public interface IVisitaRepository
     // métodos POST, PUT, DELETE
     public void Adicionar(Visita visita);
     public void Atualizar(Visita visita );
+    public void AtualizarSts(Visita visita);
     public void Remover(int id);
  
 

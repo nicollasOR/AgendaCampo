@@ -99,6 +99,35 @@ public class VisitaService
     
         return visitaConversoes.lerVisitaDto(visitaBanco);
     }
+    
+    public lerVisitaDTO concluirVisita(int visitaId, Guid usuarioId)
+    {
+        Visita? visitaBanco = _rep.BuscarPorId(visitaId);
+        if (visitaBanco == null)
+            throw new DomainException("Visita não encontrada");
+
+        bool usuarioPertencenteVisita = visitaBanco.usuario.Any(usrAux => usrAux.usuarioID == usuarioId);
+        if (usuarioPertencenteVisita != true)
+            throw new DomainException("Este usuário não pertence à esta visita");
+
+        if (visitaBanco.dataInicio > DateTime.Now)
+            throw new DomainException("Não é possível concluir uma visita que não começou..");
+        
+        if (visitaBanco.statusVisita?.nomeStatus == "Concluída")
+            throw new DomainException("Esta visita já está concluída...");
+
+        if (visitaBanco.statusVisita?.nomeStatus == "Cancelada")
+            throw new DomainException("Não é possível concluir uma visita cancelada.");
+
+        StatusVisita? stsBanco = _stsRep.buscarNomeStatus("Concluída");
+        if (stsBanco == null)
+            throw new DomainException("StatusVisita não encontrado..");
+
+        visitaBanco.statusVisitaID = stsBanco.statusVisitaID;
+        visitaBanco.statusVisita = stsBanco; // só por desencargo de consciência de memoria
+        _rep.AtualizarSts(visitaBanco);
+        return visitaConversoes.lerVisitaDto(visitaBanco);
+    }
     //
     public lerVisitaDTO Adicionar(criarVisitaDTO criarVisitaDtos, Guid usuarioId)
     {

@@ -86,7 +86,37 @@ public class VisitaRepository : IVisitaRepository
               .ToList();
  
       }
-//
+
+
+      // public Visita? concluirVisita(int visitaId, Guid usuarioId)
+      // {
+      //     var visita = _context.Visita
+      //         .Include(v => v.statusVisita)
+      //         .Include(v => v.usuario)
+      //         .FirstOrDefault(v => v.visitaID == visitaId);
+      //
+      //     if (visita == null)
+      //         throw new DomainException("Visita não encontrada.");
+      //
+      //     if (!visita.usuario.Any(u => u.usuarioID == usuarioId))
+      //         throw new DomainException("Você não tem permissão para alterar esta visita.");
+      //
+      //     var statusConcluida = _context.StatusVisita
+      //         .FirstOrDefault(s => s.nomeStatus == "Concluída");
+      //
+      //     if (statusConcluida == null)
+      //         throw new DomainException("Status 'Concluída' não encontrado.");
+      //
+      //     visita.statusVisitaID = statusConcluida.statusVisitaID;
+      //     visita.statusVisita = statusConcluida; // Atualiza a propriedade de navegação
+      //
+      //     _context.SaveChanges();
+      //
+      //     return visita;
+      // }
+
+      
+      //
      // public bool conflitoDeHorario(Guid usuarioId, DateTime dataComeco, DateTime dataFinal, int? visitaId = null)
      // {
      //     return _context.Visita.Any(visitaAux => 
@@ -190,10 +220,10 @@ public class VisitaRepository : IVisitaRepository
      }
 
 
-
-     public bool Reagendar(int visitaId, DateTime novaDataInicio, DateTime novaDataTermino)
+     public void AtualizarSts(Visita visita)
      {
-         throw new NotImplementedException();
+         _context.Visita.Update(visita);
+         _context.SaveChanges();
      }
 
      public void Remover(int id)

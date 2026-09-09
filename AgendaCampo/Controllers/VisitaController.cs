@@ -178,6 +178,23 @@ namespace AgendaCampo.Controllers
             }
         }
 
+        [HttpPatch("{visitaId}/concluir")]
+        public ActionResult<lerVisitaDTO> atualizarStatus(int visitaId)
+        {
+            try
+            {
+            Guid usuarioId = obterUsuarioLogado();
+            var visitaSts = _service.concluirVisita(visitaId, usuarioId);
+            return Ok(visitaSts);
+                
+            }
+            
+            catch(DomainException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete("{id}")]
         public ActionResult Remover(int id)
         {
