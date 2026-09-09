@@ -42,7 +42,7 @@ export default function Login() {
         </Text>
       </View>
 
-      <View style={theme.campoForm}>
+      <View style={theme.column}>
         {erro && <Text style={[theme.p, { color: Colors.red }]}>{erro}</Text>}
 
         <View>
@@ -96,29 +96,24 @@ export default function Login() {
           </View>
         )}
       </TouchableOpacity>
-      {!usuario?.usuarioID && (
-        <>
-          <Text style={[theme.h4, { color: Colors.darkblue }]}>Ou...</Text>
 
-          <TouchableOpacity
-            style={[
-              theme.btn2,
-              {
-                borderWidth: 2,
-                borderColor: Colors.blue,
-              },
-            ]}
-            onPress={() => {
-              if (usuario?.usuarioID == undefined) router.replace("/cadastro");
-            }}
-          >
-            <Text style={[theme.btnText, { color: Colors.blue }]}>
-              Cadastre-se
-            </Text>
-            <ArrowIcon color={Colors.blue} />
-          </TouchableOpacity>
-        </>
-      )}
+      <Text style={[theme.h4, { color: Colors.darkblue }]}>Ou...</Text>
+
+      <TouchableOpacity
+        style={[
+          theme.btn2,
+          {
+            borderWidth: 2,
+            borderColor: Colors.blue,
+          },
+        ]}
+        onPress={() => {
+          router.replace("/cadastro");
+        }}
+      >
+        <Text style={[theme.btnText, { color: Colors.blue }]}>Cadastre-se</Text>
+        <ArrowIcon color={Colors.blue} />
+      </TouchableOpacity>
 
       <Text style={[theme.p, { position: "absolute", bottom: 20 }]}>
         Uso exclusivo para técnicos e operacionais

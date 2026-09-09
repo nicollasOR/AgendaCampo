@@ -27,14 +27,16 @@ import { Colors, theme } from "@/src/constants/theme";
 
 import RuaIcon from "@/assets/svg/RuaIcon.svg";
 import LocalIcon from "@/assets/svg/LocalIcon.svg";
+import TargetIcon from "@/assets/svg/TargetIcon.svg";
 import NumeroIcon from "@/assets/svg/NumeroIcon.svg";
 import PerfilIcon from "@/assets/svg/PerfilIcon.svg";
 import RelogioIcon from "@/assets/svg/RelogioIcon.svg";
 import CancelarIcon from "@/assets/svg/CancelarIcon.svg";
-import PesquisaIcon from "@/assets/svg/PesquisaIcon.svg";
 import ConfirmarIcon from "@/assets/svg/ConfirmarIcon.svg";
 import DescricaoIcon from "@/assets/svg/DescricaoIcon.svg";
 import CalendarioIcon from "@/assets/svg/CalendarioIcon.svg";
+import EnterpriseIcon from "@/assets/svg/EnterpriseIcon.svg";
+import PerfilTechIcon from "@/assets/svg/PerfilTechIcon.svg";
 
 export default function Agendamento() {
   const { agendarVisita } = useVisita();
@@ -296,6 +298,9 @@ export default function Agendamento() {
           <Text style={[theme.h4, { color: Colors.darkgray }]}>
             Preencha os detalhes para agendar uma nova visita técnica.
           </Text>
+          <Text style={[theme.p, { color: Colors.lightgray }]}>
+            Campo com (*) são obrigatórios
+          </Text>
         </View>
 
         <View style={theme.form}>
@@ -306,7 +311,7 @@ export default function Agendamento() {
                 Nome da Empresa *
               </Text>
               <View style={theme.campoInput}>
-                <PesquisaIcon style={theme.inputIcon} color={Colors.gray} />
+                <EnterpriseIcon style={theme.inputIcon} color={Colors.gray} />
                 <TextInput
                   style={theme.input}
                   placeholder="Insira o nome da empresa..."
@@ -322,7 +327,7 @@ export default function Agendamento() {
                 Objetivo da Visita *
               </Text>
               <View style={theme.campoInput}>
-                <PesquisaIcon style={theme.inputIcon} color={Colors.gray} />
+                <TargetIcon style={theme.inputIcon} color={Colors.gray} />
                 <TextInput
                   style={theme.input}
                   placeholder="Insira o objetivo da visita..."
@@ -338,7 +343,7 @@ export default function Agendamento() {
                 Cliente *
               </Text>
               <View style={theme.campoInput}>
-                <PesquisaIcon style={theme.inputIcon} color={Colors.gray} />
+                <PerfilIcon style={theme.inputIcon} color={Colors.gray} />
                 <TextInput
                   style={theme.input}
                   placeholder="Nome do cliente..."
@@ -465,7 +470,7 @@ export default function Agendamento() {
                 style={theme.campoInput}
                 onPress={() => setModalTecnicosVisible(true)}
               >
-                <PerfilIcon style={theme.inputIcon} color={Colors.gray} />
+                <PerfilTechIcon style={theme.inputIcon} color={Colors.gray} />
                 <Text
                   style={[
                     theme.input,

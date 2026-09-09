@@ -34,7 +34,7 @@ export function useVisita() {
       const dados = await visitaService.listarFuturasVisitas();
       setVisitaGet(dados);
     } catch (error) {
-      Alert.alert("Erro ao listar!");
+      console.log("Sem visitas!");
     }
   }
 

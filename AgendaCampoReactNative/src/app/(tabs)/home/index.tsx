@@ -83,7 +83,7 @@ export default function Home() {
       </View>
 
       <MaskedView
-        style={{ flex: 1, width: "100%" }}
+        style={[theme.center, { flex: 1, width: "100%" }]}
         maskElement={
           <LinearGradient
             colors={["transparent", "black", "black", "transparent"]}
@@ -92,30 +92,36 @@ export default function Home() {
           />
         }
       >
-        <FlatList
-          data={visitaGet}
-          keyExtractor={(item) => String(item.visitaID)}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={theme.scroll}
-          style={{ width: "100%" }}
-          ListHeaderComponent={<View style={theme.column} />}
-          renderItem={({ item }) => (
-            <AgendaCard
-              visitaID={item.visitaID}
-              statusVisita={item.statusVisita}
-              dataInicio={item.dataInicio}
-              dataTermino={item.dataTermino}
-              logradouro={item.logradouro}
-              bairro={item.bairro}
-              numero={item.numero}
-              nomeEvento={item.nomeEvento}
-              descricao={item.descricao}
-              nomeCliente={item.nomeCliente}
-              cep={item.cep}
-              tecnicos={[]}
-            />
-          )}
-        />
+        {visitasHoje == 0 ? (
+          <Text style={[theme.h3, { color: Colors.gray }]}>
+            Sem visitas planejadas...
+          </Text>
+        ) : (
+          <FlatList
+            data={visitaGet}
+            keyExtractor={(item) => String(item.visitaID)}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={theme.scroll}
+            style={{ width: "100%" }}
+            ListHeaderComponent={<View style={theme.column} />}
+            renderItem={({ item }) => (
+              <AgendaCard
+                visitaID={item.visitaID}
+                statusVisita={item.statusVisita}
+                dataInicio={item.dataInicio}
+                dataTermino={item.dataTermino}
+                logradouro={item.logradouro}
+                bairro={item.bairro}
+                numero={item.numero}
+                nomeEvento={item.nomeEvento}
+                descricao={item.descricao}
+                nomeCliente={item.nomeCliente}
+                cep={item.cep}
+                tecnicos={[]}
+              />
+            )}
+          />
+        )}
       </MaskedView>
     </SafeAreaView>
   );

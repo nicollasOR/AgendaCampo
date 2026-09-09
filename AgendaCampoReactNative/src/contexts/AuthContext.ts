@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export function decodificarToken(token: string): Usuario | null {
   try {
     const decoded: any = jwtDecode<UsuarioPayload>(token);
-    console.log(`\n JSON do Token: \n ${JSON.stringify(decoded, null, 2)}`);
+    // console.log(`\n JSON do Token: \n ${JSON.stringify(decoded, null, 2)}`);
 
     // Mapeia todas as variações conhecidas de ID em tokens JWT do ASP.NET Core
     const usuarioID =

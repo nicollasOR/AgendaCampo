@@ -205,8 +205,8 @@ export const theme = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.lightgray,
     borderRadius: 10,
-    paddingHorizontal: 18,
-    paddingVertical: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 24,
     gap: 32,
   },
   campoForm: {

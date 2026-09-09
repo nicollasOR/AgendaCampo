@@ -51,17 +51,15 @@ export async function criarUsuario(dados: usuarioPOST) {
     formData.append("email", dados.email);
     formData.append("senha", dados.senha);
 
-
     const response = await api.post("Usuario", formData);
     // nao precisa passar o header ("Descobrindo da pior forma como sempre")
     console.log("testando retorno..", response.data);
     return response.data;
   } catch (error: any) {
-      const message = 
-      error.response?.data?.mensagem || 
-        error.response?.data?.message || 
-        "Não foi possível cadastrar o usuário " + dados.nome;
- 
+    const message =
+      error.response?.data?.mensagem ||
+      error.response?.data?.message ||
+      "Não foi possível cadastrar o usuário " + dados.nome;
 
     throw new Error(message);
   }
