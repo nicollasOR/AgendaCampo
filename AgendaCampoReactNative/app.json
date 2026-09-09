@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "Agenda Campo",
+    "slug": "AgendaCampoReactNative",
+    "scheme": "agendacampo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/img/logo.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "android": {
+      "package": "com.agendacampo.app",
+      "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/img/logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": ["READ_CALENDAR", "WRITE_CALENDAR"],
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "ios": {
+      "bundleIdentifier": "com.agendacampo.app",
+      "supportsTablet": true
+    },
+    "web": {
+      "favicon": "./assets/img/logo.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "O aplicativo precisa de acesso ao calendário para salvar as visitas agendadas.",
+          "remindersPermission": "O aplicativo precisa de acesso aos lembretes para agendar visitas."
+        }
+      ],
+      "@react-native-community/datetimepicker",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/img/splashicon.png",
+          "backgroundColor": "#ffffff",
+          "imageWidth": 200
+        }
+      ]
+    ]
+  }
+}
